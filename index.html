@@ -85,14 +85,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .lb svg{width:16px;height:16px;stroke:var(--ac2);fill:none;}
 
 /* ══ GAME GRID ══ */
-.gg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px;}
-.gc{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:10px 4px 8px;border-radius:var(--r3);border:1px solid var(--bd);background:var(--sf);transition:all .2s;}
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.gc{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px 12px;border-radius:var(--r3);border:1px solid var(--bd);background:var(--sf);transition:all .2s;}
 .gc:active{transform:scale(.94);}
 .gc:hover{border-color:var(--bd2);background:var(--sf2);}
 .gi{width:100%;aspect-ratio:1;border-radius:22px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.3);}
 .gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 50%);pointer-events:none;}
-.gi span{font-size:32px!important;position:relative;z-index:1;}
-.gn{font-size:9px;font-weight:800;color:var(--tx2);text-align:center;line-height:1.2;text-transform:uppercase;letter-spacing:.2px;}
+.gi span{font-size:40px!important;position:relative;z-index:1;}
+.gn{font-size:10px;font-weight:800;color:var(--tx2);text-align:center;line-height:1.2;text-transform:uppercase;letter-spacing:.2px;}
 .ge{text-align:center;grid-column:1/-1;color:var(--tx3);font-size:13px;padding:32px 0;}
 
 /* ══ BACK ══ */
@@ -128,7 +128,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 /* ══ PACKAGE ══ */
 .pk-g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
 .pk{border-radius:var(--r2);padding:18px 14px;text-align:center;border:1.5px solid var(--bd);background:var(--sf);cursor:pointer;transition:all .2s;font-family:var(--font);display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;overflow:hidden;min-height:90px;}
-.pk-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.15;pointer-events:none;}.pk.on .pk-img{opacity:.25;}
+.pk-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.2;pointer-events:none;transition:.2s}.pk.on .pk-img{opacity:.3;}
 .pk:active{transform:scale(.95);}
 .pk.on{border-color:var(--ac);background:var(--acg);box-shadow:0 0 0 3px var(--acg),0 4px 16px rgba(59,130,246,.1);}
 .pk .pk-a{font-size:17px;font-weight:900;color:var(--tx);position:relative;z-index:1;}.pk.on .pk-a{color:var(--ac2);}
@@ -652,10 +652,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
       <div style="font-size:11px;color:var(--tx3);font-weight:700;margin-bottom:10px" id="hcnt"></div>
       <div id="hlist"></div>
     </div>
-    <!-- PROMO -->
+    <!-- ACCOUNT -->
     <div class="pg" id="pg-pro">
-      <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Account</div>
-      <div id="prlist"></div>
+      <div id="acList">
+        <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account</div>
+        <div id="prlist"></div>
+      </div>
+      <div id="acDetail" style="display:none"></div>
     </div>
     <!-- EVENTS -->
     <div class="pg" id="pg-ev">
@@ -779,7 +782,7 @@ function doRegister(){
     curUser=r.user;
     curUser.updateProfile({displayName:nm});
     // Save user to Firestore
-    if(db)db.collection("users").doc(curUser.uid).set({name:nm,email:em,joined:new Date().toISOString(),avatar:"😎"},{merge:true});
+    if(db)db.collection("users").doc(curUser.email).set({name:nm,email:em,joined:new Date().toISOString(),avatar:"😎"},{merge:true});
     pf.nm=nm;pf.em=em;
     enterApp(curUser);
   }).catch(function(e){
@@ -793,7 +796,7 @@ function doGoogle(){
   var provider=new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider).then(function(r){
     curUser=r.user;
-    if(db)db.collection("users").doc(curUser.uid).set({name:curUser.displayName||"",email:curUser.email||"",joined:new Date().toISOString(),avatar:"😎"},{merge:true});
+    if(db)db.collection("users").doc(curUser.email).set({name:curUser.displayName||"",email:curUser.email||"",joined:new Date().toISOString(),avatar:"😎"},{merge:true});
     if(curUser.displayName)pf.nm=curUser.displayName;
     if(curUser.email)pf.em=curUser.email;
     enterApp(curUser);
@@ -811,10 +814,12 @@ function enterApp(user){
   document.getElementById("authScreen").classList.add("hide");
   document.getElementById("mainApp").classList.remove("hide");
   if(user){
-    pf.nm=user.displayName||pf.nm;
-    pf.em=user.email||pf.em;
+    pf.nm=user.displayName||"";
+    pf.em=user.email||"";
     pf.sn=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
   }
+  loadDahliaId();
+  if(user)setTimeout(saveDahliaUser,1500);
   initNotifs();
 }
 
@@ -861,8 +866,8 @@ function fbLoadOrders(callback) {
 
 // Save user profile to Firebase
 function fbSaveProfile(profile) {
-  if (!fbReady || !db) return;
-  db.collection("users").doc("current_user").set(profile, {merge: true}).then(function() {
+  if (!fbReady || !db || !curUser) return;
+  db.collection("users").doc(curUser.email).set(profile, {merge: true}).then(function() {
     console.log("Profile saved");
   }).catch(function(e) { console.log("Firebase profile error:", e); });
 }
@@ -889,6 +894,43 @@ var HL=[];
 var PR=[{t:"🎉 March Madness!",d:"20% bonus on MLBB",x:"20%",bg:"linear-gradient(135deg,#1e40af,#0891b2)",u:"31 Mar"},{t:"🔥 Weekend Deal",d:"FF double bonus Saturday",x:"2x",bg:"linear-gradient(135deg,#4338ca,#2563eb)",u:"Every Wknd"},{t:"💎 New User",d:"First top-up 15% extra",x:"15%",bg:"linear-gradient(135deg,#0369a1,#2563eb)",u:"Limited"},{t:"⭐ VIP Cashback",d:"5% on orders 30K+ MMK",x:"5%",bg:"linear-gradient(135deg,#3730a3,#1d4ed8)",u:"Ongoing"}];
 var AV=["<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><rect x='2' y='6' width='20' height='12' rx='2'/><path d='M12 12h.01'/><path d='M6 12h.01'/><path d='M18 12h.01'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0110 0v4'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='12' r='10'/><path d='M8 14s1.5 2 4 2 4-2 4-2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg>"];
 var pf={nm:"Guest",em:"",ph:"",sn:"March 2026",av:"<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6'/></svg>",gn:"",lc:"",fv:"",py:"",fb:"",tg:"",tt:"",nt:true,dk:true};
+
+// ═══ DAHLIA USER ID ═══
+var dahliaId="";
+function genDahliaId(){return String(10000+Math.floor(Math.random()*90000));}
+function loadDahliaId(){
+  var stored=null;try{stored=sessionStorage.getItem("dahliaId");}catch(e){}
+  if(stored){dahliaId=stored;return;}
+  if(curUser&&fbReady&&db){
+    db.collection("users").doc(curUser.email).get().then(function(d){
+      if(d.exists&&d.data().dahliaId){dahliaId=d.data().dahliaId;try{sessionStorage.setItem("dahliaId",dahliaId);}catch(e){}}
+      else{dahliaId=genDahliaId();try{sessionStorage.setItem("dahliaId",dahliaId);}catch(e){}saveDahliaUser();}
+      rpf();
+    }).catch(function(){dahliaId=genDahliaId();try{sessionStorage.setItem("dahliaId",dahliaId);}catch(e){}rpf();});
+  }else{dahliaId=genDahliaId();try{sessionStorage.setItem("dahliaId",dahliaId);}catch(e){}}
+}
+function saveDahliaUser(){
+  if(!fbReady||!db||!curUser)return;
+  var ua=navigator.userAgent;var plt=navigator.platform||"";
+  var dev=/Android/i.test(ua)?"Android":/iPhone|iPad/i.test(ua)?"iOS":/Windows/i.test(ua)?"Windows":/Mac/i.test(ua)?"Mac":"Other";
+  db.collection("users").doc(curUser.email).set({
+    dahliaId:dahliaId,
+    name:curUser.displayName||pf.nm,
+    email:curUser.email,
+    loginMethod:curUser.providerData&&curUser.providerData[0]?curUser.providerData[0].providerId:"email",
+    device:dev,
+    browser:ua.substring(0,100),
+    platform:plt,
+    screenSize:screen.width+"x"+screen.height,
+    language:navigator.language||"",
+    joined:new Date().toISOString(),
+    lastSeen:new Date().toISOString()
+  },{merge:true});
+}
+function copyDahliaId(){
+  var id="DH-"+dahliaId;
+  if(navigator.clipboard){navigator.clipboard.writeText(id).then(function(){tst("ID Copied: "+id,"ok")}).catch(function(){tst(id,"in")});}else{tst(id,"in");}
+}
 var mmk=function(n){return n.toLocaleString("en-US")+" MMK";};
 
 var sg=null,sp=null,ss=null,sy=null,ck=false,rc=false,pfl="All",hfl="all";
@@ -933,15 +975,17 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l){var e=document.getElementById("ggrid");if(!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}e.innerHTML=l.map(function(g){return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)"><span style="font-size:32px;position:relative;z-index:1">'+g.e+'</span></div><span class="gn">'+g.n+'</span></div>'}).join("");}
+function rgrd(l){var e=document.getElementById("ggrid");if(!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}e.innerHTML=l.map(function(g){return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)"><span style="font-size:40px;position:relative;z-index:1">'+g.e+'</span></div><span class="gn">'+g.n+'</span></div>'}).join("");}
 
 // DETAIL
 function og(id){
   sg=D.find(function(x){return x.id===id});sp=null;ss=0;sy=null;ck=false;rc=false;
   var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
   h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450)"><div class="bn-i">'+sg.e+'</div><div class="bn-t">'+sg.n+'</div><div class="bn-s"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div>';
-  h+='<div class="icard"><div class="ir"><div class="ic"><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="onIdInput()"/></div><div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID" oninput="onIdInput()"/></div></div><div id="ncResult"></div></div>';
-  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var bgI=sg.img?'<div class="pk-img" style="background-image:url('+sg.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+bgI+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
+  var needsSid=["Mobile Legends","Genshin Impact","Honkai Star Rail"];
+  var showSid=needsSid.indexOf(sg.n)>=0;
+  h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div></div>';
+  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':(sg.img?'<div class="pk-img" style="background-image:url('+sg.img+')"></div>':'');return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
   h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+'">'+p.ic+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
   h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
   h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
@@ -976,7 +1020,14 @@ function usum(){var el=document.getElementById("osm");if(!sg){el.style.display="
   var hp=sp!==null,hpy=sy!==null,pk=hp?sg.pr[sp]:null,pm=hpy?PY[sy]:null,ok=hp&&hpy&&ck;
   el.innerHTML='<div class="osum'+(ok?" rdy":"")+'"><div class="osum-t"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Order Summary</div><div class="or"><span class="ol">Game</span><span class="ov">'+sg.e+' '+sg.n+'</span></div><div class="or"><span class="ol">User ID</span><span class="ov'+(uid?"":" w")+'">'+(uid||"Not entered")+'</span></div><div class="or"><span class="ol">Server ID</span><span class="ov'+(sid?"":" w")+'">'+(sid||"Not entered")+'</span></div><div class="or"><span class="ol">Package</span><span class="ov'+(hp?"":" w")+'">'+(hp?sg.ci+" "+pk.d+" "+sg.cur:"Not selected")+'</span></div><div class="or"><span class="ol">Payment</span><span class="ov'+(hpy?"":" w")+'">'+(hpy?pm.n:"Not selected")+'</span></div><div class="or"><span class="ol">Status</span><span class="ov'+(ck?"":" w")+'">'+(ck?"Confirmed":"Pending")+'</span></div>'+(hp?'<hr class="ohr"/><div class="or tot"><span class="ol">Total</span><span class="ov">'+mmk(pk.p)+'</span></div>':"")+'</div>';}
 
-function doO(){if(sp===null||sy===null||!ck)return;omod();}
+function doO(){
+  var uidEl=document.getElementById("uid");
+  if(!uidEl||!uidEl.value.trim()){tst("Please enter User ID","er");uidEl&&uidEl.focus();return;}
+  if(sp===null){tst("Select a package","er");return;}
+  if(sy===null){tst("Select payment method","er");return;}
+  if(!ck){tst("Confirm your payment first","er");return;}
+  omod();
+}
 function omod(){var uid=document.getElementById("uid"),sid=document.getElementById("sid");uid=uid?uid.value||"-":"-";sid=sid?sid.value:"";
   var pk=sg.pr[sp],pm=PY[sy];
   document.getElementById("md").innerHTML='<div class="mr"><span class="ml">Game</span><span class="mv">'+sg.n+'</span></div><div class="mr"><span class="ml">Package</span><span class="mv">'+sg.ci+' '+pk.d+' '+sg.cur+'</span></div><div class="mr"><span class="ml">User ID</span><span class="mv">'+uid+'</span></div>'+(sid?'<div class="mr"><span class="ml">Server ID</span><span class="mv">'+sid+'</span></div>':'')+'<div class="mr"><span class="ml">Payment</span><span class="mv">'+pm.n+'</span></div><div class="mr"><span class="ml">Receipt</span><span class="mv" style="color:var(--gn)">'+(rc?"Uploaded":"—")+'</span></div><hr class="mdv"/><div class="mr mt"><span class="ml">Total</span><span class="mv">'+mmk(pk.p)+'</span></div>';
@@ -993,6 +1044,8 @@ function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
     payment:PY[sy].n,
     receiptUrl:rcData||"",
     authUser:curUser?curUser.email:"guest",
+    dahliaId:dahliaId?"DH-"+dahliaId:"",
+    authName:curUser?curUser.displayName||"":"Guest",
     status:"pending",
     timestamp:new Date().toISOString(),
     txnId:"#TXN-"+Date.now()
@@ -1029,28 +1082,59 @@ function rpr(){document.getElementById("prlist").innerHTML=PR.map(function(p,i){
   return'<div class="prc" style="background:'+p.bg+';cursor:pointer" onclick="openAcct('+i+')">'+img+'<div class="pri"><div class="pr-t">'+p.t+'</div><div class="pr-d">'+p.d+'</div>'+(p.caption?'<div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:4px;font-style:italic">'+p.caption+'</div>':'')+'<div class="pr-f"><span class="pr-u">'+p.u+'</span><span class="pr-x">'+p.x+'</span></div></div></div>'}).join("");}
 function openAcct(i){
   var p=PR[i];if(!p)return;
-  var img=p.img?'<div style="width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin-bottom:14px"><img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/></div>':'';
-  var h='<div style="padding:4px">'+img;
-  h+='<div style="font-size:16px;font-weight:900;margin-bottom:4px">'+p.t+'</div>';
-  h+='<div style="font-size:12px;color:var(--tx2);margin-bottom:10px">'+p.d+'</div>';
-  if(p.caption)h+='<div style="font-size:11px;color:var(--tx3);font-style:italic;padding:10px;background:var(--sf2);border-radius:10px;border:1px solid var(--bd);margin-bottom:10px">"'+p.caption+'"</div>';
-  if(p.game)h+='<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">Game Account</div><div style="padding:10px;background:var(--sf2);border-radius:10px;border:1px solid var(--bd);margin-bottom:10px"><div style="font-size:13px;font-weight:800">'+p.game+'</div>'+(p.gameId?'<div style="font-size:11px;color:var(--tx3);margin-top:2px">ID: '+p.gameId+'</div>':'')+(p.gameServer?'<div style="font-size:11px;color:var(--tx3)">Server: '+p.gameServer+'</div>':'')+(p.gameRank?'<div style="font-size:11px;color:var(--ac2);font-weight:700;margin-top:2px">'+p.gameRank+'</div>':'')+'</div>';
-  h+='<div style="display:flex;gap:8px"><div style="flex:1;padding:8px;background:var(--sf2);border-radius:8px;border:1px solid var(--bd);text-align:center"><div style="font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase">Discount</div><div style="font-size:16px;font-weight:900;color:var(--ac2)">'+p.x+'</div></div><div style="flex:1;padding:8px;background:var(--sf2);border-radius:8px;border:1px solid var(--bd);text-align:center"><div style="font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase">Expires</div><div style="font-size:12px;font-weight:800">'+p.u+'</div></div></div></div>';
-  document.getElementById("trkInfo").innerHTML=h;
-  document.getElementById("trkTl").innerHTML="";
-  document.querySelector("#trkOv .m-t").textContent="Account Details";
-  document.getElementById("trkOv").classList.add("v");
+  var h='<button style="display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:10px;border:1.5px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font);margin-bottom:14px" onclick="closeAcct()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
+  // Hero image
+  if(p.img)h+='<div style="width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;margin-bottom:16px;border:1px solid var(--bd)"><img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/></div>';
+  // Title
+  h+='<div style="font-size:20px;font-weight:900;margin-bottom:4px">'+p.t+'</div>';
+  h+='<div style="font-size:13px;color:var(--tx2);margin-bottom:12px">'+p.d+'</div>';
+  // Caption
+  if(p.caption)h+='<div style="font-size:12px;color:var(--tx3);font-style:italic;padding:12px 14px;background:var(--sf2);border-radius:12px;border:1px solid var(--bd);margin-bottom:14px;line-height:1.5">"'+p.caption+'"</div>';
+  // Game Account Info
+  if(p.game){
+    h+='<div class="lb" style="font-size:13px;margin-bottom:8px"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>Game Account</div>';
+    h+='<div style="padding:14px;background:var(--sf);border-radius:14px;border:1px solid var(--bd);margin-bottom:14px">';
+    h+='<div style="font-size:16px;font-weight:900">'+p.game+'</div>';
+    if(p.gameId)h+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;color:var(--tx3)">Game ID</span><span style="font-size:12px;font-weight:700;font-family:var(--mono)">'+p.gameId+'</span></div>';
+    if(p.gameServer)h+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;color:var(--tx3)">Server</span><span style="font-size:12px;font-weight:700">'+p.gameServer+'</span></div>';
+    if(p.gameRank)h+='<div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:11px;color:var(--tx3)">Rank</span><span style="font-size:12px;font-weight:800;color:var(--ac2)">'+p.gameRank+'</span></div>';
+    h+='</div>';
+  }
+  // Gallery images
+  if(p.gallery&&p.gallery.length){
+    h+='<div class="lb" style="font-size:13px;margin-bottom:8px"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Screenshots</div>';
+    h+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px">'+p.gallery.map(function(url){return'<div style="aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--bd);cursor:pointer" onclick="window.open(\''+url+'\')"><img src="'+url+'" style="width:100%;height:100%;object-fit:cover"/></div>'}).join("")+'</div>';
+  }
+  // Stats
+  h+='<div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;padding:12px;background:var(--sf);border-radius:12px;border:1px solid var(--bd);text-align:center"><div style="font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Discount</div><div style="font-size:18px;font-weight:900;color:var(--ac2)">'+p.x+'</div></div><div style="flex:1;padding:12px;background:var(--sf);border-radius:12px;border:1px solid var(--bd);text-align:center"><div style="font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Expires</div><div style="font-size:14px;font-weight:800">'+p.u+'</div></div></div>';
+  document.getElementById("acList").style.display="none";
+  document.getElementById("acDetail").style.display="block";
+  document.getElementById("acDetail").innerHTML=h;
+  window.scrollTo(0,0);
+}
+function closeAcct(){
+  document.getElementById("acDetail").style.display="none";
+  document.getElementById("acList").style.display="block";
 }
 
 // PROFILE
 function rpf(){
-  var rows=[{l:"Email",v:pf.em},{l:"Phone",v:pf.ph}];if(pf.gn)rows.push({l:"Gender",v:pf.gn});if(pf.lc)rows.push({l:"Location",v:pf.lc});if(pf.fv)rows.push({l:"Favorite",v:pf.fv});if(pf.py)rows.push({l:"Payment",v:pf.py});
+  var isGoogle=curUser&&curUser.providerData&&curUser.providerData[0]&&curUser.providerData[0].providerId==="google.com";
+  var displayName=isGoogle&&pf.nm?pf.nm:(curUser&&pf.em?pf.em.split("@")[0]:"Guest");
+  var idStr=dahliaId?"DH-"+dahliaId:"—";
+  var rows=[];
+  rows.push({l:"Dahlia ID",v:'<span style="font-family:var(--mono);font-weight:900;color:var(--ac2);cursor:pointer;letter-spacing:1px" onclick="copyDahliaId()">'+idStr+' <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--ac2);fill:none;stroke-width:2;vertical-align:-1px;display:inline"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>'});
+  if(isGoogle&&pf.nm)rows.push({l:"Name",v:pf.nm});
+  if(pf.em)rows.push({l:"Email",v:pf.em});
+  if(pf.ph)rows.push({l:"Phone",v:pf.ph});
+  if(pf.gn)rows.push({l:"Gender",v:pf.gn});if(pf.lc)rows.push({l:"Location",v:pf.lc});if(pf.fv)rows.push({l:"Favorite",v:pf.fv});if(pf.py)rows.push({l:"Payment",v:pf.py});
   var hs=pf.fb||pf.tg||pf.tt;
-  var h='<div class="pf-h"><button class="pf-eb" onclick="oed()"><svg viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Edit</button><div class="pf-av">'+pf.av+'</div><div class="pf-nm">'+pf.nm+'</div><div class="pf-dt">Since '+pf.sn+'</div>'+(hs?'<div class="pf-so">'+(pf.fb?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>':'')+(pf.tg?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M21.2 4.4L2.4 11.5c-.6.2-.6.7 0 .9l4.8 1.5 1.8 5.8c.2.5.7.5 1 .2l2.6-2.1 5.1 3.7c.5.4 1.1.1 1.2-.5L22.3 5.3c.2-.7-.4-1.2-1.1-.9z"/></svg></a>':'')+(pf.tt?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.77 0 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V12.8a8.28 8.28 0 005.58 2.17V11.5a4.84 4.84 0 01-3.58-1.81V6.69h3.58z"/></svg></a>':'')+'</div>':'')+'</div>';
+  var editBtn=curUser?'<button class="pf-eb" onclick="oed()"><svg viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Edit</button>':'';
+  var h='<div class="pf-h">'+editBtn+'<div class="pf-av">'+pf.av+'</div><div class="pf-nm">'+displayName+'</div><div style="font-size:11px;color:var(--ac2);font-family:var(--mono);font-weight:800;cursor:pointer;margin-top:2px;letter-spacing:1px" onclick="copyDahliaId()">'+idStr+'</div><div class="pf-dt">Since '+pf.sn+'</div>'+(hs?'<div class="pf-so">'+(pf.fb?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>':'')+(pf.tg?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M21.2 4.4L2.4 11.5c-.6.2-.6.7 0 .9l4.8 1.5 1.8 5.8c.2.5.7.5 1 .2l2.6-2.1 5.1 3.7c.5.4 1.1.1 1.2-.5L22.3 5.3c.2-.7-.4-1.2-1.1-.9z"/></svg></a>':'')+(pf.tt?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.77 0 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V12.8a8.28 8.28 0 005.58 2.17V11.5a4.84 4.84 0 01-3.58-1.81V6.69h3.58z"/></svg></a>':'')+'</div>':'')+'</div>';
   h+='<div class="pf-c">'+rows.map(function(r){return'<div class="pf-r"><span class="pf-rl">'+r.l+'</span><span class="pf-rv">'+r.v+'</span></div>'}).join("")+'</div>';
   var totalSpent=0;HL.forEach(function(h){if(h.s==="success"){var a=parseInt(h.am.replace(/[^0-9]/g,""));totalSpent+=a;}});
   h+='<div class="pf-c"><div class="pf-r"><span class="pf-rl">Orders</span><span class="pf-rv">'+HL.length+'</span></div><div class="pf-r"><span class="pf-rl">Total Spent</span><span class="pf-rv">'+totalSpent.toLocaleString()+' MMK</span></div></div>';
-  h+='<div class="pf-c" style="cursor:pointer" onclick="showTopUp()"><div class="pf-r"><span class="pf-rl" style="display:flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--ac2);fill:none;stroke-width:1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Wallet Balance</span><span class="pf-rv" style="color:var(--ac2);font-size:16px;font-family:var(--mono)">'+mmk(wallet)+'</span></div><div style="text-align:center;padding:8px;font-size:10px;color:var(--ac2);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Tap to Add Balance +</div></div>';
+
   // Analytics
   var gSpend={};HL.forEach(function(h){var a=parseInt(h.am.replace(/[^0-9]/g,""));gSpend[h.g]=(gSpend[h.g]||0)+a;});
   var maxS=Math.max.apply(null,Object.values(gSpend))||1;
@@ -1293,14 +1377,16 @@ function rEvMag(){
   var ftTime=(ft.endDay-18);if(ftTime<0)ftTime=0;
   var ftHrs=Math.floor(Math.random()*24);var ftMin=Math.floor(Math.random()*60);
 
-  document.getElementById("evFeatured").innerHTML='<div class="ev-featured" onclick="oevd('+ft.id+')"><div class="ev-ft-banner" style="background:'+ft.bg+'"><div class="ft-em">'+ft.emoji+'</div><span class="ft-badge '+ft.badge+'">'+ft.badge+'</span><div class="ev-ft-timer"><div class="ftt"><div class="ftt-n">'+ftTime+'</div><div class="ftt-l">Day</div></div><div class="ftt"><div class="ftt-n">'+ftHrs+'</div><div class="ftt-l">Hr</div></div><div class="ftt"><div class="ftt-n">'+ftMin+'</div><div class="ftt-l">Min</div></div></div><div class="ev-ft-body"><div class="ev-ft-game">'+ft.game+'</div><div class="ev-ft-title">'+ft.title+'</div><div class="ev-ft-reward">'+ft.rewards[0]+'</div></div></div></div>';
+  var ftImg=ft.img?'<img src="'+ft.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"/>':'<div class="ft-em">'+ft.emoji+'</div>';
+  document.getElementById("evFeatured").innerHTML='<div class="ev-featured" onclick="oevd('+ft.id+')"><div class="ev-ft-banner" style="background:'+ft.bg+'">'+ftImg+'<span class="ft-badge '+ft.badge+'">'+ft.badge+'</span><div class="ev-ft-timer"><div class="ftt"><div class="ftt-n">'+ftTime+'</div><div class="ftt-l">Day</div></div><div class="ftt"><div class="ftt-n">'+ftHrs+'</div><div class="ftt-l">Hr</div></div><div class="ftt"><div class="ftt-n">'+ftMin+'</div><div class="ftt-l">Min</div></div></div><div class="ev-ft-body"><div class="ev-ft-game">'+ft.game+'</div><div class="ev-ft-title">'+ft.title+'</div><div class="ev-ft-reward">'+(ft.rewards&&ft.rewards[0]?ft.rewards[0]:"")+'</div></div></div></div>';
 
   if(!rest.length){document.getElementById("evGrid").innerHTML='';return;}
 
   document.getElementById("evGrid").innerHTML='<div class="ev-mg-grid">'+rest.map(function(ev){
     var tl=(ev.endDay-18);if(tl<0)tl=0;
     var bdgCol=ev.badge==="live"?"var(--rd)":ev.badge==="new"?"var(--ac)":"var(--yw)";
-    return'<div class="ev-mg-card" onclick="oevd('+ev.id+')"><div class="ev-mg-top" style="background:'+ev.bg+'"><span class="mg-em">'+ev.emoji+'</span><span class="mg-badge" style="background:'+bdgCol+'"></span></div><div class="ev-mg-body"><div class="ev-mg-game">'+ev.game+'</div><div class="ev-mg-title">'+ev.title+'</div><div class="ev-mg-foot"><span class="ev-mg-time">'+tl+'d left</span><span class="ev-mg-rw">'+ev.rewards[0].split(" ")[0]+'</span></div></div></div>';
+    var evImg=ev.img?'<img src="'+ev.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>':'<span class="mg-em">'+ev.emoji+'</span>';
+    return'<div class="ev-mg-card" onclick="oevd('+ev.id+')"><div class="ev-mg-top" style="background:'+ev.bg+';position:relative;overflow:hidden">'+evImg+'<span class="mg-badge" style="background:'+bdgCol+'"></span></div><div class="ev-mg-body"><div class="ev-mg-game">'+ev.game+'</div><div class="ev-mg-title">'+ev.title+'</div><div class="ev-mg-foot"><span class="ev-mg-time">'+tl+'d left</span><span class="ev-mg-rw">'+(ev.rewards&&ev.rewards[0]?ev.rewards[0].split(" ")[0]:"")+'</span></div></div></div>';
   }).join("")+'</div>';
 }
 
@@ -1339,6 +1425,18 @@ function toggleTheme(dark){
 // ═══ IN-APP NOTIFICATIONS ═══
 var NOTIFS=[];
 var notifUnsub=null;
+var prevNotifCount=0;
+
+// Request notification permission
+if("Notification" in window&&Notification.permission==="default"){
+  Notification.requestPermission();
+}
+
+function pushNotify(title,body){
+  if("Notification" in window&&Notification.permission==="granted"){
+    try{new Notification(title,{body:body,icon:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%236d28d9'/><text x='12' y='16' text-anchor='middle' fill='white' font-size='12'>D</text></svg>",badge:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%236d28d9'/></svg>",vibrate:[200,100,200],tag:"dahlia-"+Date.now()});}catch(e){}
+  }
+}
 
 function initNotifs(){
   if(!fbReady||!db)return;
@@ -1346,6 +1444,12 @@ function initNotifs(){
   notifUnsub=db.collection("notifications").where("userId","==",uid).orderBy("timestamp","desc").limit(30).onSnapshot(function(s){
     NOTIFS=[];
     s.forEach(function(d){var n=d.data();n.fbId=d.id;NOTIFS.push(n);});
+    // Push notification for new items
+    if(prevNotifCount>0&&NOTIFS.length>prevNotifCount){
+      var newest=NOTIFS[0];
+      if(newest)pushNotify(newest.title||"Dahlia Store",newest.message||"You have a new notification");
+    }
+    prevNotifCount=NOTIFS.length;
     updateBell();
   },function(){});
 }
@@ -1447,18 +1551,20 @@ rpt();rgrd(D);rht();rhl();rpr();rpf();
 // Try load from Firebase — REAL-TIME
 if(fbReady){
   // Real-time orders listener
-  db.collection("orders").orderBy("timestamp","desc").limit(50).onSnapshot(function(s){
+  // Load only current user's orders
+  var orderUid=curUser?curUser.email:"guest";
+  db.collection("orders").where("authUser","==",orderUid).orderBy("timestamp","desc").limit(50).onSnapshot(function(s){
     HL=[];s.forEach(function(d){var o=d.data();HL.push({id:o.txnId||d.id,fbId:d.id,g:o.game,gi:o.gameEmoji,gc:o.gameColor,ci:o.currencyIcon,cur:o.currency,q:o.amount,am:mmk(o.price),dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",s:o.status||"pending"});});
     rht();rhl();
   },function(){});
   // Load wallet
-  var wUid=curUser?curUser.uid:"guest";
+  var wUid=curUser?curUser.email:"guest";
   db.collection("wallets").doc(wUid).onSnapshot(function(d){
     if(d.exists){wallet=d.data().balance||0;}else{wallet=0;}
     if(document.getElementById("walBal"))document.getElementById("walBal").textContent=mmk(wallet);
   },function(){});
   // Load profile
-  db.collection("users").doc("current_user").get().then(function(doc){
+  db.collection("users").doc(curUser?curUser.email:"guest").get().then(function(doc){
     if(doc.exists){var d=doc.data();Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});rpf();}
   }).catch(function(){});
   // Load Games from Firebase (Admin editable)
@@ -1475,10 +1581,10 @@ if(fbReady){
       if(fbEv.length){EVT=fbEv;if(document.getElementById("evTabs"))rEvPage();}
     }
   },function(){});
-  // Load Promos from Firebase (Admin editable)
+  // Load Promos/Account from Firebase (Admin editable)
   db.collection("promos").onSnapshot(function(s){
     if(!s.empty){
-      var fbPr=[];s.forEach(function(d){var p=d.data();fbPr.push({t:p.t||p.title||"",d:p.d||p.desc||"",x:p.x||p.discount||"",bg:p.bg||"linear-gradient(135deg,#1e40af,#2563eb)",u:p.exp||p.u||"",img:p.img||""});});
+      var fbPr=[];s.forEach(function(d){var p=d.data();fbPr.push({t:p.t||p.title||"",d:p.d||p.desc||"",x:p.x||p.discount||"",bg:p.bg||"linear-gradient(135deg,#1e40af,#2563eb)",u:p.exp||p.u||"",img:p.img||"",caption:p.caption||"",game:p.game||"",gameId:p.gameId||"",gameServer:p.gameServer||"",gameRank:p.gameRank||"",gallery:p.gallery||[]});});
       if(fbPr.length){PR=fbPr;rpr();}
     }
   },function(){});
