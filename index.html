@@ -594,10 +594,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .af-google svg{width:16px;height:16px;}
 .af-skip{width:100%;padding:10px;border:none;background:none;color:var(--tx3);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);margin-top:10px;text-decoration:underline;}
 </style>
+<script>(function(){try{if(localStorage.getItem("dahlia_logged")==="1"){var s=document.createElement("style");s.textContent=".auth{display:none!important}.app.hide{display:block!important}";document.head.appendChild(s);}}catch(e){}})()</script>
 </head>
 <body>
 <!-- AUTH SCREEN -->
-<script>try{if(localStorage.getItem("dahlia_logged")==="1"){document.write('<div class="auth hide" id="authScreen">')}else{document.write('<div class="auth" id="authScreen">')}}catch(e){document.write('<div class="auth" id="authScreen">')}</script>
+<div class="auth" id="authScreen">
   <div class="auth-logo">
     <div class="al-mark"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div>
     <div class="al-name"><span>Dahlia</span> Store</div>
@@ -631,7 +632,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 </div>
 
 <!-- MAIN APP (hidden until auth) -->
-<script>try{if(localStorage.getItem("dahlia_logged")==="1"){document.write('<div class="app" id="mainApp">')}else{document.write('<div class="app hide" id="mainApp">')}}catch(e){document.write('<div class="app hide" id="mainApp">')}</script>
+<div class="app hide" id="mainApp">
   <div class="hdr">
     <div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div><span>Dahlia</span> Store</div>
     <div class="hdr-icons"><div class="lang-sw"><button class="lang-b on" id="lEn" onclick="setLang('en')">EN</button><button class="lang-b" id="lMm" onclick="setLang('mm')">MM</button></div><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24" style="stroke:rgba(255,255,255,.35)"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24" style="stroke:rgba(255,255,255,.35)"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div></div>
@@ -1003,11 +1004,11 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l){var e=document.getElementById("ggrid");if(!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}e.innerHTML=l.map(function(g){return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)"><span style="font-size:40px;position:relative;z-index:1">'+g.e+'</span></div><span class="gn">'+g.n+'</span></div>'}).join("");}
+function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)"><span style="font-size:40px;position:relative;z-index:1">'+g.e+'</span></div><span class="gn">'+g.n+'</span></div>'}).join("");}
 
 // DETAIL
 function og(id){
-  sg=D.find(function(x){return x.id===id});sp=null;ss=0;sy=null;ck=false;rc=false;
+  sg=D.find(function(x){return x.id===id})||D[id]||D[0];if(!sg){tst("Game not found","er");return;}sp=null;ss=0;sy=null;ck=false;rc=false;
   var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
   var bnImg=sg.img?'<img src="'+sg.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3"/>':'';
   h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden">'+bnImg+'<div class="bn-i" style="position:relative;z-index:1">'+sg.e+'</div><div class="bn-t" style="position:relative;z-index:1">'+sg.n+'</div><div class="bn-s" style="position:relative;z-index:1"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div>';
@@ -1693,8 +1694,8 @@ if(fbReady){
   // Load Games from Firebase (Admin editable)
   db.collection("games").onSnapshot(function(s){
     if(!s.empty){
-      var fbGames=[];s.forEach(function(d){var g=d.data();fbGames.push({n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}]});});
-      if(fbGames.length){D=fbGames;rgrd(D);}
+      var fbGames=[];var gIdx=0;s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}]});});
+      if(fbGames.length){D=fbGames;rgrd(D);rpt();}
     }
   },function(){});
   // Load Events from Firebase (Admin editable)
