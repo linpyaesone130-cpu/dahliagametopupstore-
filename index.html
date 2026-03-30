@@ -679,7 +679,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 <div class="app light hide" id="mainApp">
   <div class="hdr">
     <div class="logo"><div class="logo-mark" id="logoMark"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div><span id="logoText">DAHLIA</span> <span id="logoSub" style="color:var(--tx2);font-weight:600">STORE</span></div>
-    <div class="hdr-icons"><div class="lang-sw"><button class="lang-b on" id="lEn" onclick="setLang(&quot;en&quot;)">EN</button><button class="lang-b" id="lMm" onclick="setLang(&quot;mm&quot;)">MM</button></div><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div></div>
+    <div class="hdr-icons"><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div></div>
   </div>
 
   <div class="cnt" id="cnt">
@@ -956,26 +956,10 @@ function fbSaveProfile(profile) {
   }).catch(function(e) {  });
 }
 
-var D=[
-  {id:1,n:"Mobile Legends",c:"#1e3a5f",e:"⚔️",cur:"Diamonds",ci:"💎",pl:"Mobile",sv:["Asia 1","Asia 2","Europe","NA","SA","Middle East"],pr:[{d:86,p:2800},{d:172,p:5500},{d:344,p:11000},{d:516,p:16500},{d:1075,p:33000},{d:2195,p:66000}]},
-  {id:2,n:"Free Fire",c:"#0d4f8b",e:"🔥",cur:"Diamonds",ci:"💎",pl:"Mobile",sv:["India","Singapore","Brazil","Thailand","Vietnam","Indonesia"],pr:[{d:100,p:2200},{d:310,p:6500},{d:520,p:10800},{d:1060,p:21500},{d:2180,p:43000}]},
-  {id:3,n:"Genshin Impact",c:"#2a5298",e:"🌟",cur:"Genesis Crystals",ci:"💠",pl:"Cross-platform",sv:["Asia","America","Europe","TW/HK/MO"],pr:[{d:60,p:2300},{d:330,p:11400},{d:1090,p:36000},{d:2240,p:69000},{d:6480,p:187000}]},
-  {id:4,n:"PUBG Mobile",c:"#1a3c6e",e:"🎯",cur:"UC",ci:"🪙",pl:"Mobile",sv:["Asia","KRJP","Europe","NA","SA","MENA"],pr:[{d:60,p:2200},{d:325,p:10800},{d:660,p:21500},{d:1800,p:55000},{d:3850,p:109000}]},
-  {id:5,n:"Honkai Star Rail",c:"#1b4178",e:"🚀",cur:"Oneiric Shards",ci:"🔮",pl:"Cross-platform",sv:["Asia","America","Europe","TW/HK/MO"],pr:[{d:60,p:2300},{d:330,p:11400},{d:1090,p:36000},{d:2240,p:69000}]},
-  {id:6,n:"Valorant",c:"#0f3460",e:"💎",cur:"VP",ci:"⚡",pl:"PC",sv:["AP","EU","NA","BR","KR","LATAM"],pr:[{d:125,p:2200},{d:420,p:6500},{d:700,p:10800},{d:1375,p:21000},{d:2400,p:35000}]},
-  {id:7,n:"Arena of Valor",c:"#163d6f",e:"🛡️",cur:"Vouchers",ci:"🎫",pl:"Mobile",sv:["Asia","EU","NA","India"],pr:[{d:90,p:2200},{d:300,p:6500},{d:600,p:13000},{d:1500,p:32000}]},
-  {id:8,n:"Call of Duty Mobile",c:"#0b3d5e",e:"🔫",cur:"CP",ci:"🎖️",pl:"Mobile",sv:["Global","Garena","Vietnam","Korea"],pr:[{d:80,p:2300},{d:400,p:11400},{d:800,p:21500},{d:2000,p:53000}]},
-  {id:9,n:"Clash of Clans",c:"#1a4a7a",e:"🏰",cur:"Gems",ci:"💚",pl:"Mobile",sv:["Global"],pr:[{d:80,p:1400},{d:500,p:7200},{d:1200,p:14400},{d:2500,p:28800},{d:6500,p:72000}]},
-  {id:10,n:"Stumble Guys",c:"#264e86",e:"🏃",cur:"Gems",ci:"💎",pl:"Cross-platform",sv:["Global"],pr:[{d:50,p:1400},{d:250,p:5400},{d:800,p:14400},{d:1600,p:28800}]},
-  {id:11,n:"League of Legends",c:"#0e3866",e:"🧙",cur:"RP",ci:"🔶",pl:"PC",sv:["NA","EUW","EUNE","KR","JP","BR","OCE","SEA"],pr:[{d:150,p:2900},{d:475,p:7900},{d:950,p:14400},{d:1900,p:28800}]},
-  {id:12,n:"Roblox",c:"#1c4b82",e:"🧱",cur:"Robux",ci:"🟢",pl:"Cross-platform",sv:["Global"],pr:[{d:80,p:1400},{d:400,p:7200},{d:800,p:14400},{d:1700,p:28800},{d:4500,p:72000}]},
-  {id:13,n:"Clash Royale",c:"#15437a",e:"👑",cur:"Gems",ci:"💚",pl:"Mobile",sv:["Global"],pr:[{d:80,p:1400},{d:500,p:7200},{d:1200,p:14400},{d:2500,p:28800},{d:6500,p:72000}]},
-  {id:14,n:"Minecraft",c:"#1d5a3a",e:"⛏️",cur:"Minecoins",ci:"⛏️",pl:"Cross-platform",sv:["Global"],pr:[{d:320,p:2200},{d:700,p:5000},{d:1720,p:10800},{d:3500,p:21500}]},
-  {id:15,n:"Apex Legends",c:"#123a64",e:"🦅",cur:"Apex Coins",ci:"🔴",pl:"PC",sv:["Singapore","Tokyo","Sydney","Oregon","Frankfurt","London"],pr:[{d:150,p:2900},{d:1000,p:14400},{d:2150,p:28800},{d:4350,p:57600}]}
-];
-var PY=[{k:"kpay",n:"KBZ Pay",col:"#0066cc",ic:"K",ph:"09-123-456-789",hd:"Dahlia Official"},{k:"wave",n:"Wave Pay",col:"#f59e0b",ic:"W",ph:"09-987-654-321",hd:"Dahlia Store"},{k:"uab",n:"UAB Pay",col:"#10b981",ic:"U",ph:"09-555-888-111",hd:"Dahlia MM"}];
+var D=[];
+var PY=[];
 var HL=[];
-var PR=[{t:"🎉 March Madness!",d:"20% bonus on MLBB",x:"20%",bg:"linear-gradient(135deg,#1e40af,#0891b2)",u:"31 Mar"},{t:"🔥 Weekend Deal",d:"FF double bonus Saturday",x:"2x",bg:"linear-gradient(135deg,#4338ca,#2563eb)",u:"Every Wknd"},{t:"💎 New User",d:"First top-up 15% extra",x:"15%",bg:"linear-gradient(135deg,#0369a1,#2563eb)",u:"Limited"},{t:"⭐ VIP Cashback",d:"5% on orders 30K+ MMK",x:"5%",bg:"linear-gradient(135deg,#3730a3,#1d4ed8)",u:"Ongoing"}];
+var PR=[];
 var AV=["<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><rect x='2' y='6' width='20' height='12' rx='2'/><path d='M12 12h.01'/><path d='M6 12h.01'/><path d='M18 12h.01'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0110 0v4'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='12' r='10'/><path d='M8 14s1.5 2 4 2 4-2 4-2'/><line x1='9' y1='9' x2='9.01' y2='9'/><line x1='15' y1='9' x2='15.01' y2='9'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z'/></svg>","<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg>"];
 var pf={nm:"Guest",em:"",ph:"",sn:"March 2026",av:"<svg viewBox='0 0 24 24' width='28' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6'/></svg>",gn:"",lc:"",fv:"",py:"",fb:"",tg:"",tt:"",nt:true,dk:false};
 
@@ -1061,7 +1045,7 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){var inner;if(g.img){inner='<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';}else{inner='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite"></div></div>';}return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)">'+inner+'</div><span class="gn">'+g.n+'</span></div>'}).join("");}
+function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge" style="text-align:center;padding:40px;color:var(--tx3)">Loading games...</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){var inner=g.img?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>':'';return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)">'+inner+'</div><span class="gn">'+g.n+'</span></div>'}).join("");}
 
 // DETAIL
 
@@ -1074,19 +1058,19 @@ function pickRegion(ri){
   sp=null;sy=null;ck=false;usum();
 }
 function renderPkgs(pkgs){
-  return pkgs.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("");
+  return pkgs.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("");
 }
 function og(id){
   sg=D.find(function(x){return x.id===id})||D[id]||D[0];if(!sg){tst("Game not found","er");return;}sp=null;ss=0;sy=null;ck=false;rc=false;
   var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
   if(sg.img){
-    h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px"><img src="'+sg.img+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div></div>';
+    h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px"><img src="'+sg.img+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.cur+' • Instant</div></div></div>';
   }else{
-    h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div>';
+    h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.cur+' • Instant</div></div>';
   }
   var showSid=sg.showSid===true||sg.showSid==="true";
   h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
-  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
+  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
   h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+'">'+p.ic+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
   h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
   h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
@@ -1241,7 +1225,7 @@ function rpf(){
   var months=["Jan","Feb","Mar","Apr","May","Jun"];var mData=[12000,8500,21500,15200,18600,11400];var mMax=Math.max.apply(null,mData);
   h+='<div class="an-months">';months.forEach(function(m,i){var pct=Math.round(mData[i]/mMax*100);h+='<div class="an-mo"><div class="an-mo-bar" style="height:'+pct+'%;background:'+colors[i%colors.length]+'"></div><span class="an-mo-lb">'+m+'</span></div>';});
   h+='</div></div>';
-  h+='<div class="st-c"><div class="st-t">Settings</div><div class="st-r"><div class="st-l"><div class="st-i" style="background:rgba(99,102,241,.08)"><svg viewBox="0 0 24 24" stroke="#6366f1"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="st-info"><span class="st-lb">Help & FAQ</span><span class="st-ds">Questions & answers</span></div></div><button style="padding:5px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="go(\'faq\')">Open</button></div><div class="st-r"><div class="st-l"><div class="st-i" style="background:var(--acg)"><svg viewBox="0 0 24 24" stroke="var(--ac2)"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div class="st-info"><span class="st-lb">Notifications</span><span class="st-ds">Order & app updates</span></div></div><label class="tg"><input type="checkbox" '+(pf.nt?"checked":"")+" onchange=\"pf.nt=this.checked\"/><span class=\"ts\"></span></label></div>";
+  h+='<div class="st-c"><div class="st-t">Settings</div><div class="st-r"><div class="st-l"><div class="st-i" style="background:rgba(37,99,235,.08)"><svg viewBox="0 0 24 24" stroke="#2563eb"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><div class="st-info"><span class="st-lb">Language</span><span class="st-ds" id="curLangDs">English</span></div></div><div style="display:flex;gap:4px"><button class="lang-b on" id="lEn" onclick="setLang(&quot;en&quot;)" style="padding:5px 12px;border-radius:8px;border:1.5px solid var(--ac);background:var(--ac);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">EN</button><button class="lang-b" id="lMm" onclick="setLang(&quot;mm&quot;)" style="padding:5px 12px;border-radius:8px;border:1.5px solid var(--bd);background:none;color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">MM</button></div></div><div class="st-r"><div class="st-l"><div class="st-i" style="background:rgba(99,102,241,.08)"><svg viewBox="0 0 24 24" stroke="#6366f1"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="st-info"><span class="st-lb">Help & FAQ</span><span class="st-ds">Questions & answers</span></div></div><button style="padding:5px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="go(\'faq\')">Open</button></div><div class="st-r"><div class="st-l"><div class="st-i" style="background:var(--acg)"><svg viewBox="0 0 24 24" stroke="var(--ac2)"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div class="st-info"><span class="st-lb">Notifications</span><span class="st-ds">Order & app updates</span></div></div><label class="tg"><input type="checkbox" '+(pf.nt?"checked":"")+" onchange=\"pf.nt=this.checked\"/><span class=\"ts\"></span></label></div>";
   h+='<div class="st-r"><div class="st-l"><div class="st-i" style="background:'+(pf.dk?"var(--acg)":"rgba(245,158,11,.08)")+'"><svg viewBox="0 0 24 24" stroke="'+(pf.dk?"var(--ac2)":"#d97706")+'"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div><div class="st-info"><span class="st-lb">'+(pf.dk?"Dark Mode":"Light Mode")+'</span><span class="st-ds">Switch appearance</span></div></div><label class="tg"><input type="checkbox" '+(pf.dk?"checked":"")+' onchange="toggleTheme(this.checked)"/><span class="ts"></span></label></div></div>';
   h+='<button class="lgo" onclick="doLogout()">Log Out</button>';
   h+='<div style="text-align:center;margin-top:16px;padding:12px;font-size:10px;color:var(--tx3)"><div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px"><span style="width:6px;height:6px;border-radius:50%;background:'+(fbReady?"var(--gn)":"var(--rd)")+'"></span>'+(fbReady?"Firebase Connected":"Firebase Offline")+'</div>'+(curUser?'Logged in as <strong style="color:var(--tx2)">'+curUser.email+'</strong>':'Guest mode')+'<br/>Dahlia Top Up Store v1.0</div>';
@@ -1252,7 +1236,7 @@ function uploadAvatar(){
   document.body.appendChild(inp);
   inp.addEventListener("change",function(){
     if(inp.files&&inp.files[0]){
-      if(inp.files[0].size>300000){tst("Max 300KB","er");return;}
+      if(inp.files[0].size>2000000){tst("Max 2MB","er");return;}
       var reader=new FileReader();reader.onload=function(e){
         pf.av='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>';
         rpf();tst("Avatar updated","ok");
@@ -1502,12 +1486,12 @@ function listenVerify(docId){
   });
 }
 function confirmName(ok){
-  if(ok){idVerified=true;var _uid=document.getElementById("uid");if(_uid&&sg){saveVerified(_uid.value.trim(),sg.n,"Verified");}document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center;font-size:12px;font-weight:800;color:var(--gn)">ID Verified</div>';document.getElementById("verifyBtn").textContent="Verified";tst("ID confirmed!","ok");}
+  if(ok){idVerified=true;var _uid=document.getElementById("uid");var _vname=document.querySelector("#verifyStatus div div:nth-child(2)");var vn=_vname?_vname.textContent:"Verified";if(_uid&&sg){saveVerified(_uid.value.trim(),sg.n,vn);}document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center;font-size:12px;font-weight:800;color:var(--gn)">Verified: '+vn+'</div>';document.getElementById("verifyBtn").textContent="Verified";document.getElementById("verifyBtn").disabled=true;document.getElementById("verifyBtn").textContent="Verified";tst("ID confirmed!","ok");}
   else{idVerified=false;document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)">Please re-enter correct ID</div>';document.getElementById("verifyBtn").textContent="Confirm ID";document.getElementById("verifyBtn").disabled=false;document.getElementById("uid").value="";document.getElementById("uid").focus();}
 }
 
 // ═══ GIVEAWAYS ═══
-var GV=[{t:"Free 86 Diamonds",d:"Like & Share to win!",img:"",game:"Mobile Legends",prize:"86 Diamonds",end:"Mar 31",status:"active"},{t:"UC Giveaway",d:"Follow us on Telegram",img:"",game:"PUBG Mobile",prize:"300 UC",end:"Apr 5",status:"active"}];
+var GV=[];
 function rGv(){
   var el=document.getElementById("gvList");if(!el)return;
   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">'+GV.map(function(g,i){
@@ -1528,18 +1512,7 @@ function openGv(i){
 }
 
 // ═══ EVENTS CALENDAR ═══
-var EVT=[
-  {id:0,emoji:"⚔️",bg:"linear-gradient(135deg,#1e3a5f,#2563eb)",badge:"live",game:"Mobile Legends",title:"Season 32 Starlight Pass",desc:"Get exclusive Starlight skins, emotes, and sacred statue. Complete missions to earn bonus rewards.",startDay:12,endDay:22,rewards:["💎 500 Diamonds","🎭 Starlight Skin","📦 Premium Chest"],players:"142K"},
-  {id:1,emoji:"🌟",bg:"linear-gradient(135deg,#2a5298,#6366f1)",badge:"live",game:"Genshin Impact",title:"Lantern Rite Festival 2026",desc:"Celebrate the Lantern Rite with exclusive events, free Liyue character selection and Primogem rewards.",startDay:10,endDay:31,rewards:["💠 1600 Primogems","🎫 Free 4★ Character","✨ Festival Namecard"],players:"289K"},
-  {id:2,emoji:"🔥",bg:"linear-gradient(135deg,#0d4f8b,#f59e0b)",badge:"new",game:"Free Fire",title:"Free Fire x Naruto Collab",desc:"Ninja-themed skins, Naruto character bundles, special Ninjutsu abilities in Battle Royale mode.",startDay:15,endDay:30,rewards:["🔥 Naruto Bundle","🎯 Rasengan Emote","💎 800 Diamonds"],players:"95K"},
-  {id:3,emoji:"🎯",bg:"linear-gradient(135deg,#1a3c6e,#10b981)",badge:"soon",game:"PUBG Mobile",title:"Season 7 Royale Pass",desc:"New Royale Pass with 100 tiers of rewards including legendary gun skins and mythic outfits.",startDay:20,endDay:30,rewards:["🪙 600 UC Rebate","🔫 Mythic AKM Skin","🚗 Sports Car Skin"],players:"Pre-reg"},
-  {id:4,emoji:"⚡",bg:"linear-gradient(135deg,#0f3460,#ef4444)",badge:"live",game:"Valorant",title:"Episode 10 Act 2 Battle Pass",desc:"New agent Vyse joins the roster. Battle Pass includes exclusive weapon skins and gun buddies.",startDay:5,endDay:28,rewards:["⚡ 300 VP Bonus","🎨 Night Market","🃏 Agent Contract"],players:"178K"},
-  {id:5,emoji:"🚀",bg:"linear-gradient(135deg,#1b4178,#8b5cf6)",badge:"new",game:"Honkai Star Rail",title:"Version 3.1 — Amphoreus",desc:"Explore the new Amphoreus region with new 5-star characters and double drop event for Relics.",startDay:12,endDay:31,rewards:["🔮 1600 Stellar Jade","🎫 10 Special Passes","📦 Relic Box x5"],players:"67K"},
-  {id:6,emoji:"🧙",bg:"linear-gradient(135deg,#0e3866,#f59e0b)",badge:"live",game:"League of Legends",title:"Lunar Eclipse Skins 2026",desc:"New Lunar Eclipse skin line featuring Leona, Diana, and Aatrox prestige edition.",startDay:8,endDay:28,rewards:["🔶 500 RP Bonus","🎭 Prestige Skin","🏆 Event Border"],players:"210K"},
-  {id:7,emoji:"🏰",bg:"linear-gradient(135deg,#1a4a7a,#22c55e)",badge:"live",game:"Clash of Clans",title:"Clan Capital Raid Weekend",desc:"Special raid weekend with double Capital Gold rewards and new Clan Capital districts.",startDay:15,endDay:19,rewards:["💚 2500 Gems","🏗️ Builder Potion x3","⚔️ Raid Medal x500"],players:"320K"},
-  {id:8,emoji:"👑",bg:"linear-gradient(135deg,#15437a,#ec4899)",badge:"soon",game:"Clash Royale",title:"Global Tournament March",desc:"Compete globally for exclusive rewards. Top finishers earn legendary cards and emotes.",startDay:25,endDay:31,rewards:["👑 Legendary Card","🏅 Gold Rush x3","💚 5000 Gems"],players:"Coming"},
-  {id:9,emoji:"🧱",bg:"linear-gradient(135deg,#1c4b82,#10b981)",badge:"new",game:"Roblox",title:"Creator Fest 2026",desc:"Play community-created games and earn exclusive avatar items. Double Robux rewards on purchases.",startDay:18,endDay:31,rewards:["🟢 500 Robux","🎭 Exclusive Hat","⭐ Creator Badge"],players:"450K"}
-];
+var EVT=[];
 var calMonth=2;var calYear=2026;var calSel=null;var evFilter="all";
 var dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
@@ -1801,27 +1774,26 @@ function startFirebaseListeners(){
   }).catch(function(){});
   // Games
   db.collection("games").onSnapshot(function(s){
-    {var fbGames=[];var gIdx=0;s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false});});
-      if(fbGames.length){D=fbGames;rgrd(D);rpt();}
-    }
+    var fbGames=[];var gIdx=0;s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false});});
+      D=fbGames;rgrd(D);rpt();
   },function(){});
   // Events
   db.collection("events").onSnapshot(function(s){
     if(!s.empty){
       var fbEv=[];var idx=0;s.forEach(function(d){var e=d.data();fbEv.push({id:idx++,emoji:e.emoji||"🎮",bg:e.bg||"linear-gradient(135deg,#2563eb,#6366f1)",badge:e.badge||"new",game:e.game||"",title:e.title||"",desc:e.desc||"",img:e.img||"",startDay:e.startDay||1,endDay:e.endDay||30,rewards:e.rewards||[],players:e.players||""});});
-      if(fbEv.length){EVT=fbEv;if(document.getElementById("evTabs"))rEvPage();}
+      EVT=fbEv;if(document.getElementById("evTabs"))rEvPage();
     }
   },function(){});
   // Promos/Account
   db.collection("promos").onSnapshot(function(s){
     if(!s.empty){
       var fbPr=[];s.forEach(function(d){var p=d.data();fbPr.push({t:p.t||p.title||"",d:p.d||p.desc||"",x:p.x||p.discount||"",bg:p.bg||"linear-gradient(135deg,#1e40af,#2563eb)",u:p.exp||p.u||"",img:p.img||"",caption:p.caption||"",game:p.game||"",gameId:p.gameId||"",gameServer:p.gameServer||"",gameRank:p.gameRank||"",gallery:p.gallery||[]});});
-      if(fbPr.length){PR=fbPr;rpr();}
+      PR=fbPr;rpr();
     }
   },function(){});
   // Giveaways
   db.collection("giveaways").onSnapshot(function(s){
-    if(!s.empty){GV=[];s.forEach(function(d){GV.push(d.data());});rGv();}
+    GV=[];s.forEach(function(d){GV.push(d.data());});rGv();
   },function(){});
   // Payments
   db.collection("payments").onSnapshot(function(s){
