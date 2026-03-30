@@ -100,7 +100,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .gi{width:100%;aspect-ratio:1;border-radius:22px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.3);}
 .gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 50%);pointer-events:none;}
 .gi span{font-size:40px!important;position:relative;z-index:1;}
-.gn{font-size:10px;font-weight:800;color:var(--tx2);text-align:center;line-height:1.2;text-transform:uppercase;letter-spacing:.2px;}
+.gn{font-size:10px;font-weight:600;color:var(--tx);-webkit-font-smoothing:antialiased;text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;-webkit-font-smoothing:antialiased;}
 .ge{text-align:center;grid-column:1/-1;color:var(--tx3);font-size:13px;padding:32px 0;}
 
 /* ══ BACK ══ */
@@ -435,6 +435,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .app.light .prc{border-color:var(--bd);}
 .app.light .abtn{border-color:var(--bd);}
 .app.light .notif-card{background:var(--sf);border-color:var(--bd);}
+.app.light .hero-tag,.app.light .hero h2,.app.light .hero p,.app.light .hs-n,.app.light .hs-l{color:#fff!important;}
+.app.light .bn-t,.app.light .bn-s{color:#fff!important;}
+.app.light .pk .pk-a{color:var(--tx)!important;}
+.app.light .pk .pk-p{color:var(--tx2)!important;}
+.app.light .pk.on .pk-a{color:var(--ac)!important;}
+.app.light .gn{color:var(--tx)!important;}
+.app.light .lb{color:var(--tx)!important;}
+.app.light .icard input{color:var(--tx)!important;background:var(--bg2)!important;}
+.app.light .tr-ph{color:var(--tx)!important;}
+.app.light .chk-t{color:var(--tx2)!important;}
+.app.light .osum{color:var(--tx)!important;}
+.app.light .or .ol{color:var(--tx2)!important;}
+.app.light .or .ov{color:var(--tx)!important;}
+.app.light .pf-nm{color:#fff!important;}
+.app.light .pf-dt{color:rgba(255,255,255,.7)!important;}
+.app.light .faq-a{color:var(--tx2)!important;}
 .app.light .ov .sh,.app.light .su-c,.app.light .ed .es,.app.light .evd-sh,.app.light .trk-sh{background:var(--sf);border-color:var(--bd);}
 
 /* ══ EVENT DETAIL PAGE ══ */
@@ -662,7 +678,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 <!-- MAIN APP (hidden until auth) -->
 <div class="app light hide" id="mainApp">
   <div class="hdr">
-    <div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div><span>Dahlia</span> Store</div>
+    <div class="logo"><div class="logo-mark" id="logoMark"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div><span id="logoText">DAHLIA</span> <span id="logoSub" style="color:var(--tx2);font-weight:600">STORE</span></div>
     <div class="hdr-icons"><div class="lang-sw"><button class="lang-b on" id="lEn" onclick="setLang(&quot;en&quot;)">EN</button><button class="lang-b" id="lMm" onclick="setLang(&quot;mm&quot;)">MM</button></div><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div></div>
   </div>
 
@@ -671,7 +687,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
     <div class="pg on" id="pg-home">
       <div id="heroCarousel" style="position:relative;margin-bottom:16px">
         <div id="heroSlides" style="overflow-x:auto;display:flex;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;border-radius:var(--r3);gap:0">
-          <div class="hero" id="heroSec" style="min-width:100%;scroll-snap-align:start;flex-shrink:0"><div class="hero-glow"></div><div class="hero-glow2"></div>
+          <div class="hero" id="heroSec" style="min-width:100%;scroll-snap-align:start;flex-shrink:0;aspect-ratio:16/9"><div class="hero-glow"></div><div class="hero-glow2"></div>
             <div class="hero-tag"><span class="dot"></span><span data-t="heroTag">Live Now</span></div>
             <h2><span data-t="heroH1">Top Up Instantly.</span><br/><span data-t="heroH2">Play Unlimited.</span></h2>
             <p data-t="heroP">Dahlia — Fastest game top-up in Myanmar</p>
@@ -1045,7 +1061,7 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){var gimg=g.img?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>':'';return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)">'+gimg+'<span style="font-size:'+(g.img?'0':'40')+'px;position:relative;z-index:1">'+(g.img?'':g.e)+'</span></div><span class="gn">'+g.n+'</span></div>'}).join("");}
+function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge">No games found</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){var inner;if(g.img){inner='<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';}else{inner='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite"></div></div>';}return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)">'+inner+'</div><span class="gn">'+g.n+'</span></div>'}).join("");}
 
 // DETAIL
 
@@ -1058,16 +1074,19 @@ function pickRegion(ri){
   sp=null;sy=null;ck=false;usum();
 }
 function renderPkgs(pkgs){
-  return pkgs.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':(sg.img?'<div class="pk-img" style="background-image:url('+sg.img+')"></div>':'');return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("");
+  return pkgs.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("");
 }
 function og(id){
   sg=D.find(function(x){return x.id===id})||D[id]||D[0];if(!sg){tst("Game not found","er");return;}sp=null;ss=0;sy=null;ck=false;rc=false;
   var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
-  var bnImg=sg.img?'<img src="'+sg.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3"/>':'';
-  h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden">'+bnImg+'<div class="bn-i" style="position:relative;z-index:1">'+sg.e+'</div><div class="bn-t" style="position:relative;z-index:1">'+sg.n+'</div><div class="bn-s" style="position:relative;z-index:1"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div>';
+  if(sg.img){
+    h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px"><img src="'+sg.img+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div></div>';
+  }else{
+    h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.ci+' '+sg.cur+' • Instant</div></div>';
+  }
   var showSid=sg.showSid===true||sg.showSid==="true";
   h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
-  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':(sg.img?'<div class="pk-img" style="background-image:url('+sg.img+')"></div>':'');return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
+  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+sg.ci+' '+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
   h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+'">'+p.ic+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
   h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
   h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
@@ -1120,7 +1139,7 @@ var lastOrder=null;
 function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
   var uid=document.getElementById("uid");var sid=document.getElementById("sid");
   var order={
-    game:sg.n,gameEmoji:sg.e,gameColor:sg.c,
+    game:sg.n,gameEmoji:sg.e,gameColor:sg.c,gameImg:sg.img||"",gameName:sg.n,
     currency:sg.cur,currencyIcon:sg.ci,
     amount:sg.pr[sp].d,price:sg.pr[sp].p,
     userId:uid?uid.value:"-",serverId:sid?sid.value:"",region:selRegion!==null&&sg.regions?sg.regions[selRegion].name:"",
