@@ -1175,12 +1175,35 @@ function csuc(){document.getElementById("sov").classList.remove("v");cg();go("ho
 document.getElementById("cmod").addEventListener("click",function(e){if(e.target===this)cm(0);});
 
 // HISTORY
-function rht(){var c={all:HL.length,success:HL.filter(function(h){return h.s==="success"}).length,pending:HL.filter(function(h){return h.s==="pending"}).length,failed:HL.filter(function(h){return h.s==="failed"}).length};
-  document.getElementById("htabs").innerHTML=["all","success","pending","failed"].map(function(k){return'<button class="tb'+(hfl===k?" on":"")+'" onclick="shf(\''+k+'\')">'+k[0].toUpperCase()+k.slice(1)+' ('+c[k]+')</button>'}).join("");}
+function rht(){var c={all:HL.length,confirmed:HL.filter(function(h){return h.s==="confirmed"||h.s==="success"}).length,pending:HL.filter(function(h){return h.s==="pending"}).length,failed:HL.filter(function(h){return h.s==="failed"}).length};
+  document.getElementById("htabs").innerHTML=['all','confirmed','pending','failed'].map(function(k){var label=k==="confirmed"?"✓ Confirmed":k==="pending"?"⏳ Waiting":k==="failed"?"✗ Failed":"All";return'<button class="tb'+(hfl===k?" on":"")+'" onclick="shf(\''+k+'\')">'+label+' ('+c[k]+')</button>'}).join("");}
 function shf(v){hfl=v;rht();rhl();}
-function rhl(){var f=hfl==="all"?HL:HL.filter(function(h){return h.s===hfl});document.getElementById("hcnt").textContent=f.length+" transaction"+(f.length!==1?"s":"");
-  if(!f.length){document.getElementById("hlist").innerHTML='<div class="hc-mt">No transactions</div>';return;}
-  document.getElementById("hlist").innerHTML=f.map(function(h,idx){var sc=h.s==="success"?"s":h.s==="pending"?"p":"f";return'<div class="hc s-'+sc+'" onclick="otrk('+idx+')" style="cursor:pointer"><div class="hc-top"><div class="hc-gi" style="background:linear-gradient(135deg,'+h.gc+',#2563eb)">'+h.gi+'</div><div class="hc-inf"><div class="hc-gn">'+h.g+'</div><div class="hc-cur">'+h.ci+' '+h.q+' '+h.cur+'</div></div><div class="hc-rt"><div class="hc-am">'+h.am+'</div><div class="hc-dt">'+h.dt+'</div></div></div><div class="hc-bt"><span class="hc-id">'+h.id+'</span><span class="hc-bg b-'+sc+'">'+h.s+'</span></div></div>'}).join("");}
+function rhl(){
+  var f;
+  if(hfl==="all")f=HL;
+  else if(hfl==="confirmed")f=HL.filter(function(h){return h.s==="confirmed"||h.s==="success";});
+  else f=HL.filter(function(h){return h.s===hfl;});
+  document.getElementById("hcnt").textContent=f.length+" transaction"+(f.length!==1?"s":"");
+  if(!f.length){document.getElementById("hlist").innerHTML='<div class="hc-mt">No transactions yet</div>';return;}
+  // Status display mapping
+  function statusLabel(s){
+    if(s==="confirmed"||s==="success")return"✓ Confirmed";
+    if(s==="pending")return"⏳ Waiting";
+    return"✗ Failed";
+  }
+  function statusClass(s){
+    if(s==="confirmed"||s==="success")return"s";
+    if(s==="pending")return"p";
+    return"f";
+  }
+  document.getElementById("hlist").innerHTML=f.map(function(h,idx){
+    var sc=statusClass(h.s);
+    var sl=statusLabel(h.s);
+    var gData=D.find(function(g){return g.n===h.g;});
+    var gImg=gData&&gData.img?gData.img:(h.gi_url||"");
+    var gThumb=gImg?'<img src="'+gImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>':h.gi;
+    return'<div class="hc s-'+sc+'" onclick="otrk('+HL.indexOf(h)+')" style="cursor:pointer"><div class="hc-top"><div class="hc-gi" style="background:linear-gradient(135deg,'+(gData&&gData.c?gData.c:h.gc)+',#2563eb);overflow:hidden">'+gThumb+'</div><div class="hc-inf"><div class="hc-gn">'+h.g+'</div><div class="hc-cur">'+h.ci+' '+h.q+' '+h.cur+'</div></div><div class="hc-rt"><div class="hc-am">'+h.am+'</div><div class="hc-dt">'+h.dt+'</div></div></div><div class="hc-bt"><span class="hc-id">'+h.id+'</span><span class="hc-bg b-'+sc+'">'+sl+'</span></div></div>';
+  }).join("");}
 
 // PROMO
 function rpr(){
@@ -1228,7 +1251,7 @@ function rpf(){
   var editBtn=curUser?'<button class="pf-eb" onclick="oed()"><svg viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Edit</button>':'';
   var h='<div class="pf-h">'+editBtn+'<div class="pf-av">'+pf.av+'</div><div class="pf-nm">'+displayName+'</div><div style="font-size:11px;color:var(--ac2);font-family:var(--mono);font-weight:800;cursor:pointer;margin-top:2px;letter-spacing:1px" onclick="copyDahliaId()">'+idStr+'</div><div class="pf-dt">Since '+pf.sn+'</div>'+(hs?'<div class="pf-so">'+(pf.fb?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>':'')+(pf.tg?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M21.2 4.4L2.4 11.5c-.6.2-.6.7 0 .9l4.8 1.5 1.8 5.8c.2.5.7.5 1 .2l2.6-2.1 5.1 3.7c.5.4 1.1.1 1.2-.5L22.3 5.3c.2-.7-.4-1.2-1.1-.9z"/></svg></a>':'')+(pf.tt?'<a class="pf-sb" href="#"><svg viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.77 0 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V12.8a8.28 8.28 0 005.58 2.17V11.5a4.84 4.84 0 01-3.58-1.81V6.69h3.58z"/></svg></a>':'')+'</div>':'')+'</div>';
   h+='<div class="pf-c">'+rows.map(function(r){return'<div class="pf-r"><span class="pf-rl">'+r.l+'</span><span class="pf-rv">'+r.v+'</span></div>'}).join("")+'</div>';
-  var totalSpent=0;HL.forEach(function(h){if(h.s==="success"){var a=parseInt(h.am.replace(/[^0-9]/g,""));totalSpent+=a;}});
+  var totalSpent=0;HL.forEach(function(h){if(h.s==="confirmed"||h.s==="success"){var a=parseInt(h.am.replace(/[^0-9]/g,""));totalSpent+=a;}});
   h+='<div class="pf-c"><div class="pf-r"><span class="pf-rl">Orders</span><span class="pf-rv">'+HL.length+'</span></div><div class="pf-r"><span class="pf-rl">Total Spent</span><span class="pf-rv">'+totalSpent.toLocaleString()+' MMK</span></div></div>';
 
   // Analytics
@@ -1779,8 +1802,8 @@ function fmtP(v){if(curU==="MMK")return v.toLocaleString()+" MMK";var c=v*RATES[
 // ═══ PWA ═══
 if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})').catch(function(){});}
 
-// INIT (hardcoded data - shows while Firebase loads)
-rpt();rgrd(D);
+// INIT — show loading state until Firebase loads (no hardcoded sample data)
+rpt();rgrd([]);
 
 // Firebase listeners — called from enterApp() AFTER auth completes
 function startFirebaseListeners(){
@@ -1788,8 +1811,23 @@ function startFirebaseListeners(){
   var userEmail=curUser?curUser.email:"guest";
   // Orders — filtered by current user
   db.collection("orders").where("authUser","==",userEmail).orderBy("timestamp","desc").limit(50).onSnapshot(function(s){
-    HL=[];s.forEach(function(d){var o=d.data();HL.push({id:o.txnId||d.id,fbId:d.id,g:o.game,gi:o.gameEmoji,gc:o.gameColor,ci:o.currencyIcon,cur:o.currency,q:o.amount,am:mmk(o.price),dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",s:o.status||"pending"});});
+    HL=[];s.forEach(function(d){var o=d.data();
+      var rawStatus=o.status||"pending";
+      var displayStatus=rawStatus==="success"?"confirmed":rawStatus;
+      // Look up live game image from D array
+      var gLive=D.find(function(g){return g.n===o.game;});
+      HL.push({
+        id:o.txnId||d.id,fbId:d.id,
+        g:o.game,gi:o.gameEmoji,gc:o.gameColor,
+        gi_url:gLive&&gLive.img?gLive.img:(o.gameImg||""),
+        ci:o.currencyIcon,cur:o.currency,q:o.amount,
+        am:mmk(o.price),
+        dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",
+        s:displayStatus
+      });
+    });
     rht();rhl();
+    if(document.getElementById("pg-his").classList.contains("on")){rht();rhl();}
   },function(){});
   // Wallet — by user email
   db.collection("wallets").doc(userEmail).onSnapshot(function(d){
