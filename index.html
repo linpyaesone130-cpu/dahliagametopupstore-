@@ -896,7 +896,7 @@ function enterApp(user){
     startFirebaseListeners();
   }
   loadDahliaId();
-  if(user)setTimeout(saveDahliaUser,1500);
+  if(user)setTimeout(saveDahliaUser,500);
   initNotifs();
 }
 
@@ -1064,14 +1064,14 @@ function og(id){
   sg=D.find(function(x){return x.id===id})||D[id]||D[0];if(!sg){tst("Game not found","er");return;}sp=null;ss=0;sy=null;ck=false;rc=false;
   var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
   if(sg.img){
-    h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px"><img src="'+sg.img+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.cur+' • Instant</div></div></div>';
+    h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px"><img src="'+sg.img+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)">'+sg.cur+' • Instant</div></div></div>';
   }else{
-    h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>'+sg.cur+' • Instant</div></div>';
+    h+='<div class="bn" style="background:linear-gradient(135deg,'+sg.c+',#162450);position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s">'+sg.cur+' • Instant</div></div>';
   }
   var showSid=sg.showSid===true||sg.showSid==="true";
   h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
   h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
-  h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+'">'+p.ic+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
+  h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+';overflow:hidden;border-radius:10px">'+(p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/>':p.ic)+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
   h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
   h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
   document.getElementById("pg-det").innerHTML=h;shw("det");usum();try{var _gids=JSON.parse(localStorage.getItem("dahlia_gameids")||"{}");if(_gids[sg.n]){document.getElementById("uid").value=_gids[sg.n];checkSavedVerify();}}catch(e){}
@@ -1103,7 +1103,7 @@ function ubtn(){var b=document.getElementById("abtn");if(sp===null){b.textConten
 function usum(){var el=document.getElementById("osm");if(!sg){el.style.display="none";return;}el.style.display="block";
   var uid=document.getElementById("uid"),sid=document.getElementById("sid");uid=uid?uid.value:"";sid=sid?sid.value:"";
   var hp=sp!==null,hpy=sy!==null,pk=hp?sg.pr[sp]:null,pm=hpy?PY[sy]:null,ok=hp&&hpy&&ck;
-  el.innerHTML='<div class="osum'+(ok?" rdy":"")+'"><div class="osum-t"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Order Summary</div><div class="or"><span class="ol">Game</span><span class="ov">'+sg.e+' '+sg.n+'</span></div><div class="or"><span class="ol">User ID</span><span class="ov'+(uid?"":" w")+'">'+(uid||"Not entered")+'</span></div><div class="or"><span class="ol">Server ID</span><span class="ov'+(sid?"":" w")+'">'+(sid||"Not entered")+'</span></div><div class="or"><span class="ol">Package</span><span class="ov'+(hp?"":" w")+'">'+(hp?sg.ci+" "+pk.d+" "+sg.cur:"Not selected")+'</span></div><div class="or"><span class="ol">Payment</span><span class="ov'+(hpy?"":" w")+'">'+(hpy?pm.n:"Not selected")+'</span></div><div class="or"><span class="ol">Status</span><span class="ov'+(ck?"":" w")+'">'+(ck?"Confirmed":"Pending")+'</span></div>'+(hp?'<hr class="ohr"/><div class="or tot"><span class="ol">Total</span><span class="ov">'+mmk(pk.p)+'</span></div>':"")+'</div>';}
+  el.innerHTML='<div class="osum'+(ok?" rdy":"")+'"><div class="osum-t"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Order Summary</div><div class="or"><span class="ol">Game</span><span class="ov">'+sg.n+'</span></div><div class="or"><span class="ol">User ID</span><span class="ov'+(uid?"":" w")+'">'+(uid||"Not entered")+'</span></div><div class="or"><span class="ol">Server ID</span><span class="ov'+(sid?"":" w")+'">'+(sid||"Not entered")+'</span></div><div class="or"><span class="ol">Package</span><span class="ov'+(hp?"":" w")+'">'+(hp?pk.d+" "+sg.cur:"Not selected")+'</span></div><div class="or"><span class="ol">Payment</span><span class="ov'+(hpy?"":" w")+'">'+(hpy?pm.n:"Not selected")+'</span></div><div class="or"><span class="ol">Status</span><span class="ov'+(ck?"":" w")+'">'+(ck?"Confirmed":"Pending")+'</span></div>'+(hp?'<hr class="ohr"/><div class="or tot"><span class="ol">Total</span><span class="ov">'+mmk(pk.p)+'</span></div>':"")+'</div>';}
 
 function doO(){
   var uidEl=document.getElementById("uid");
@@ -1116,7 +1116,7 @@ function doO(){
 }
 function omod(){var uid=document.getElementById("uid"),sid=document.getElementById("sid");uid=uid?uid.value||"-":"-";sid=sid?sid.value:"";
   var pk=sg.pr[sp],pm=PY[sy];
-  document.getElementById("md").innerHTML='<div class="mr"><span class="ml">Game</span><span class="mv">'+sg.n+'</span></div><div class="mr"><span class="ml">Package</span><span class="mv">'+sg.ci+' '+pk.d+' '+sg.cur+'</span></div><div class="mr"><span class="ml">User ID</span><span class="mv">'+uid+'</span></div>'+(sid?'<div class="mr"><span class="ml">Server ID</span><span class="mv">'+sid+'</span></div>':'')+'<div class="mr"><span class="ml">Payment</span><span class="mv">'+pm.n+'</span></div><div class="mr"><span class="ml">Receipt</span><span class="mv" style="color:var(--gn)">'+(rc?"Uploaded":"—")+'</span></div><hr class="mdv"/><div class="mr mt"><span class="ml">Total</span><span class="mv">'+mmk(pk.p)+'</span></div>';
+  document.getElementById("md").innerHTML='<div class="mr"><span class="ml">Game</span><span class="mv">'+sg.n+'</span></div><div class="mr"><span class="ml">Package</span><span class="mv">'+pk.d+' '+sg.cur+'</span></div><div class="mr"><span class="ml">User ID</span><span class="mv">'+uid+'</span></div>'+(sid?'<div class="mr"><span class="ml">Server ID</span><span class="mv">'+sid+'</span></div>':'')+'<div class="mr"><span class="ml">Payment</span><span class="mv">'+pm.n+'</span></div><div class="mr"><span class="ml">Receipt</span><span class="mv" style="color:var(--gn)">'+(rc?"Uploaded":"—")+'</span></div><hr class="mdv"/><div class="mr mt"><span class="ml">Total</span><span class="mv">'+mmk(pk.p)+'</span></div>';
   document.getElementById("cmod").classList.add("v");
 }
 var lastOrder=null;
@@ -1381,20 +1381,28 @@ function doNameCheck(uid,sid){
 var STORE_TG_BOT="8784274109:AAE3Mwasc8opGIPpx-fOl1K6eyKfqpjA_Ms";
 var STORE_TG_CHAT="7579946276";
 function sendTgOrder(order){
-  if(!STORE_TG_BOT||!STORE_TG_CHAT){tst("Telegram not configured","er");return;}
+  if(!STORE_TG_BOT||!STORE_TG_CHAT)return;
   var msg="🆕 NEW ORDER\n\n";
   msg+="🎮 "+order.game+"\n";
-  msg+="📦 "+order.currencyIcon+" "+order.amount+" "+order.currency+"\n";
+  msg+="📦 "+(order.amount||"")+" "+(order.currency||"")+"\n";
   msg+="👤 User: "+order.userId+(order.serverId?" ("+order.serverId+")":"")+"\n";
-  msg+="💰 "+order.price+" MMK\n";
-  msg+="💳 "+order.payment+"\n";
+  msg+="💰 "+(order.price||0)+" MMK\n";
+  msg+="💳 "+(order.payment||"")+"\n";
   msg+="🆔 "+(order.dahliaId||"Guest")+"\n";
   msg+="📧 "+(order.authUser||"Guest")+"\n";
-  msg+="🔖 "+order.txnId+"\n";
+  msg+="🔖 "+(order.txnId||"")+"\n";
   msg+="📅 "+new Date().toLocaleString()+"\n\n";
   msg+="⏳ Status: Pending";
-  var sent=false;
-  function sendText(){if(sent)return;sent=true;var url="https://api.telegram.org/bot"+STORE_TG_BOT+"/sendMessage";var body={chat_id:STORE_TG_CHAT,text:msg};fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){if(r.ok)tst("Order sent!","ok");else{r.text().then(function(t){tst("Send failed: "+r.status,"er");});}}).catch(function(e){tst("Network: "+e.message,"er");});}
+  // Always send text message first
+  fetch("https://api.telegram.org/bot"+STORE_TG_BOT+"/sendMessage",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({chat_id:STORE_TG_CHAT,text:msg})
+  }).then(function(r){return r.json()}).then(function(d){
+    if(d.ok){tst("Telegram sent!","ok");}
+    else{tst("Telegram error","er");}
+  }).catch(function(e){tst("Network error","er");});
+  // Try send receipt photo separately (may fail on some browsers)
   if(order.receiptUrl&&order.receiptUrl.startsWith("data:")){
     try{
       var b64=order.receiptUrl.split(",")[1];
@@ -1402,15 +1410,12 @@ function sendTgOrder(order){
       var byteStr=atob(b64);var ab=new ArrayBuffer(byteStr.length);var ia=new Uint8Array(ab);
       for(var i=0;i<byteStr.length;i++)ia[i]=byteStr.charCodeAt(i);
       var blob=new Blob([ab],{type:mime});
-      var fd=new FormData();
-      fd.append("chat_id",STORE_TG_CHAT);
-      fd.append("photo",blob,"receipt."+(mime.indexOf("png")>=0?"png":"jpg"));
-      fd.append("caption",msg);
-      sent=true;
-      fetch("https://api.telegram.org/bot"+STORE_TG_BOT+"/sendPhoto",{method:"POST",body:fd}).then(function(r){if(!r.ok){sent=false;sendText();}}).catch(function(){sent=false;sendText();});
-    }catch(e){sendText();}
-  }else{sendText();}
+      var fd=new FormData();fd.append("chat_id",STORE_TG_CHAT);fd.append("photo",blob,"receipt.jpg");fd.append("caption","Receipt for "+(order.txnId||"order"));
+      fetch("https://api.telegram.org/bot"+STORE_TG_BOT+"/sendPhoto",{method:"POST",body:fd}).catch(function(){});
+    }catch(e){}
+  }
 }
+
 function sendTg(){
   var btn=document.getElementById("tgBtn");
   if(!lastOrder){btn.textContent="No order";return;}
@@ -1478,7 +1483,12 @@ function listenVerify(docId){
   verifyUnsub=db.collection("verifications").doc(docId).onSnapshot(function(d){
     if(!d.exists)return;var v=d.data();
     if(v.status==="verified"&&v.verifiedName){
-      document.getElementById("verifyStatus").innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15)"><div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">Admin verified as:</div><div style="font-size:16px;font-weight:900;color:var(--gn);margin-bottom:8px">'+v.verifiedName+'</div><div style="display:flex;gap:6px"><button onclick="confirmName(true)" style="flex:1;padding:9px;border-radius:8px;border:none;background:var(--gn);color:#fff;font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font)">Yes, correct</button><button onclick="confirmName(false)" style="flex:1;padding:9px;border-radius:8px;border:1.5px solid var(--rd);background:none;color:var(--rd);font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font)">No, wrong</button></div></div>';
+      idVerified=true;
+      var _uid=document.getElementById("uid");
+      if(_uid&&sg)saveVerified(_uid.value.trim(),sg.n,v.verifiedName);
+      document.getElementById("verifyBtn").textContent="Verified ✓";document.getElementById("verifyBtn").disabled=true;
+      document.getElementById("verifyStatus").innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center"><div style="font-size:9px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:2px">Name Verified ✓</div><div style="font-size:18px;font-weight:900;color:var(--gn)">'+v.verifiedName+'</div></div>';
+      document.getElementById("verifyStatus").innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center"><div style="font-size:10px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:2px">Name Verified ✓</div><div style="font-size:18px;font-weight:900;color:var(--gn)">'+v.verifiedName+'</div></div>';
     }else if(v.status==="rejected"){
       document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--rd)">ID not found — check and try again</div></div>';
       document.getElementById("verifyBtn").textContent="Confirm ID";document.getElementById("verifyBtn").disabled=false;
