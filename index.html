@@ -94,14 +94,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 
 /* ══ GAME GRID ══ */
 .gg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
-.gc{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px 12px;border-radius:var(--r3);border:1px solid var(--bd);background:var(--sf);transition:all .2s;}
-.gc:active{transform:scale(.94);}
-.gc:hover{border-color:var(--bd2);background:var(--sf2);}
-.gi{width:100%;aspect-ratio:1;border-radius:22px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.3);}
-.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 50%);pointer-events:none;}
+.gc{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px 12px;border-radius:var(--r3);border:1px solid var(--bd);background:var(--sf);transition:all .25s;}
+.gc:active{transform:scale(.93);}
+.gc:hover{border-color:var(--ac3);background:var(--sf2);box-shadow:0 4px 16px var(--acg);}
+.gi{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 55%);pointer-events:none;}
 .gi span{font-size:40px!important;position:relative;z-index:1;}
-.gn{font-size:10px;font-weight:600;color:var(--tx);-webkit-font-smoothing:antialiased;text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;-webkit-font-smoothing:antialiased;}
+.gn{font-size:10px;font-weight:700;color:var(--tx);text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;}
 .ge{text-align:center;grid-column:1/-1;color:var(--tx3);font-size:13px;padding:32px 0;}
+
+/* ══ SKELETON LOADING ══ */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.sk{background:linear-gradient(90deg,var(--sf) 25%,var(--sf2) 50%,var(--sf) 75%);background-size:800px 100%;animation:shimmer 1.4s infinite;}
+.sk-card{border-radius:var(--r3);border:1px solid var(--bd);padding:14px 6px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.sk-img{width:100%;aspect-ratio:1;border-radius:20px;}
+.sk-txt{width:70%;height:10px;border-radius:6px;}
+.sk-txt2{width:50%;height:8px;border-radius:6px;}
 
 /* ══ BACK ══ */
 .bk{display:inline-flex;align-items:center;gap:6px;color:var(--ac2);font-weight:700;font-size:11px;cursor:pointer;border:none;background:none;font-family:var(--font);margin-bottom:14px;padding:6px 12px 6px 8px;border-radius:var(--r);transition:all .15s;border:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px;}
@@ -777,8 +785,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
   <div class="evd-ov" id="evdOv"><div class="evd-sh"><div class="m-h"></div><div class="evd-hero" id="evdHero"></div><div id="evdBody"></div><button class="evd-close" onclick="cevd()">Close</button></div></div>
   <div class="trk-ov" id="trkOv"><div class="trk-sh"><div class="m-h"></div><div class="m-t">Order Tracking</div><div class="trk-info" id="trkInfo"></div><div class="trk-tl" id="trkTl"></div><button class="trk-close" onclick="ctrk()">Close</button></div></div>
   <!-- WALLET MODAL -->
-
-  <!-- NOTIFICATION PANEL -->
+  <div class="su" id="walMo" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:100;align-items:flex-end;justify-content:center;">
+    <div style="background:var(--sf);border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:430px">
+      <div class="m-h"></div>
+      <div id="walMoBd"></div>
+    </div>
+  </div>
   <div class="notif-ov" id="notifOv"><div class="notif-sh"><div class="m-h"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="m-t" style="margin:0">Notifications</div><button style="border:none;background:none;color:var(--ac2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="clearNotifs()">Clear All</button></div><div id="notifList"></div><button class="trk-close" onclick="closeNotif()">Close</button></div></div>
 </div>
 
@@ -889,7 +901,7 @@ function enterApp(user){
   }
   var isDk=localStorage.getItem("dahlia_dark")==="1";document.getElementById("mainApp").classList.toggle("light",!isDk);if(typeof pf!=="undefined")pf.dk=isDk;
   // Render games immediately
-  rpt();rgrd(D);fltG();rht();rhl();rpr();rpf();
+  rpt();rgrd(D.length?D:[]);fltG();rht();rhl();rpr();rpf();
   // Start Firebase listeners with correct user
   if(fbReady&&!window._fbListenersStarted){
     window._fbListenersStarted=true;
@@ -1045,7 +1057,21 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l){var e=document.getElementById("ggrid");if(!l||!l.length){e.innerHTML='<div class="ge" style="text-align:center;padding:40px;color:var(--tx3)">Loading games...</div>';return;}l.forEach(function(g,i){if(g.id===undefined)g.id=i;});e.innerHTML=l.map(function(g){var inner=g.img?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>':'';return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#2563eb)">'+inner+'</div><span class="gn">'+g.n+'</span></div>'}).join("");}
+function rgrd(l){
+  var e=document.getElementById("ggrid");
+  if(!e)return;
+  if(!l||!l.length){
+    // Show 9 skeleton cards while loading
+    var sk="";for(var s=0;s<9;s++)sk+='<div class="sk-card"><div class="sk-img sk"></div><div class="sk-txt sk"></div></div>';
+    e.innerHTML=sk;
+    return;
+  }
+  l.forEach(function(g,i){if(g.id===undefined)g.id=i;});
+  e.innerHTML=l.map(function(g){
+    var inner=g.img?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit"/>':'';
+    return'<div class="gc" onclick="og('+g.id+')"><div class="gi" style="background:linear-gradient(135deg,'+g.c+',#1d4ed8)">'+inner+'</div><span class="gn">'+g.n+'</span></div>';
+  }).join("");
+}
 
 // DETAIL
 
@@ -1075,25 +1101,16 @@ function og(id){
   h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+';overflow:hidden;border-radius:10px">'+(p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/>':p.ic)+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
   h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
   h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
-  document.getElementById("pg-det").innerHTML=h;shw("det");usum();try{var _gids=JSON.parse(localStorage.getItem("dahlia_gameids")||"{}");if(_gids[sg.n]){document.getElementById("uid").value=_gids[sg.n];checkSavedVerify();
-    // Re-attach verify listener if pending
-    if(!idVerified&&fbReady&&db){
-      var _vid=_gids[sg.n]+"_"+sg.n.replace(/\s/g,"");
-      db.collection("verifications").doc(_vid).get().then(function(d){
-        if(d.exists){var v=d.data();
-          if(v.status==="verified"&&v.verifiedName){
-            idVerified=true;saveVerified(_gids[sg.n],sg.n,v.verifiedName);
-            document.getElementById("verifyBtn").textContent="Verified ✓";document.getElementById("verifyBtn").disabled=true;
-            document.getElementById("verifyStatus").innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center"><div style="font-size:9px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:2px">Name Verified ✓</div><div style="font-size:18px;font-weight:900;color:var(--gn)">'+v.verifiedName+'</div></div>';
-          }else if(v.status==="pending"){
-            document.getElementById("verifyBtn").textContent="Waiting...";document.getElementById("verifyBtn").disabled=true;
-            document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--yw)">Waiting for admin...</div></div>';
-            listenVerify(_vid);
-          }
-        }
-      }).catch(function(){});
+  document.getElementById("pg-det").innerHTML=h;shw("det");usum();
+  // Auto-fill saved game ID and attach real-time verify listener
+  try{
+    var _gids=JSON.parse(localStorage.getItem("dahlia_gameids")||"{}");
+    if(_gids[sg.n]){
+      document.getElementById("uid").value=_gids[sg.n];
+      // checkSavedVerify now handles both localStorage cache AND real-time Firebase listener
+      checkSavedVerify();
     }
-  }}catch(e){}
+  }catch(e){}
 }
 function cg(){sg=null;shw("home");}
 
@@ -1303,13 +1320,15 @@ function otrk(idx){
   var flt=hfl==="all"?HL:HL.filter(function(h){return h.s===hfl});
   var h=flt[idx];if(!h)return;
   document.getElementById("trkInfo").innerHTML='<div class="trk-info-r"><span class="til">Order</span><span class="tiv" style="font-family:var(--mono)">'+h.id+'</span></div><div class="trk-info-r"><span class="til">Game</span><span class="tiv">'+h.gi+' '+h.g+'</span></div><div class="trk-info-r"><span class="til">Package</span><span class="tiv">'+h.ci+' '+h.q+' '+h.cur+'</span></div><div class="trk-info-r"><span class="til">Amount</span><span class="tiv" style="color:var(--ac2)">'+h.am+'</span></div>';
+  var isConf=h.s==="confirmed"||h.s==="success";
+  var isFail=h.s==="failed";
+  var cur=isConf?4:isFail?0:1;
   var steps=[
     {lb:"Order Placed",tm:h.dt,ic:'<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'},
-    {lb:"Payment Verified",tm:"Auto verified",ic:'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'},
-    {lb:"Processing",tm:"Top-up in progress",ic:'<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>'},
-    {lb:"Delivered",tm:"Completed",ic:'<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
+    {lb:"Payment Checking",tm:isConf?"Checked ✓":isFail?"Checked":"Admin reviewing...",ic:'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'},
+    {lb:"Processing Top-Up",tm:isConf?"Completed":"In progress...",ic:'<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>'},
+    {lb:isConf?"✅ Delivered!":"Delivered",tm:isConf?"Top-up complete! 🎉":"Waiting...",ic:'<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
   ];
-  var cur=h.s==="success"?4:h.s==="pending"?2:1;
   var tl="";steps.forEach(function(st,i){
     var cls=i<cur?"done":i===cur?"active":"future";
     tl+='<div class="trk-step '+cls+'"><div class="trk-dot">'+(i<cur?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':i===cur?'<svg viewBox="0 0 24 24" stroke="var(--ac2)"><circle cx="12" cy="12" r="3" fill="var(--ac2)"/></svg>':'')+'</div><div class="trk-txt"><div class="trk-lb">'+st.lb+'</div><div class="trk-tm">'+st.tm+'</div></div></div>';
@@ -1486,10 +1505,11 @@ function rFaq(){
   el.innerHTML=FAQ.map(function(f,i){return'<div style="background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer" onclick="this.querySelector(\'.faq-a\').style.display=this.querySelector(\'.faq-a\').style.display===\'block\'?\'none\':\'block\'"><div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--ac2);fill:none;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:13px;font-weight:700;flex:1">'+f.q+'</div><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--tx3);fill:none;flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-a" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);font-size:12px;color:var(--tx2);line-height:1.6">'+f.a+'</div></div>'}).join("")+'<div style="text-align:center;padding:20px"><div style="font-size:11px;color:var(--tx3);margin-bottom:8px">Still need help?</div><button style="padding:10px 24px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="window.open(\'https://t.me/\')">Contact on Telegram</button></div>';
 }
 
-// ═══ ID VERIFICATION (Admin Manual) ═══
+// ═══ ID VERIFICATION (Admin Manual) — REAL-TIME FIX ═══
 var verifyUnsub=null;var idVerified=false;
 var verifiedIds={};
 try{var vi=localStorage.getItem("dahlia_verified");if(vi)verifiedIds=JSON.parse(vi);}catch(e){}
+
 function isAlreadyVerified(gameId,gameName){
   var key=gameId+"_"+gameName.replace(/\s/g,"");
   return verifiedIds[key]||false;
@@ -1499,41 +1519,94 @@ function saveVerified(gameId,gameName,name){
   verifiedIds[key]=name;
   try{localStorage.setItem("dahlia_verified",JSON.stringify(verifiedIds));}catch(e){}
 }
+
+function _showVerifiedUI(name){
+  idVerified=true;
+  var btn=document.getElementById("verifyBtn");
+  var vs=document.getElementById("verifyStatus");
+  if(btn){btn.textContent="✓ Verified";btn.style.background="rgba(5,150,105,.1)";btn.style.borderColor="var(--gn)";btn.style.color="var(--gn)";btn.disabled=true;}
+  if(vs)vs.innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.2);text-align:center;animation:pgIn .3s ease"><div style="font-size:9px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:4px"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--gn);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg>Name Verified</div><div style="font-size:20px;font-weight:900;color:var(--gn);letter-spacing:-.3px">'+name+'</div></div>';
+}
+function _showWaitingUI(){
+  var btn=document.getElementById("verifyBtn");
+  var vs=document.getElementById("verifyStatus");
+  if(btn){btn.textContent="⏳ Waiting...";btn.disabled=true;btn.style.background="rgba(217,119,6,.08)";btn.style.borderColor="var(--yw)";btn.style.color="var(--yw)";}
+  if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--yw);display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:var(--yw);animation:blink 1.2s infinite;flex-shrink:0"></span>Waiting for admin verification...</div><div style="font-size:9px;color:var(--tx3);margin-top:4px">Admin will check your in-game name and confirm</div></div>';
+}
+function _showRejectedUI(){
+  idVerified=false;
+  var btn=document.getElementById("verifyBtn");
+  var vs=document.getElementById("verifyStatus");
+  if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
+  if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)">❌ ID not found — please check and try again</div>';
+}
+
+// MAIN FIX: Always attach real-time onSnapshot listener when user enters/has ID
 function checkSavedVerify(){
-  var uidEl=document.getElementById("uid");if(!uidEl||!uidEl.value.trim()||!sg)return;
-  var saved=isAlreadyVerified(uidEl.value.trim(),sg.n);
-  if(saved){
-    idVerified=true;
-    document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center;font-size:12px;font-weight:800;color:var(--gn)">Verified: '+saved+'</div>';
-    document.getElementById("verifyBtn").textContent="Verified";document.getElementById("verifyBtn").disabled=true;
+  var uidEl=document.getElementById("uid");
+  if(!uidEl||!uidEl.value.trim()||!sg)return;
+  var gameId=uidEl.value.trim();
+  if(gameId.length<3)return;
+
+  // 1. Check localStorage cache first (instant)
+  var saved=isAlreadyVerified(gameId,sg.n);
+  if(saved){_showVerifiedUI(saved);return;}
+
+  // 2. Attach real-time Firebase listener (works even if admin verifies while user is on page)
+  if(fbReady&&db){
+    var docId=gameId+"_"+sg.n.replace(/\s/g,"");
+    listenVerify(docId);
   }
 }
+
 function requestVerify(){
   var uidEl=document.getElementById("uid");var sidEl=document.getElementById("sid");
   if(!uidEl||!uidEl.value.trim()){tst("Enter User ID first","er");return;}
   if(!fbReady||!db){tst("Firebase offline","er");return;}
   var gameId=uidEl.value.trim();var serverId=sidEl?sidEl.value.trim():"";
-  document.getElementById("verifyBtn").textContent="Waiting...";document.getElementById("verifyBtn").disabled=true;
-  document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--yw)">Waiting for admin verification...</div><div style="font-size:9px;color:var(--tx3);margin-top:3px">Admin will check your in-game name</div></div>';
-  var vDoc={game:sg.n,gameId:gameId,serverId:serverId,authUser:curUser?curUser.email:"guest",dahliaId:dahliaId?"DH-"+dahliaId:"",status:"pending",verifiedName:"",timestamp:new Date().toISOString()};
-  db.collection("verifications").doc(gameId+"_"+sg.n.replace(/\s/g,"")).set(vDoc).then(function(){
-    listenVerify(gameId+"_"+sg.n.replace(/\s/g,""));
+
+  // Show waiting UI immediately
+  _showWaitingUI();
+
+  var vDoc={
+    game:sg.n,gameId:gameId,serverId:serverId,
+    authUser:curUser?curUser.email:"guest",
+    dahliaId:dahliaId?"DH-"+dahliaId:"",
+    status:"pending",verifiedName:"",
+    timestamp:new Date().toISOString()
+  };
+  var docId=gameId+"_"+sg.n.replace(/\s/g,"");
+
+  // Save to Firebase then start real-time listener
+  // NOTE: NO Telegram notification for name check — only orders go to Telegram
+  db.collection("verifications").doc(docId).set(vDoc).then(function(){
+    listenVerify(docId);
+  }).catch(function(){
+    tst("Failed to send. Try again.","er");
+    var btn=document.getElementById("verifyBtn");
+    if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
   });
 }
+
+// REAL-TIME listener — fires instantly when admin verifies/rejects
 function listenVerify(docId){
-  if(verifyUnsub)verifyUnsub();
+  if(verifyUnsub)verifyUnsub(); // unsubscribe previous
   verifyUnsub=db.collection("verifications").doc(docId).onSnapshot(function(d){
-    if(!d.exists)return;var v=d.data();
+    if(!d.exists)return;
+    var v=d.data();
     if(v.status==="verified"&&v.verifiedName){
-      idVerified=true;
       var _uid=document.getElementById("uid");
       if(_uid&&sg)saveVerified(_uid.value.trim(),sg.n,v.verifiedName);
-      document.getElementById("verifyBtn").textContent="Verified ✓";document.getElementById("verifyBtn").disabled=true;
-      document.getElementById("verifyStatus").innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center"><div style="font-size:9px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:2px">Name Verified ✓</div><div style="font-size:18px;font-weight:900;color:var(--gn)">'+v.verifiedName+'</div></div>';
+      _showVerifiedUI(v.verifiedName);
+      tst("✅ Verified: "+v.verifiedName,"ok");
     }else if(v.status==="rejected"){
-      document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--rd)">ID not found — check and try again</div></div>';
-      document.getElementById("verifyBtn").textContent="Confirm ID";document.getElementById("verifyBtn").disabled=false;
+      _showRejectedUI();
+      tst("ID not found — try again","er");
+    }else if(v.status==="pending"){
+      _showWaitingUI();
     }
+  },function(err){
+    // Listener error — silent fail
   });
 }
 function confirmName(ok){
@@ -1791,9 +1864,9 @@ function showTopUp(){
   h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px">'+am.map(function(a){return'<button style="padding:10px;border-radius:10px;border:1.5px solid var(--bd);background:var(--sf);color:var(--tx);font-size:12px;font-weight:800;font-family:var(--mono);cursor:pointer" onclick="addWallet('+a+');cWalMo()">'+mmk(a)+'</button>'}).join("")+'</div>';
   h+='<div style="font-size:10px;color:var(--tx3);text-align:center">Balance will be added instantly</div>';
   document.getElementById("walMoBd").innerHTML=h;
-  document.getElementById("walMo").classList.add("v");
+  document.getElementById("walMo").style.display="flex";
 }
-function cWalMo(){document.getElementById("walMo").classList.remove("v");}
+function cWalMo(){document.getElementById("walMo").style.display="none";}
 
 // ═══ MULTI-CURRENCY ═══
 var curU="MMK";var RATES={MMK:1,USD:0.00048,THB:0.016};var SYMS={MMK:" MMK",USD:"$",THB:"฿"};
@@ -1802,8 +1875,18 @@ function fmtP(v){if(curU==="MMK")return v.toLocaleString()+" MMK";var c=v*RATES[
 // ═══ PWA ═══
 if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})').catch(function(){});}
 
-// INIT — show loading state until Firebase loads (no hardcoded sample data)
+// INIT — skeleton loading (no hardcoded sample data)
 rpt();rgrd([]);
+
+// 3-second max loading — if Firebase hasn't responded, show empty state
+var _gamesLoadTimeout=setTimeout(function(){
+  if(!D||!D.length){
+    var e=document.getElementById("ggrid");
+    if(e&&e.querySelector(".sk-card")){
+      e.innerHTML='<div class="ge" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--tx3)"><svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:var(--tx3);fill:none;margin:0 auto 8px;display:block"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><div style="font-size:13px;font-weight:600">No games yet</div><div style="font-size:11px;margin-top:4px">Check back soon</div></div>';
+    }
+  }
+},3000);
 
 // Firebase listeners — called from enterApp() AFTER auth completes
 function startFirebaseListeners(){
@@ -1811,10 +1894,10 @@ function startFirebaseListeners(){
   var userEmail=curUser?curUser.email:"guest";
   // Orders — filtered by current user
   db.collection("orders").where("authUser","==",userEmail).orderBy("timestamp","desc").limit(50).onSnapshot(function(s){
+    var prevHL=HL.slice();
     HL=[];s.forEach(function(d){var o=d.data();
       var rawStatus=o.status||"pending";
       var displayStatus=rawStatus==="success"?"confirmed":rawStatus;
-      // Look up live game image from D array
       var gLive=D.find(function(g){return g.n===o.game;});
       HL.push({
         id:o.txnId||d.id,fbId:d.id,
@@ -1826,8 +1909,20 @@ function startFirebaseListeners(){
         s:displayStatus
       });
     });
+    // Auto-detect status changes — show toast when admin confirms
+    if(prevHL.length>0){
+      HL.forEach(function(h){
+        var prev=prevHL.find(function(p){return p.id===h.id;});
+        if(prev&&prev.s==="pending"&&h.s==="confirmed"){
+          tst("✅ "+h.g+" order confirmed!","ok");
+          try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.15)";setTimeout(function(){nb.style.background="";},5000);}}catch(e){}
+        }
+        if(prev&&prev.s==="pending"&&h.s==="failed"){
+          tst("❌ Order rejected — contact admin","er");
+        }
+      });
+    }
     rht();rhl();
-    if(document.getElementById("pg-his").classList.contains("on")){rht();rhl();}
   },function(){});
   // Wallet — by user email
   db.collection("wallets").doc(userEmail).onSnapshot(function(d){
@@ -1838,11 +1933,15 @@ function startFirebaseListeners(){
   db.collection("users").doc(userEmail).get().then(function(doc){
     if(doc.exists){var d=doc.data();Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});rpf();}
   }).catch(function(){});
-  // Games
+  // Games — real-time, clears skeleton loading
   db.collection("games").onSnapshot(function(s){
-    var fbGames=[];var gIdx=0;s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
-      D=fbGames;rgrd(D);rpt();
-  },function(){});
+    clearTimeout(_gamesLoadTimeout);
+    var fbGames=[];var gIdx=0;
+    s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
+    D=fbGames;rgrd(D);rpt();
+    // If history is open, refresh so game images update
+    if(document.getElementById("pg-his")&&document.getElementById("pg-his").classList.contains("on")){rht();rhl();}
+  },function(){clearTimeout(_gamesLoadTimeout);});
   // Events
   db.collection("events").onSnapshot(function(s){
     if(!s.empty){
