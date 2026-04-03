@@ -364,6 +364,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .trk-step.future .trk-lb{color:var(--tx3);}
 .trk-close{width:100%;padding:12px;border-radius:var(--r);border:1.5px solid var(--bd);background:none;color:var(--tx2);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);margin-top:16px;text-transform:uppercase;letter-spacing:.3px;}
 
+/* ══ WARNING DIALOG ══ */
+.warn-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;padding:20px;}
+.warn-ov.v{opacity:1;pointer-events:all;}
+.warn-box{background:var(--sf);border-radius:22px;padding:26px 22px;width:100%;max-width:300px;text-align:center;transform:scale(.88);transition:transform .25s cubic-bezier(.34,1.2,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.3);}
+.warn-ov.v .warn-box{transform:scale(1);}
+.warn-icon{width:54px;height:54px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.warn-icon.red{background:rgba(220,38,38,.1);} .warn-icon.blue{background:rgba(37,99,235,.08);}
+.warn-icon svg{width:26px;height:26px;stroke-width:2;}
+.warn-title{font-size:16px;font-weight:900;color:var(--tx);margin-bottom:6px;letter-spacing:-.2px;}
+.warn-msg{font-size:13px;color:var(--tx2);line-height:1.55;margin-bottom:22px;}
+.warn-btns{display:flex;gap:10px;}
+.warn-cancel{flex:1;padding:13px;border-radius:13px;border:1.5px solid var(--bd);background:var(--sf2);color:var(--tx2);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:.15s;}
+.warn-cancel:active{transform:scale(.96);}
+.warn-ok{flex:1;padding:13px;border-radius:13px;border:none;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);color:#fff;transition:.15s;}
+.warn-ok:active{transform:scale(.96);}
+.warn-ok.red{background:var(--rd);box-shadow:0 4px 16px rgba(220,38,38,.25);}
+.warn-ok.blue{background:var(--ac);box-shadow:0 4px 16px rgba(37,99,235,.2);}
+
 /* ══ QR CODE ══ */
 .qr-wrap{text-align:center;margin:12px 0;padding:14px;background:var(--bg);border-radius:var(--r);border:1px solid var(--bd);}
 .qr-box{width:120px;height:120px;margin:0 auto 8px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px;}
@@ -792,6 +810,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
     </div>
   </div>
   <div class="notif-ov" id="notifOv"><div class="notif-sh"><div class="m-h"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="m-t" style="margin:0">Notifications</div><button style="border:none;background:none;color:var(--ac2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="clearNotifs()">Clear All</button></div><div id="notifList"></div><button class="trk-close" onclick="closeNotif()">Close</button></div></div>
+  <!-- WARNING DIALOG -->
+  <div class="warn-ov" id="warnOv">
+    <div class="warn-box">
+      <div class="warn-icon" id="warnIcon"><svg viewBox="0 0 24 24" id="warnSvg"></svg></div>
+      <div class="warn-title" id="warnTitle"></div>
+      <div class="warn-msg" id="warnMsg"></div>
+      <div class="warn-btns">
+        <button class="warn-cancel" onclick="warnDismiss()">Cancel</button>
+        <button class="warn-ok" id="warnOkBtn" onclick="warnConfirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -891,6 +921,16 @@ function skipAuth(){
   enterApp(null);
 }
 
+// ═══ LISTENER MANAGEMENT ═══
+var _listeners={}; // store unsubscribe functions
+
+function stopAllListeners(){
+  Object.keys(_listeners).forEach(function(k){
+    try{if(_listeners[k])_listeners[k]();}catch(e){}
+  });
+  _listeners={};
+}
+
 function enterApp(user){
   document.getElementById("authScreen").classList.add("hide");
   document.getElementById("mainApp").classList.remove("hide");
@@ -899,12 +939,21 @@ function enterApp(user){
     pf.em=user.email||"";
     pf.sn=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
   }
-  var isDk=localStorage.getItem("dahlia_dark")==="1";document.getElementById("mainApp").classList.toggle("light",!isDk);if(typeof pf!=="undefined")pf.dk=isDk;
-  // Render games immediately
-  rpt();rgrd(D.length?D:[]);fltG();rht();rhl();rpr();rpf();
-  // Start Firebase listeners with correct user
-  if(fbReady&&!window._fbListenersStarted){
-    window._fbListenersStarted=true;
+  var isDk=localStorage.getItem("dahlia_dark")==="1";
+  document.getElementById("mainApp").classList.toggle("light",!isDk);
+  if(typeof pf!=="undefined")pf.dk=isDk;
+
+  // Load cached orders from localStorage immediately (instant display)
+  try{
+    var cached=localStorage.getItem("dahlia_hl");
+    if(cached){HL=JSON.parse(cached);rht();rhl();}
+  }catch(e){}
+
+  rpt();rgrd(D.length?D:[]);fltG();rpr();rpf();
+
+  // Always (re)start listeners — stop old ones first
+  if(fbReady){
+    stopAllListeners();
     startFirebaseListeners();
   }
   loadDahliaId();
@@ -913,6 +962,9 @@ function enterApp(user){
 }
 
 function doLogout(){
+  stopAllListeners();
+  HL=[];
+  try{localStorage.removeItem("dahlia_hl");}catch(e){}
   if(auth)auth.signOut();
   curUser=null;
   try{localStorage.removeItem("dahlia_logged");sessionStorage.removeItem("dahliaId");}catch(e){}
@@ -1174,10 +1226,10 @@ function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
   };
   lastOrder=order;try{var _gids=JSON.parse(localStorage.getItem("dahlia_gameids")||"{}");_gids[sg.n]=order.userId;localStorage.setItem("dahlia_gameids",JSON.stringify(_gids));}catch(e){}
   fbSaveOrder(order);
-  sendTgOrder(order); // Auto-send to Telegram
-  // Self-notification: order placed
+  sendTgOrder(order);
   if(fbReady&&db){var nUid=curUser?curUser.email:"guest";db.collection("notifications").add({userId:nUid,type:"order",title:"Order Placed!",message:order.game+" "+order.currencyIcon+order.amount+" "+order.currency+" — Waiting for approval.",orderId:order.txnId,read:false,timestamp:new Date().toISOString()}).catch(function(){});}
-  HL.unshift({id:order.txnId,g:order.game,gi:order.gameEmoji,gc:order.gameColor,ci:order.currencyIcon,cur:order.currency,q:order.amount,am:mmk(order.price),dt:new Date().toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}),s:"pending"});
+  // Add to HL with _local flag — preserved until Firebase onSnapshot confirms it
+  HL.unshift({id:order.txnId,g:order.game,gi:order.gameEmoji,gc:order.gameColor,ci:order.currencyIcon,cur:order.currency,q:order.amount,am:mmk(order.price),dt:new Date().toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}),s:"pending",_local:true,_localTs:Date.now()});
   // Populate receipt
   document.getElementById("rcptId").textContent=order.txnId;
   var rw=function(l,v){return'<div style="display:flex;justify-content:space-between;padding:3px 0"><span style="font-size:11px;color:var(--tx3)">'+l+'</span><span style="font-size:11px;font-weight:700">'+v+'</span></div>'};
@@ -1502,7 +1554,18 @@ var FAQ=[
 ];
 function rFaq(){
   var el=document.getElementById("faqList");if(!el)return;
-  el.innerHTML=FAQ.map(function(f,i){return'<div style="background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer" onclick="this.querySelector(\'.faq-a\').style.display=this.querySelector(\'.faq-a\').style.display===\'block\'?\'none\':\'block\'"><div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--ac2);fill:none;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:13px;font-weight:700;flex:1">'+f.q+'</div><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--tx3);fill:none;flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-a" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);font-size:12px;color:var(--tx2);line-height:1.6">'+f.a+'</div></div>'}).join("")+'<div style="text-align:center;padding:20px"><div style="font-size:11px;color:var(--tx3);margin-bottom:8px">Still need help?</div><button style="padding:10px 24px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="window.open(\'https://t.me/\')">Contact on Telegram</button></div>';
+  var tgUser=window._storeTgUser||"";
+  var tgUrl=tgUser?"https://t.me/"+tgUser:"https://t.me/";
+  var tgLabel=tgUser?"@"+tgUser:"Telegram";
+  el.innerHTML=FAQ.map(function(f,i){return'<div style="background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer" onclick="this.querySelector(\'.faq-a\').style.display=this.querySelector(\'.faq-a\').style.display===\'block\'?\'none\':\'block\'"><div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--ac2);fill:none;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:13px;font-weight:700;flex:1">'+f.q+'</div><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--tx3);fill:none;flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg></div><div class="faq-a" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);font-size:12px;color:var(--tx2);line-height:1.6">'+f.a+'</div></div>'}).join("")
+  +'<div style="margin-top:8px;padding:20px;background:var(--sf);border:1px solid var(--bd);border-radius:14px;text-align:center">'
+    +'<div style="width:44px;height:44px;border-radius:50%;background:rgba(38,166,226,.1);margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="#26A6E2" style="width:24px;height:24px"><path d="M21.2 4.4L2.4 11.5c-.6.2-.6.7 0 .9l4.8 1.5 1.8 5.8c.2.5.7.5 1 .2l2.6-2.1 5.1 3.7c.5.4 1.1.1 1.2-.5L22.3 5.3c.2-.7-.4-1.2-1.1-.9z"/></svg></div>'
+    +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">Still need help?</div>'
+    +'<div style="font-size:11px;color:var(--tx3);margin-bottom:14px">Contact us on Telegram for fast support</div>'
+    +(tgUser
+      ?'<button onclick="window.open(\''+tgUrl+'\')" style="display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:12px;border:none;background:#26A6E2;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font)"><svg viewBox="0 0 24 24" fill="#fff" style="width:16px;height:16px"><path d="M21.2 4.4L2.4 11.5c-.6.2-.6.7 0 .9l4.8 1.5 1.8 5.8c.2.5.7.5 1 .2l2.6-2.1 5.1 3.7c.5.4 1.1.1 1.2-.5L22.3 5.3c.2-.7-.4-1.2-1.1-.9z"/></svg>'+tgLabel+'</button>'
+      :'<div style="font-size:11px;color:var(--tx3);padding:8px 16px;border-radius:10px;background:var(--sf2);border:1px dashed var(--bd)">Telegram not configured yet</div>')
+  +'</div>';
 }
 
 // ═══ ID VERIFICATION (Admin Manual) — REAL-TIME FIX ═══
@@ -1541,22 +1604,47 @@ function _showRejectedUI(){
   if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)">❌ ID not found — please check and try again</div>';
 }
 
-// MAIN FIX: Always attach real-time onSnapshot listener when user enters/has ID
+// MAIN: ID input handler — reset if changed, instant verify if cached
 function checkSavedVerify(){
   var uidEl=document.getElementById("uid");
-  if(!uidEl||!uidEl.value.trim()||!sg)return;
+  if(!uidEl||!sg)return;
   var gameId=uidEl.value.trim();
-  if(gameId.length<3)return;
+  var btn=document.getElementById("verifyBtn");
+  var vs=document.getElementById("verifyStatus");
 
-  // 1. Check localStorage cache first (instant)
-  var saved=isAlreadyVerified(gameId,sg.n);
-  if(saved){_showVerifiedUI(saved);return;}
-
-  // 2. Attach real-time Firebase listener (works even if admin verifies while user is on page)
-  if(fbReady&&db){
-    var docId=gameId+"_"+sg.n.replace(/\s/g,"");
-    listenVerify(docId);
+  // Empty or too short — full reset to "Confirm ID"
+  if(!gameId||gameId.length<2){
+    idVerified=false;
+    if(verifyUnsub){verifyUnsub();verifyUnsub=null;}
+    if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
+    if(vs)vs.innerHTML="";
+    usum();
+    return;
   }
+
+  // Check if this exact ID was previously verified
+  var saved=isAlreadyVerified(gameId,sg.n);
+  if(saved){
+    // Instantly show verified — no need to wait
+    _showVerifiedUI(saved);
+    usum();
+    return;
+  }
+
+  // ID typed but not yet verified — reset button to "Confirm ID"
+  // (only reset if currently NOT in waiting state to avoid flicker)
+  if(btn&&btn.textContent!=="⏳ Waiting..."&&!idVerified){
+    btn.textContent="Confirm ID";btn.disabled=false;
+    btn.style.background="";btn.style.borderColor="";btn.style.color="";
+  }
+  // If currently showing verified but ID changed to unverified ID — reset
+  if(idVerified){
+    idVerified=false;
+    if(verifyUnsub){verifyUnsub();verifyUnsub=null;}
+    if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
+    if(vs)vs.innerHTML="";
+  }
+  usum();
 }
 
 function requestVerify(){
@@ -1564,9 +1652,13 @@ function requestVerify(){
   if(!uidEl||!uidEl.value.trim()){tst("Enter User ID first","er");return;}
   if(!fbReady||!db){tst("Firebase offline","er");return;}
   var gameId=uidEl.value.trim();var serverId=sidEl?sidEl.value.trim():"";
+  var docId=gameId+"_"+sg.n.replace(/\s/g,"");
 
   // Show waiting UI immediately
   _showWaitingUI();
+
+  // FIX: Start listener FIRST, then write — so we never miss admin's response
+  listenVerify(docId);
 
   var vDoc={
     game:sg.n,gameId:gameId,serverId:serverId,
@@ -1575,13 +1667,8 @@ function requestVerify(){
     status:"pending",verifiedName:"",
     timestamp:new Date().toISOString()
   };
-  var docId=gameId+"_"+sg.n.replace(/\s/g,"");
-
-  // Save to Firebase then start real-time listener
-  // NOTE: NO Telegram notification for name check — only orders go to Telegram
-  db.collection("verifications").doc(docId).set(vDoc).then(function(){
-    listenVerify(docId);
-  }).catch(function(){
+  // Write to Firebase (listener already active, will catch any change)
+  db.collection("verifications").doc(docId).set(vDoc).catch(function(){
     tst("Failed to send. Try again.","er");
     var btn=document.getElementById("verifyBtn");
     if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
@@ -1614,7 +1701,36 @@ function confirmName(ok){
   else{idVerified=false;document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)">Please re-enter correct ID</div>';document.getElementById("verifyBtn").textContent="Confirm ID";document.getElementById("verifyBtn").disabled=false;document.getElementById("uid").value="";document.getElementById("uid").focus();}
 }
 
-// ═══ GIVEAWAYS ═══
+// ═══ WARNING DIALOG ═══
+var _warnCb=null;
+function showWarn(opts){
+  // opts: {title, msg, okLabel, type('red'|'blue'), icon('trash'|'edit'|'warn'), onOk}
+  var iconSvg={
+    trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>',
+    edit:'<path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>',
+    warn:'<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
+  };
+  var type=opts.type||'red';
+  document.getElementById("warnIcon").className='warn-icon '+type;
+  document.getElementById("warnSvg").setAttribute('viewBox','0 0 24 24');
+  document.getElementById("warnSvg").setAttribute('fill','none');
+  document.getElementById("warnSvg").setAttribute('stroke',type==='red'?'var(--rd)':'var(--ac)');
+  document.getElementById("warnSvg").setAttribute('stroke-width','2');
+  document.getElementById("warnSvg").setAttribute('stroke-linecap','round');
+  document.getElementById("warnSvg").innerHTML=iconSvg[opts.icon||'warn'];
+  document.getElementById("warnTitle").textContent=opts.title||"Are you sure?";
+  document.getElementById("warnMsg").textContent=opts.msg||"This action cannot be undone.";
+  document.getElementById("warnOkBtn").textContent=opts.okLabel||"Confirm";
+  document.getElementById("warnOkBtn").className='warn-ok '+type;
+  _warnCb=opts.onOk||null;
+  document.getElementById("warnOv").classList.add("v");
+}
+function warnConfirm(){document.getElementById("warnOv").classList.remove("v");if(_warnCb){_warnCb();_warnCb=null;}}
+function warnDismiss(){document.getElementById("warnOv").classList.remove("v");_warnCb=null;}
+document.addEventListener("DOMContentLoaded",function(){
+  var wo=document.getElementById("warnOv");
+  if(wo)wo.addEventListener("click",function(e){if(e.target===this)warnDismiss();});
+});
 var GV=[];
 function rGv(){
   var el=document.getElementById("gvList");if(!el)return;
@@ -1888,53 +2004,65 @@ var _gamesLoadTimeout=setTimeout(function(){
   }
 },3000);
 
-// Firebase listeners — called from enterApp() AFTER auth completes
+// Firebase listeners — called from enterApp() every time
 function startFirebaseListeners(){
   if(!fbReady||!db)return;
   var userEmail=curUser?curUser.email:"guest";
-  // Orders — filtered by current user
-  db.collection("orders").where("authUser","==",userEmail).orderBy("timestamp","desc").limit(50).onSnapshot(function(s){
-    var prevHL=HL.slice();
-    HL=[];s.forEach(function(d){var o=d.data();
+
+  // Orders — no orderBy (avoids composite index), sort client-side
+  var ordUnsub=db.collection("orders").where("authUser","==",userEmail).limit(100).onSnapshot(function(s){
+    var prevHL=HL.filter(function(h){return !h._local;}); // only compare firebase-sourced
+    var newHL=[];
+    s.forEach(function(d){
+      var o=d.data();
       var rawStatus=o.status||"pending";
-      var displayStatus=rawStatus==="success"?"confirmed":rawStatus;
+      var displayStatus=(rawStatus==="success"||rawStatus==="confirmed")?"confirmed":rawStatus;
       var gLive=D.find(function(g){return g.n===o.game;});
-      HL.push({
+      newHL.push({
         id:o.txnId||d.id,fbId:d.id,
         g:o.game,gi:o.gameEmoji,gc:o.gameColor,
         gi_url:gLive&&gLive.img?gLive.img:(o.gameImg||""),
         ci:o.currencyIcon,cur:o.currency,q:o.amount,
         am:mmk(o.price),
         dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",
-        s:displayStatus
+        s:displayStatus,
+        _ts:o.timestamp||""
       });
     });
-    // Auto-detect status changes — show toast when admin confirms
-    if(prevHL.length>0){
-      HL.forEach(function(h){
-        var prev=prevHL.find(function(p){return p.id===h.id;});
-        if(prev&&prev.s==="pending"&&h.s==="confirmed"){
-          tst("✅ "+h.g+" order confirmed!","ok");
-          try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.15)";setTimeout(function(){nb.style.background="";},5000);}}catch(e){}
-        }
-        if(prev&&prev.s==="pending"&&h.s==="failed"){
-          tst("❌ Order rejected — contact admin","er");
-        }
-      });
-    }
+    // Sort newest first
+    newHL.sort(function(a,b){return b._ts>a._ts?1:b._ts<a._ts?-1:0;});
+
+    // Detect status changes and notify
+    prevHL.forEach(function(prev){
+      var cur=newHL.find(function(n){return n.id===prev.id;});
+      if(cur&&prev.s==="pending"&&cur.s==="confirmed"){
+        tst(cur.g+" order confirmed!","ok");
+        try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.2)";setTimeout(function(){nb.style.background="";},6000);}}catch(e){}
+      }
+      if(cur&&prev.s==="pending"&&cur.s==="failed"){
+        tst("Order rejected — contact admin","er");
+      }
+    });
+
+    HL=newHL;
+    // Save to localStorage so data persists on re-entry
+    try{localStorage.setItem("dahlia_hl",JSON.stringify(HL.slice(0,30)));}catch(e){}
     rht();rhl();
-  },function(){});
-  // Wallet — by user email
-  db.collection("wallets").doc(userEmail).onSnapshot(function(d){
+  },function(err){
+    console.warn("Orders listener error:",err.code,err.message);
+  });
+  _listeners.orders=ordUnsub;
+  // Wallet
+  _listeners.wallet=db.collection("wallets").doc(userEmail).onSnapshot(function(d){
     if(d.exists){wallet=d.data().balance||0;}else{wallet=0;}
     if(document.getElementById("walBal"))document.getElementById("walBal").textContent=mmk(wallet);
   },function(){});
-  // Profile — by user email
+  // Profile
   db.collection("users").doc(userEmail).get().then(function(doc){
     if(doc.exists){var d=doc.data();Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});rpf();}
   }).catch(function(){});
-  // Games — real-time, clears skeleton loading
-  db.collection("games").onSnapshot(function(s){
+  // Games
+  _listeners.games=db.collection("games").onSnapshot(function(s){
     clearTimeout(_gamesLoadTimeout);
     var fbGames=[];var gIdx=0;
     s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#2563eb",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
@@ -1943,36 +2071,38 @@ function startFirebaseListeners(){
     if(document.getElementById("pg-his")&&document.getElementById("pg-his").classList.contains("on")){rht();rhl();}
   },function(){clearTimeout(_gamesLoadTimeout);});
   // Events
-  db.collection("events").onSnapshot(function(s){
+  _listeners.events=db.collection("events").onSnapshot(function(s){
     if(!s.empty){
       var fbEv=[];var idx=0;s.forEach(function(d){var e=d.data();fbEv.push({id:idx++,emoji:e.emoji||"🎮",bg:e.bg||"linear-gradient(135deg,#2563eb,#6366f1)",badge:e.badge||"new",game:e.game||"",title:e.title||"",desc:e.desc||"",img:e.img||"",startDay:e.startDay||1,endDay:e.endDay||30,rewards:e.rewards||[],players:e.players||""});});
       EVT=fbEv;if(document.getElementById("evTabs"))rEvPage();
     }
   },function(){});
   // Promos/Account
-  db.collection("promos").onSnapshot(function(s){
+  _listeners.promos=db.collection("promos").onSnapshot(function(s){
     if(!s.empty){
       var fbPr=[];s.forEach(function(d){var p=d.data();fbPr.push({t:p.t||p.title||"",d:p.d||p.desc||"",x:p.x||p.discount||"",bg:p.bg||"linear-gradient(135deg,#1e40af,#2563eb)",u:p.exp||p.u||"",img:p.img||"",caption:p.caption||"",game:p.game||"",gameId:p.gameId||"",gameServer:p.gameServer||"",gameRank:p.gameRank||"",gallery:p.gallery||[]});});
       PR=fbPr;rpr();
     }
   },function(){});
   // Giveaways
-  db.collection("giveaways").onSnapshot(function(s){
+  _listeners.giveaways=db.collection("giveaways").onSnapshot(function(s){
     GV=[];s.forEach(function(d){GV.push(d.data());});rGv();
   },function(){});
   // Payments
-  db.collection("payments").onSnapshot(function(s){
+  _listeners.payments=db.collection("payments").onSnapshot(function(s){
     var fbPy=[];s.forEach(function(d){var p=d.data();fbPy.push({k:p.k||p.n.toLowerCase().replace(/\s/g,""),n:p.n||"",col:p.col||"#2563eb",ic:p.ic||"$",ph:p.ph||"",hd:p.hd||"",img:p.img||"",qr:p.qr||""});});
     if(fbPy.length)PY=fbPy;
   },function(){});
-  // Config (hero banner)
-  db.collection("config").doc("store").onSnapshot(function(d){
+  // Config
+  _listeners.config=db.collection("config").doc("store").onSnapshot(function(d){
     if(d.exists){var cfg=d.data();
       var hero=document.getElementById("heroSec");
       if(hero&&cfg.heroImg){hero.style.backgroundImage="url("+cfg.heroImg+")";hero.style.backgroundSize="cover";hero.style.backgroundPosition="center";}
       if(cfg.heroTitle){var parts=cfg.heroTitle.split("\n");var h1=document.querySelector('[data-t="heroH1"]');var h2=document.querySelector('[data-t="heroH2"]');if(h1)h1.textContent=parts[0]||"";if(h2)h2.textContent=parts[1]||"";}
       if(cfg.logoImg){var lm=document.querySelector(".logo-mark");if(lm)lm.innerHTML='<img src="'+cfg.logoImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';}
       if(cfg.heroSub){var hp=document.querySelector('[data-t="heroP"]');if(hp)hp.textContent=cfg.heroSub;}
+      // Save Telegram username globally for FAQ
+      if(cfg.tgUsername!==undefined)window._storeTgUser=cfg.tgUsername;
       // Banner carousel images
       if(cfg.banners&&cfg.banners.length){
         var sl=document.getElementById("heroSlides");
@@ -1983,12 +2113,10 @@ function startFirebaseListeners(){
           slide.innerHTML='<img src="'+b+'" style="width:100%;height:100%;object-fit:cover"/>';
           sl.appendChild(slide);
         });
-        // Dots
         var totalSlides=1+cfg.banners.length;
         var dotHtml="";for(var di=0;di<totalSlides;di++)dotHtml+='<div style="width:'+(di===0?'8':'6')+'px;height:6px;border-radius:3px;background:'+(di===0?'var(--ac)':'var(--bd)')+';transition:.2s"></div>';
         dots.innerHTML=dotHtml;
         sl.addEventListener("scroll",function(){var idx=Math.round(sl.scrollLeft/sl.offsetWidth);dots.querySelectorAll("div").forEach(function(d,i){d.style.background=i===idx?"var(--ac)":"var(--bd)";d.style.width=i===idx?"8px":"6px";});});
-        // Auto-scroll
         var hIdx=0;setInterval(function(){hIdx=(hIdx+1)%totalSlides;sl.scrollTo({left:hIdx*sl.offsetWidth,behavior:"smooth"});},5000);
       }
     }
