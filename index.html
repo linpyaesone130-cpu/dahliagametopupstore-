@@ -94,23 +94,65 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 
 /* ══ GAME GRID ══ */
 .gg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
-.gc{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;padding:12px 6px 10px;border-radius:var(--r2);border:1px solid var(--bd);background:var(--sf);transition:all .2s;}
+.gc{display:flex;flex-direction:column;cursor:pointer;border-radius:var(--r2);border:1px solid var(--bd);background:var(--sf);transition:all .2s;overflow:hidden;gap:0;}
 .gc:active{transform:scale(.93);}
-.gc:hover{border-color:var(--ac3);background:var(--sf2);box-shadow:0 4px 16px var(--acg);}
-.gi{width:100%;aspect-ratio:1/1;border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 55%);pointer-events:none;}
+.gc:hover{border-color:var(--ac3);box-shadow:0 4px 16px var(--acg);}
+.gi{width:100%;aspect-ratio:3/4;border-radius:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.7) 100%);pointer-events:none;}
+.gi.sk::after{display:none;}
 .gi span{font-size:32px;position:relative;z-index:1;}
 .gi img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.gn{font-size:9px;font-weight:700;color:var(--tx);text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;}
+.gn{font-size:9px;font-weight:800;color:var(--tx);text-align:center;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;padding:7px 6px 8px;width:100%;}
 .ge{text-align:center;grid-column:1/-1;color:var(--tx3);font-size:13px;padding:32px 0;}
 
 /* ══ SKELETON LOADING ══ */
-@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
-.sk{background:linear-gradient(90deg,var(--sf) 25%,var(--sf2) 50%,var(--sf) 75%);background-size:800px 100%;animation:shimmer 1.4s infinite;}
-.sk-card{border-radius:var(--r2);border:1px solid var(--bd);padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;}
-.sk-img{width:100%;aspect-ratio:1/1;border-radius:16px;}
-.sk-txt{width:70%;height:9px;border-radius:6px;}
-.sk-txt2{width:50%;height:8px;border-radius:6px;}
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+
+/* Dark mode shimmer: #111 → orange-tinted #1f1400 */
+.sk{
+  background:linear-gradient(90deg,#161616 0%,#2a1a00 50%,#161616 100%);
+  background-size:800px 100%;
+  animation:shimmer 1.6s ease-in-out infinite;
+}
+/* Light mode shimmer: #eef → blue-tinted #c5d3f0 */
+.app.light .sk{
+  background:linear-gradient(90deg,#eef1f9 0%,#c5d3f0 50%,#eef1f9 100%);
+  background-size:800px 100%;
+  animation:shimmer 1.6s ease-in-out infinite;
+}
+
+/* Skeleton card = same shape as real .gc game card */
+.sk-card{
+  border-radius:var(--r2);
+  border:1px solid #222;
+  background:#111;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.app.light .sk-card{background:#edf0f8;border-color:#ccd4e8;}
+
+/* Skeleton image = full-width tall rectangle (like game cover) */
+.sk-img{
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:var(--r2) var(--r2) 0 0;
+  min-height:80px;
+}
+/* Skeleton label bar at bottom */
+.sk-txt{
+  width:70%;
+  height:10px;
+  border-radius:6px;
+  margin:10px auto 4px;
+}
+.sk-txt2{
+  width:45%;
+  height:8px;
+  border-radius:6px;
+  margin:0 auto 10px;
+}
 
 /* ══ BACK ══ */
 .bk{display:inline-flex;align-items:center;gap:6px;color:var(--ac2);font-weight:700;font-size:11px;cursor:pointer;border:none;background:none;font-family:var(--font);margin-bottom:14px;padding:6px 12px 6px 8px;border-radius:var(--r);transition:all .15s;border:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px;}
@@ -421,11 +463,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .itab.sk{border:1px solid var(--bd);pointer-events:none;}
 
 /* ══ LIGHT MODE ══ */
-.app.light{--bg:#f4f6fa;--bg2:#edf0f7;--sf:#ffffff;--sf2:#f8f9fc;--sf3:#e8ecf4;--bd:#dce1ed;--bd2:#c8d0e0;--bd3:#b4bdd3;--tx:#111827;--tx2:#4b5563;--tx3:#9ca3af;--ac:#FF8C00;--ac2:#e07a00;--ac3:#FF8C00;--acg:rgba(255,140,0,.09);--acg2:rgba(255,140,0,.04);--gn:#059669;--gng:rgba(5,150,105,.06);--yw:#d97706;--ywg:rgba(217,119,6,.06);--rd:#dc2626;--rdg:rgba(220,38,38,.06);}
+.app.light{--bg:#f4f6fa;--bg2:#edf0f7;--sf:#ffffff;--sf2:#f0f4ff;--sf3:#e8edf8;--bd:#d0d8ee;--bd2:#bbc5e0;--bd3:#a8b4d4;--tx:#111827;--tx2:#374151;--tx3:#9ca3af;--ac:#2563eb;--ac2:#1d4ed8;--ac3:#3b82f6;--acg:rgba(37,99,235,.1);--acg2:rgba(37,99,235,.05);--gn:#059669;--gng:rgba(5,150,105,.08);--yw:#d97706;--ywg:rgba(217,119,6,.06);--rd:#dc2626;--rdg:rgba(220,38,38,.06);}
 .app.light .hdr{background:rgba(244,246,250,.9);border-bottom-color:var(--bd);}
+.app.light .nb.on{background:rgba(37,99,235,.12)!important;}
+.app.light .nb.on svg{stroke:#2563eb!important;}
+.app.light .nb.on .nl{color:#2563eb!important;}
 .app.light .nav{background:rgba(255,255,255,.94);border-top-color:var(--bd);}
 /* Hero and banner keep white text on colored bg */
-.app.light .hero{background:linear-gradient(145deg,#FF8C00 0%,#FF8C00 50%,#FFA533 100%);border-color:rgba(255,140,0,.15);}
+.app.light .hero{background:linear-gradient(145deg,#0d0d0d 0%,#1a0f00 50%,#1f1200 100%);border-color:rgba(255,140,0,.12);}
 .app.light .hero h2,.app.light .hero p,.app.light .hero-tag,.app.light .hero .hs-n,.app.light .hero .hs-l,.app.light .hero-tag span{color:#fff!important;}
 .app.light .bn{background:linear-gradient(145deg,#FF8C00,#FF8C00)!important;border-color:rgba(255,140,0,.1);}
 .app.light .bn .bn-i,.app.light .bn .bn-t,.app.light .bn .bn-s{color:#fff!important;}
@@ -441,7 +486,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .app.light .gc:hover{background:var(--sf2);border-color:var(--bd2);}
 .app.light .gn{color:var(--tx)!important;}
 .app.light .lb{color:var(--tx)!important;}
-.app.light .lb svg{stroke:var(--ac);}
+.app.light .lb svg{stroke:#2563eb;}
 .app.light .pk{background:var(--sf);border-color:var(--bd);}
 .app.light .pk .pk-a{color:var(--tx)!important;}
 .app.light .pk .pk-p{color:var(--tx2)!important;}
@@ -483,7 +528,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .app.light .hc-dt,.app.light .hc-id{color:var(--tx3)!important;}
 /* Tabs */
 .app.light .tb{background:var(--sf);border-color:var(--bd);color:var(--tx2);}
-.app.light .tb.on{background:var(--ac);color:#fff;border-color:var(--ac);}
+.app.light .tb.on{background:#2563eb;color:#fff;border-color:#2563eb;box-shadow:0 4px 14px rgba(37,99,235,.25);}
 /* Profile card rows */
 .app.light .pf-c{background:var(--sf);border-color:var(--bd);}
 .app.light .pf-rl{color:var(--tx3)!important;}
@@ -969,41 +1014,40 @@ function stopAllListeners(){
   _listenersStarted=false;
 }
 
-function enterApp(user) {
-  hideSplash();
-  var _auth = document.getElementById("authScreen");
-  var _app = document.getElementById("mainApp");
-  if (_auth) { _auth.classList.add("hide"); _auth.style.display = "none"; }
-  if (_app) { _app.classList.remove("hide"); _app.style.display = "block"; }
-  
-  if (user) {
-    pf.nm = user.displayName || "";
-    pf.em = user.email || "";
-    pf.sn = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
+function enterApp(user){hideSplash();
+  var _auth=document.getElementById("authScreen");
+  var _app=document.getElementById("mainApp");
+  if(_auth){_auth.classList.add("hide");_auth.style.display="none";}
+  if(_app){_app.classList.remove("hide");_app.style.display="block";}
+  if(user){
+    pf.nm=user.displayName||"";
+    pf.em=user.email||"";
+    pf.sn=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
   }
-  
-  var isDk = localStorage.getItem("pca_dark") === "1";
-  document.getElementById("mainApp").classList.toggle("light", !isDk);
-  if (typeof pf !== "undefined") pf.dk = isDk;
+  var isDk=localStorage.getItem("pca_dark")!=="0";  // default: dark mode
+  document.getElementById("mainApp").classList.toggle("light",!isDk);
+  if(typeof pf!=="undefined")pf.dk=isDk;
 
-  try {
-    var cached = localStorage.getItem("pca_hl");
-    if (cached) { HL = JSON.parse(cached); rht(); rhl(); }
-  } catch (e) {}
+  // Load cached orders instantly
+  try{
+    var cached=localStorage.getItem("pca_hl");
+    if(cached){HL=JSON.parse(cached);rht();rhl();}
+  }catch(e){}
 
-  rpt();
-  rgrd([], true); // ပထမဆုံး အကြိမ်မှာပဲ Skeleton ပြရန်
-  fltG(); rpr(); rpf();
+  // Show skeleton grid immediately — Firebase listener will replace when ready
+  rpt();   // shows skeleton tabs when D is empty
+  rgrd([]); // shows skeleton cards
+  fltG();rpr();rpf();
 
-  var newEmail = user ? user.email : "guest";
-  if (fbReady && (!_listenersStarted || _currentUserEmail !== newEmail)) {
-    if (_listenersStarted) stopAllListeners();
-    _currentUserEmail = newEmail;
+  // Only start Firebase listeners if user changed or not started yet
+  var newEmail=user?user.email:"guest";
+  if(fbReady&&(!_listenersStarted||_currentUserEmail!==newEmail)){
+    if(_listenersStarted)stopAllListeners(); // user changed — restart
+    _currentUserEmail=newEmail;
     startFirebaseListeners();
   }
-  
   loadPcaId();
-  if (user) setTimeout(savePcaUser, 500);
+  if(user)setTimeout(savePcaUser,500);
   initNotifs();
 }
 
@@ -1138,9 +1182,9 @@ function rpt(){
   // If no games yet — show skeleton tabs
   if(!D||!D.length){
     document.getElementById("ptabs").innerHTML=
-      '<div class="itab sk" style="height:64px;border-color:transparent"></div>'
-      +'<div class="itab sk" style="height:64px;border-color:transparent"></div>'
-      +'<div class="itab sk" style="height:64px;border-color:transparent"></div>';
+      '<div class="itab sk" style="height:62px;border-color:transparent;pointer-events:none"></div>'
+      +'<div class="itab sk" style="height:62px;border-color:transparent;pointer-events:none"></div>'
+      +'<div class="itab sk" style="height:62px;border-color:transparent;pointer-events:none"></div>';
     return;
   }
   var icons=[
@@ -1167,28 +1211,31 @@ function fltG(){
   var f=D.filter(function(g){return(pfl==="All"||g.pl===pfl)&&(!q||g.n.toLowerCase().indexOf(q)>=0)});
   rgrd(f);
 }
-function rgrd(l, isInitialLoad = true) {
-  var e = document.getElementById("ggrid");
-  if (!e) return;
-  
-  clearTimeout(_gamesLoadTimeout);
-
-  if (!l || !l.length) {
-    if (isInitialLoad) {
-      var sk = "";
-      for (var s = 0; s < 9; s++) sk += '<div class="sk-card"><div class="sk-img sk"></div><div class="sk-txt sk"></div></div>';
-      e.innerHTML = sk;
-      _startGamesTimeout();
-    } else {
-      e.innerHTML = '<div class="ge" style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--tx3);font-size:13px;">No games available right now.</div>';
+function rgrd(l){
+  var e=document.getElementById("ggrid");
+  if(!e)return;
+  if(!l||!l.length){
+    var sk="";
+    for(var s=0;s<9;s++){
+      sk+='<div class="gc" style="pointer-events:none;cursor:default">'
+        +'<div class="gi sk" style="border-radius:16px"></div>'
+        +'<div style="width:65%;height:8px;border-radius:5px;margin-top:2px" class="sk"></div>'
+        +'</div>';
     }
+    e.innerHTML=sk;
+    _startGamesTimeout();
     return;
   }
-  
-  l.forEach(function(g, i) { if (g.id === undefined) g.id = i; });
-  e.innerHTML = l.map(function(g) {
-    var inner = g.img ? '<img src="' + g.img + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>' : '<span style="font-size:28px;position:relative;z-index:1">' + g.e + '</span>';
-    return '<div class="gc" onclick="og(' + g.id + ')"><div class="gi" style="background:linear-gradient(135deg,' + g.c + ',#FF8C00)">' + inner + '</div><span class="gn">' + g.n + '</span></div>';
+  clearTimeout(_gamesLoadTimeout);
+  l.forEach(function(g,i){if(g.id===undefined)g.id=i;});
+  e.innerHTML=l.map(function(g){
+    var inner=g.img
+      ?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>'
+      :'<span style="font-size:28px;position:relative;z-index:1">'+g.e+'</span>';
+    return'<div class="gc" onclick="og('+g.id+')">'
+      +'<div class="gi" style="background:linear-gradient(135deg,'+g.c+',#FF8C00)">'+inner+'</div>'
+      +'<span class="gn">'+g.n+'</span>'
+      +'</div>';
   }).join("");
 }
 
@@ -1714,53 +1761,54 @@ function checkSavedVerify(){
   usum();
 }
 
-function requestVerify() {
-  var uidEl = document.getElementById("uid");
-  var sidEl = document.getElementById("sid");
-  if (!uidEl || !uidEl.value.trim()) { tst("Enter User ID first", "er"); return; }
-  if (!fbReady || !db) { tst("Firebase offline", "er"); return; }
-  
-  var gameId = uidEl.value.trim();
-  var serverId = sidEl ? sidEl.value.trim() : "";
-  var docId = gameId + "_" + sg.n.replace(/\s/g, "");
+function requestVerify(){
+  var uidEl=document.getElementById("uid");var sidEl=document.getElementById("sid");
+  if(!uidEl||!uidEl.value.trim()){tst("Enter User ID first","er");return;}
+  if(!fbReady||!db){tst("Firebase offline","er");return;}
+  var gameId=uidEl.value.trim();var serverId=sidEl?sidEl.value.trim():"";
+  var docId=gameId+"_"+sg.n.replace(/\s/g,"");
 
+  // Show waiting UI immediately
   _showWaitingUI();
-  listenVerify(docId); // Listener ကို အရင်ဖွင့်ပါမယ်
 
-  var vDoc = {
-    game: sg.n, gameId: gameId, serverId: serverId,
-    authUser: curUser ? curUser.email : "guest",
-    pcaId: pcaId ? "DH-" + pcaId : "",
-    status: "pending", verifiedName: "",
-    timestamp: new Date().toISOString()
+  // FIX: Start listener FIRST, then write — so we never miss admin's response
+  listenVerify(docId);
+
+  var vDoc={
+    game:sg.n,gameId:gameId,serverId:serverId,
+    authUser:curUser?curUser.email:"guest",
+    pcaId:pcaId?"DH-"+pcaId:"",
+    status:"pending",verifiedName:"",
+    timestamp:new Date().toISOString()
   };
-  
-  db.collection("verifications").doc(docId).set(vDoc).catch(function() {
-    tst("Failed to send. Try again.", "er");
-    var btn = document.getElementById("verifyBtn");
-    if (btn) { btn.textContent = "Confirm ID"; btn.disabled = false; btn.style.background = ""; btn.style.borderColor = ""; btn.style.color = ""; }
+  // Write to Firebase (listener already active, will catch any change)
+  db.collection("verifications").doc(docId).set(vDoc).catch(function(){
+    tst("Failed to send. Try again.","er");
+    var btn=document.getElementById("verifyBtn");
+    if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
   });
 }
 
-function listenVerify(docId) {
-  if (verifyUnsub) verifyUnsub(); 
-  verifyUnsub = db.collection("verifications").doc(docId).onSnapshot(function(d) {
-    if (!d.exists) return;
-    var v = d.data();
-    if (v.status === "verified" && v.verifiedName) {
-      idVerified = true;
-      var _uid = document.getElementById("uid");
-      if (_uid && sg) saveVerified(_uid.value.trim(), sg.n, v.verifiedName);
+// REAL-TIME listener — fires instantly when admin verifies/rejects
+function listenVerify(docId){
+  if(verifyUnsub)verifyUnsub(); // unsubscribe previous
+  verifyUnsub=db.collection("verifications").doc(docId).onSnapshot(function(d){
+    if(!d.exists)return;
+    var v=d.data();
+    if(v.status==="verified"&&v.verifiedName){
+      var _uid=document.getElementById("uid");
+      if(_uid&&sg)saveVerified(_uid.value.trim(),sg.n,v.verifiedName);
       _showVerifiedUI(v.verifiedName);
-      tst("✅ Verified: " + v.verifiedName, "ok");
-    } else if (v.status === "rejected") {
-      idVerified = false;
+      tst("✅ Verified: "+v.verifiedName,"ok");
+    }else if(v.status==="rejected"){
       _showRejectedUI();
-      tst("ID not found — try again", "er");
-    } else if (v.status === "pending") {
+      tst("ID not found — try again","er");
+    }else if(v.status==="pending"){
       _showWaitingUI();
     }
-  }, function(err) { /* error handler */ });
+  },function(err){
+    // Listener error — silent fail
+  });
 }
 function confirmName(ok){
   if(ok){idVerified=true;var _uid=document.getElementById("uid");var _vname=document.querySelector("#verifyStatus div div:nth-child(2)");var vn=_vname?_vname.textContent:"Verified";if(_uid&&sg){saveVerified(_uid.value.trim(),sg.n,vn);}document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center;font-size:12px;font-weight:800;color:var(--gn)">Verified: '+vn+'</div>';document.getElementById("verifyBtn").textContent="Verified";document.getElementById("verifyBtn").disabled=true;document.getElementById("verifyBtn").textContent="Verified";tst("ID confirmed!","ok");}
@@ -1930,7 +1978,16 @@ document.getElementById("evdOv").addEventListener("click",function(e){if(e.targe
 // ═══ THEME TOGGLE ═══
 function toggleTheme(dark){
   pf.dk=dark;
-  document.querySelector(".app").classList.toggle("light",!dark);
+  // Save immediately
+  try{localStorage.setItem("pca_dark",dark?"1":"0");}catch(e){}
+  // Apply class
+  var app=document.querySelector(".app");
+  if(app){app.classList.toggle("light",!dark);}
+  // Update meta theme-color
+  var mt=document.querySelector("meta[name=theme-color]");
+  if(mt)mt.setAttribute("content",dark?"#000000":"#f4f6fa");
+  // Re-render skeleton so colors update immediately
+  if(!D||!D.length){rgrd([]);}
   rpf();
 }
 
@@ -2061,21 +2118,10 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/jav
 rpt();rgrd([]);
 
 // 3-second max loading — if Firebase hasn't responded, show empty state
-// Keep skeleton until Firebase data arrives; show retry after 5s if still loading
+// Skeleton stays until Firebase data arrives — no timeout error shown
 var _gamesLoadTimeout=null;
 function _startGamesTimeout(){
-  clearTimeout(_gamesLoadTimeout);
-  _gamesLoadTimeout=setTimeout(function(){
-    var e=document.getElementById("ggrid");
-    if(e&&e.querySelector(".sk-card")){
-      e.innerHTML='<div class="ge" style="grid-column:1/-1;text-align:center;padding:32px 0">'
-        +'<svg viewBox="0 0 24 24" style="width:36px;height:36px;stroke:var(--tx3);fill:none;margin:0 auto 10px;display:block"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-        +'<div style="font-size:13px;font-weight:700;color:var(--tx2)">Could not load games</div>'
-        +'<div style="font-size:11px;color:var(--tx3);margin-top:4px;margin-bottom:14px">Check your connection</div>'
-        +'<button onclick="location.reload()" style="padding:10px 20px;border-radius:10px;border:1.5px solid var(--ac);background:var(--acg);color:var(--ac2);font-size:12px;font-weight:800;cursor:pointer;font-family:var(--font)">Retry</button>'
-      +'</div>';
-    }
-  },5000);
+  // Disabled: no Retry button, skeleton stays until data loads
 }
 
 // Firebase listeners — called from enterApp() every time
@@ -2137,22 +2183,14 @@ function startFirebaseListeners(){
     if(doc.exists){var d=doc.data();Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});rpf();}
   }).catch(function(){});
   // Games
-  _listeners.games = db.collection("games").onSnapshot(function(s) {
+  _listeners.games=db.collection("games").onSnapshot(function(s){
     clearTimeout(_gamesLoadTimeout);
-    var fbGames = [];
-    var gIdx = 0;
-    s.forEach(function(d) {
-      var g = d.data();
-      fbGames.push({ id: gIdx++, n: g.n || g.name || "", e: g.e || g.emoji || "🎮", c: g.c || g.color || "#FF8C00", cur: g.cur || "Diamonds", ci: g.ci || "💎", pl: g.pl || g.platform || "Mobile", img: g.img || "", pr: g.pr || g.packages || [{ d: 86, p: 2800 }], regions: g.regions || [], showSid: g.showSid || false, bannerImg: g.bannerImg || "" });
-    });
-    D = fbGames;
-    rgrd(D, false); // false ကို သုံးလိုက်တာကြောင့် Skeleton loop ကို ရပ်တန့်စေပါတယ်
-    rpt();
-    if (document.getElementById("pg-his") && document.getElementById("pg-his").classList.contains("on")) { rht(); rhl(); }
-  }, function() { 
-    clearTimeout(_gamesLoadTimeout); 
-    rgrd([], false); 
-  });
+    var fbGames=[];var gIdx=0;
+    s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"🎮",c:g.c||g.color||"#FF8C00",cur:g.cur||"Diamonds",ci:g.ci||"💎",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
+    D=fbGames;rgrd(D);rpt();
+    // If history is open, refresh so game images update
+    if(document.getElementById("pg-his")&&document.getElementById("pg-his").classList.contains("on")){rht();rhl();}
+  },function(){clearTimeout(_gamesLoadTimeout);});
   // Events
   _listeners.events=db.collection("events").onSnapshot(function(s){
     if(!s.empty){
