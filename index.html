@@ -730,6 +730,69 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .ni-desc{font-size:11px;color:var(--tx2);line-height:1.4;}
 .ni-time{font-size:9px;color:var(--tx3);margin-top:3px;}
 .notif-empty{text-align:center;padding:30px;color:var(--tx3);font-size:12px;}
+/* NOTIFICATION BADGE */
+.notif-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;background:var(--rd);border-radius:8px;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;padding:0 3px;pointer-events:none;}
+/* ADMIN NOTIF ITEM */
+.notif-item.admin-msg{background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.2);}
+/* AI CHAT BUTTON */
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:16px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#FF8C00,#ff6b00);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,140,0,.45);z-index:55;transition:all .2s;font-family:var(--font);}
+.ai-fab:active{transform:scale(.88);}
+.ai-fab svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;}
+.ai-fab .ai-fab-dot{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:var(--gn);border:2px solid #fff;display:flex;align-items:center;justify-content:center;}
+.ai-fab .ai-fab-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:blink 1.5s infinite;}
+/* AI CHAT OVERLAY */
+.ai-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:90;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.25s;}
+.ai-ov.v{opacity:1;pointer-events:all;}
+.ai-sh{background:var(--bg);border-radius:24px 24px 0 0;padding:0;max-width:430px;width:100%;height:88vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);}
+.ai-ov.v .ai-sh{transform:translateY(0);}
+.ai-hdr{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.ai-hdr-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF8C00,#ff6b00);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.ai-hdr-av svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;}
+.ai-hdr-av .ai-online{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--gn);border:2px solid var(--bg);}
+.ai-hdr-info{flex:1;}
+.ai-hdr-nm{font-size:14px;font-weight:800;color:var(--tx);}
+.ai-hdr-st{font-size:10px;color:var(--gn);font-weight:600;display:flex;align-items:center;gap:4px;}
+.ai-hdr-st::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gn);}
+.ai-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:var(--sf);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.ai-close svg{width:16px;height:16px;stroke:var(--tx2);fill:none;}
+.ai-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.ai-msg{display:flex;gap:8px;animation:pgIn .25s ease;}
+.ai-msg.user{flex-direction:row-reverse;}
+.ai-msg .ai-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:linear-gradient(135deg,#FF8C00,#ff6b00);}
+.ai-msg .ai-av svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;}
+.ai-msg .ai-bub{max-width:78%;padding:10px 14px;border-radius:18px;font-size:13px;line-height:1.55;}
+.ai-msg.bot .ai-bub{background:var(--sf);border:1px solid var(--bd);color:var(--tx);border-top-left-radius:4px;}
+.ai-msg.user .ai-bub{background:linear-gradient(135deg,#FF8C00,#ff6b00);color:#fff;border-top-right-radius:4px;}
+.ai-typing{display:flex;align-items:center;gap:4px;padding:10px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:18px;border-top-left-radius:4px;width:fit-content;}
+.ai-typing span{width:7px;height:7px;border-radius:50%;background:var(--tx3);animation:aiDot 1.2s ease infinite;}
+.ai-typing span:nth-child(2){animation-delay:.2s;}
+.ai-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes aiDot{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+.ai-qsug{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 4px;}
+.ai-qsug button{padding:6px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:.15s;text-align:left;}
+.ai-qsug button:active{background:var(--acg);border-color:var(--ac);color:var(--ac2);}
+.ai-inp-row{display:flex;gap:8px;padding:10px 14px calc(env(safe-area-inset-bottom,8px)+12px);border-top:1px solid var(--bd);flex-shrink:0;}
+.ai-inp{flex:1;padding:11px 14px;border-radius:22px;border:1.5px solid var(--bd);background:var(--sf);font-size:13px;font-family:var(--font);color:var(--tx);outline:none;transition:.2s;resize:none;line-height:1.4;max-height:100px;}
+.ai-inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acg);}
+.ai-send{width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#FF8C00,#ff6b00);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;align-self:flex-end;}
+.ai-send:active{transform:scale(.88);}
+.ai-send svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;}
+.ai-send:disabled{opacity:.4;cursor:default;}
+/* CS profile row */
+.cs-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(255,140,0,.08),rgba(255,107,0,.04));border:1px solid rgba(255,140,0,.2);cursor:pointer;transition:all .15s;margin-bottom:10px;}
+.cs-row:active{transform:scale(.97);}
+.cs-ic{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#FF8C00,#ff6b00);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255,140,0,.25);}
+.cs-ic svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;}
+.cs-info{flex:1;}
+.cs-nm{font-size:13px;font-weight:800;color:var(--tx);}
+.cs-ds{font-size:11px;color:var(--tx3);margin-top:2px;}
+.cs-badge{padding:3px 8px;border-radius:6px;background:var(--gng);border:1px solid rgba(34,197,94,.2);font-size:9px;font-weight:800;color:var(--gn);text-transform:uppercase;letter-spacing:.3px;}
+.app.light .cs-row{background:rgba(255,140,0,.06);}
+.app.light .ai-sh{background:#f4f6fa;}
+.app.light .ai-msg.bot .ai-bub{background:#fff;border-color:var(--bd);}
+.app.light .ai-hdr{background:#fff;border-color:var(--bd);}
+.app.light .ai-inp-row{background:#fff;border-color:var(--bd);}
+.app.light .ai-inp{background:#f4f6fa;border-color:var(--bd);}
 .auth{width:100%;max-width:430px;min-height:100vh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
 .auth.hide{display:none;}
 .app.hide{display:none;}
@@ -816,7 +879,7 @@ if(dk!=="1"){document.documentElement.classList.add("theme-light");}
  <span id="logoText" style="display:none">PCA</span>
  <span id="logoSub" style="display:none;color:var(--ac2);font-weight:600">STORE</span>
  </div>
- <div class="hdr-icons"><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div></div>
+ <div class="hdr-icons"><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" id="bellBtn" onclick="openNotif()" style="position:relative"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span id="notifBadge" style="display:none" class="notif-badge">0</span></div></div>
  </div>
 
  <div class="cnt" id="cnt">
@@ -941,6 +1004,38 @@ if(dk!=="1"){document.documentElement.classList.add("theme-light");}
  </div>
  </div>
  <div class="notif-ov" id="notifOv"><div class="notif-sh"><div class="m-h"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="m-t" style="margin:0">Notifications</div><button style="border:none;background:none;color:var(--ac2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="clearNotifs()">Clear All</button></div><div id="notifList"></div><button class="trk-close" onclick="closeNotif()">Close</button></div></div>
+
+<!-- AI CUSTOMER SERVICE CHAT -->
+<button class="ai-fab" id="aiFab" onclick="openAiChat()" title="Customer Service AI">
+ <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+ <div class="ai-fab-dot"></div>
+</button>
+
+<div class="ai-ov" id="aiOv">
+ <div class="ai-sh">
+ <div class="ai-hdr">
+ <div class="ai-hdr-av">
+ <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+ <div class="ai-online"></div>
+ </div>
+ <div class="ai-hdr-info">
+ <div class="ai-hdr-nm">PCA Store Assistant</div>
+ <div class="ai-hdr-st">Online · AI Powered</div>
+ </div>
+ <div class="ai-close" onclick="closeAiChat()">
+ <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+ </div>
+ </div>
+ <div class="ai-msgs" id="aiMsgs"></div>
+ <div class="ai-qsug" id="aiSug"></div>
+ <div class="ai-inp-row">
+ <textarea class="ai-inp" id="aiInp" placeholder="Type your question..." rows="1" onkeydown="aiKeydown(event)" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+ <button class="ai-send" id="aiSend" onclick="aiSend()">
+ <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+ </button>
+ </div>
+ </div>
+</div>
  <!-- WARNING DIALOG -->
  <div class="warn-ov" id="warnOv">
  <div class="warn-box">
@@ -1078,6 +1173,11 @@ function enterApp(user){hideSplash();
  pf.nm=user.displayName||"";
  pf.em=user.email||"";
  pf.sn=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
+ // ── Restore cached profile (reduces data usage, instant display) ──
+ try{
+ var cachedPf=localStorage.getItem("pca_pf_"+(user.email||"g"));
+ if(cachedPf){var cp=JSON.parse(cachedPf);Object.keys(cp).forEach(function(k){if(pf.hasOwnProperty(k)&&k!=="em")pf[k]=cp[k];});}
+ }catch(e){}
  }
  var isDk=localStorage.getItem("pca_dark")==="1"; // default: light mode
  document.getElementById("mainApp").classList.toggle("light",!isDk);
@@ -1110,6 +1210,8 @@ function doLogout(){
  stopAllListeners();
  HL=[];
  try{localStorage.removeItem("pca_hl");}catch(e){}
+ // ── Clear cached profile on logout ──
+ try{if(curUser)localStorage.removeItem("pca_pf_"+(curUser.email||"g"));}catch(e){}
  if(auth)auth.signOut();
  curUser=null;
  try{localStorage.removeItem("pca_logged");sessionStorage.removeItem("pcaId");}catch(e){}
@@ -1217,20 +1319,37 @@ var mmk=function(n){return n.toLocaleString("en-US")+" MMK";};
 
 var sg=null,sp=null,ss=null,sy=null,ck=false,rc=false,pfl="All",hfl="all";
 
-function go(t){sg=null;sp=null;ss=null;sy=null;ck=false;rc=false;
+// ── Scroll-position memory for Home page ──
+var _homeScrollY=0;
+function _saveHomeScroll(){_homeScrollY=document.getElementById("cnt").scrollTop;}
+function _restoreHomeScroll(){setTimeout(function(){document.getElementById("cnt").scrollTop=_homeScrollY;},0);}
+
+function go(t){
+ // Save scroll if leaving home
+ var prevPg=document.querySelector(".pg.on");
+ if(prevPg&&prevPg.id==="pg-home")_saveHomeScroll();
+ sg=null;sp=null;ss=null;sy=null;ck=false;rc=false;
  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on")});
  document.querySelectorAll(".nb").forEach(function(n){n.classList.remove("on")});
  var pg=document.getElementById("pg-"+t);if(pg)pg.classList.add("on");
  var nb=document.querySelector('.nb[data-t="'+t+'"]');if(nb)nb.classList.add("on");
- document.getElementById("cnt").scrollTop=0;
+ if(t==="home"){document.getElementById("cnt").scrollTop=0;_homeScrollY=0;rpt();fltG();}
+ else{document.getElementById("cnt").scrollTop=0;}
  if(t==="pf")rpf();
  if(t==="ev")rEvPage();
  if(t==="gv")rGv();if(t==="faq")rFaq();
  if(t==="his"){rht();rhl();}
- if(t==="home"){rpt();fltG();}
  if(t==="pro"){document.getElementById("acList").style.display="block";document.getElementById("acDetail").style.display="none";rpr();}
 }
-function shw(p){document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on")});document.getElementById("pg-"+p).classList.add("on");document.getElementById("cnt").scrollTop=0;}
+function shw(p){
+ // Save home scroll before leaving
+ var prevPg=document.querySelector(".pg.on");
+ if(prevPg&&prevPg.id==="pg-home")_saveHomeScroll();
+ document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on")});
+ document.getElementById("pg-"+p).classList.add("on");
+ if(p==="home"){_restoreHomeScroll();}
+ else{document.getElementById("cnt").scrollTop=0;}
+}
 function tst(m,t){var e=document.getElementById("tst");e.textContent=m;e.className="toast "+(t||"in")+" v";setTimeout(function(){e.className="toast"},2200);}
 
 // HOME
@@ -1336,7 +1455,7 @@ function og(id){
  }
  }catch(e){}
 }
-function cg(){sg=null;shw("home");}
+function cg(){sg=null;shw("home");_restoreHomeScroll();}
 
 function ppk(i){sp=i;sy=null;ck=false;if(selRegion!==null&&sg.regions&&sg.regions[selRegion]&&sg.regions[selRegion].pr){sg.pr=sg.regions[selRegion].pr;}rc=false;
  document.querySelectorAll(".pk").forEach(function(e,x){e.classList.toggle("on",x===i)});
@@ -1631,6 +1750,8 @@ function rpf(){
  h+='</div></div>';
  h+='<div class="st-c"><div class="st-t">Settings</div><div class="st-r"><div class="st-l"><div class="st-i" style="background:rgba(255,140,0,.08)"><svg viewBox="0 0 24 24" stroke="#FF8C00"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><div class="st-info"><span class="st-lb">Language</span><span class="st-ds" id="curLangDs">English</span></div></div><div style="display:flex;gap:4px"><button class="lang-b on" id="lEn" onclick="setLang(&quot;en&quot;)" style="padding:5px 12px;border-radius:8px;border:1.5px solid var(--ac);background:var(--ac);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">EN</button><button class="lang-b" id="lMm" onclick="setLang(&quot;mm&quot;)" style="padding:5px 12px;border-radius:8px;border:1.5px solid var(--bd);background:none;color:var(--tx2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">MM</button></div></div><div class="st-r"><div class="st-l"><div class="st-i" style="background:rgba(255,165,51,.08)"><svg viewBox="0 0 24 24" stroke="#FF8C00"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="st-info"><span class="st-lb">Help & FAQ</span><span class="st-ds">Questions & answers</span></div></div><button style="padding:5px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="go(\'faq\')">Open</button></div><div class="st-r"><div class="st-l"><div class="st-i" style="background:var(--acg)"><svg viewBox="0 0 24 24" stroke="var(--ac2)"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div class="st-info"><span class="st-lb">Notifications</span><span class="st-ds">Order & app updates</span></div></div><label class="tg"><input type="checkbox" '+(pf.nt?"checked":"")+" onchange=\"pf.nt=this.checked\"/><span class=\"ts\"></span></label></div>";
  h+='<div class="st-r"><div class="st-l"><div class="st-i" style="background:'+(pf.dk?"var(--acg)":"rgba(245,158,11,.08)")+'"><svg viewBox="0 0 24 24" stroke="'+(pf.dk?"var(--ac2)":"#d97706")+'"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div><div class="st-info"><span class="st-lb">'+(pf.dk?"Dark Mode":"Light Mode")+'</span><span class="st-ds">Switch appearance</span></div></div><label class="tg"><input type="checkbox" '+(pf.dk?"checked":"")+' onchange="toggleTheme(this.checked)"/><span class="ts"></span></label></div></div>';
+ // Customer Service AI button
+ h+='<div class="cs-row" onclick="openAiChat()"><div class="cs-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="cs-info"><div class="cs-nm">Customer Service</div><div class="cs-ds">AI assistant — ask anything about PCA Store</div></div><div class="cs-badge">AI Online</div></div>';
  h+='<button class="lgo" onclick="doLogout()">Log Out</button>';
  h+='<div style="text-align:center;margin-top:16px;padding:12px;font-size:10px;color:var(--tx3)"><div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px"><span style="width:6px;height:6px;border-radius:50%;background:'+(fbReady?"var(--gn)":"var(--rd)")+'"></span>'+(fbReady?"Firebase Connected":"Firebase Offline")+'</div>'+(curUser?'Logged in as <strong style="color:var(--tx2)">'+curUser.email+'</strong>':'Guest mode')+'<br/>PCA Store v1.0</div>';
  document.getElementById("pg-pf").innerHTML=h;
@@ -1657,7 +1778,10 @@ function oed(){document.getElementById("en").value=pf.nm;document.getElementById
 }
 function pav(idx){document.querySelectorAll(".av").forEach(function(a,i){a.classList.remove("on");if(i===idx)a.classList.add("on")});pf.av=AV[idx];}
 function ced(){document.getElementById("emod").classList.remove("v");}
-function sed(){pf.nm=document.getElementById("en").value||pf.nm;pf.em=document.getElementById("ee").value||pf.em;pf.ph=document.getElementById("ep").value||pf.ph;pf.gn=document.getElementById("eg").value;pf.lc=document.getElementById("el").value;pf.fv=document.getElementById("efv").value;pf.py=document.getElementById("epy").value;pf.fb=document.getElementById("efb").value;pf.tg=document.getElementById("etg").value;pf.tt=document.getElementById("ett").value;fbSaveProfile(pf);rpf();ced();}
+function sed(){pf.nm=document.getElementById("en").value||pf.nm;pf.em=document.getElementById("ee").value||pf.em;pf.ph=document.getElementById("ep").value||pf.ph;pf.gn=document.getElementById("eg").value;pf.lc=document.getElementById("el").value;pf.fv=document.getElementById("efv").value;pf.py=document.getElementById("epy").value;pf.fb=document.getElementById("efb").value;pf.tg=document.getElementById("etg").value;pf.tt=document.getElementById("ett").value;
+ // ── Cache updated profile locally ──
+ try{if(curUser)localStorage.setItem("pca_pf_"+(curUser.email||"g"),JSON.stringify(pf));}catch(e){}
+ fbSaveProfile(pf);rpf();ced();}
 document.getElementById("emod").addEventListener("click",function(e){if(e.target===this)ced();});
 
 // ORDER TRACKING 
@@ -2256,21 +2380,48 @@ function pushNotify(title,body){
 function initNotifs(){
  if(!fbReady||!db)return;
  var uid=curUser?curUser.email:"guest";
+ // Listen to user-specific notifications (order feedback, personal messages)
  notifUnsub=db.collection("notifications").where("userId","==",uid).orderBy("timestamp","desc").limit(30).onSnapshot(function(s){
- NOTIFS=[];
- s.forEach(function(d){var n=d.data();n.fbId=d.id;NOTIFS.push(n);});
- // Push notification for new items
- if(prevNotifCount>0&&NOTIFS.length>prevNotifCount){
+ var userNotifs=[];
+ s.forEach(function(d){var n=d.data();n.fbId=d.id;n._src="user";userNotifs.push(n);});
+ _mergeNotifs(userNotifs,"user");
+ },function(){});
+ // Listen to broadcast notifications (admin announcements → all users)
+ // Order-related types are NEVER broadcast — they are user-specific only
+ var ORDER_TYPES=["approved","rejected","failed","order","topup","refund"];
+ db.collection("notifications").where("userId","==","all").orderBy("timestamp","desc").limit(20).onSnapshot(function(s){
+ var broadNotifs=[];
+ s.forEach(function(d){
+ var n=d.data();n.fbId=d.id;n._src="broadcast";
+ // Skip any order-feedback types even if accidentally sent to "all"
+ if(ORDER_TYPES.indexOf(n.type||"")!==-1)return;
+ broadNotifs.push(n);
+ });
+ _mergeNotifs(broadNotifs,"broadcast");
+ },function(){});
+}
+var _notifUser=[];var _notifBroadcast=[];
+function _mergeNotifs(list,src){
+ if(src==="user")_notifUser=list;
+ if(src==="broadcast")_notifBroadcast=list;
+ var merged=_notifUser.concat(_notifBroadcast);
+ merged.sort(function(a,b){var ta=new Date(a.timestamp).getTime()||0;var tb=new Date(b.timestamp).getTime()||0;return tb-ta;});
+ var prevCount=NOTIFS.length;
+ NOTIFS=merged;
+ if(prevCount>0&&NOTIFS.length>prevCount){
  var newest=NOTIFS[0];
  if(newest)pushNotify(newest.title||"PCA Store",newest.message||"You have a new notification");
  }
- prevNotifCount=NOTIFS.length;
  updateBell();
- },function(){});
 }
 
 function updateBell(){
- // Badge removed — notifications shown in panel only
+ var unread=NOTIFS.filter(function(n){return !n.read;}).length;
+ var badge=document.getElementById("notifBadge");
+ if(badge){
+ if(unread>0){badge.style.display="flex";badge.textContent=unread>9?"9+":unread;}
+ else{badge.style.display="none";}
+ }
 }
 
 function openNotif(){
@@ -2278,26 +2429,32 @@ function openNotif(){
  el.classList.add("v");
  var h="";
  if(NOTIFS.length===0){
- h='<div class="notif-empty"> No notifications yet</div>';
+ h='<div class="notif-empty">🔔 No notifications yet</div>';
  }else{
  h=NOTIFS.map(function(n){
- var ic="blue",emoji="";
- if(n.type==="approved"){ic="green";emoji="";}
- else if(n.type==="rejected"){ic="red";emoji="";}
- else if(n.type==="order"){ic="yellow";emoji="";}
- else if(n.type==="promo"){ic="blue";emoji="";}
+ var ic="blue",emoji="🔔";
+ if(n.type==="approved"){ic="green";emoji="✅";}
+ else if(n.type==="rejected"||n.type==="failed"){ic="red";emoji="❌";}
+ else if(n.type==="order"){ic="yellow";emoji="🛒";}
+ else if(n.type==="promo"){ic="blue";emoji="🎁";}
+ else if(n.type==="admin"||n._src==="broadcast"){ic="blue";emoji="📢";}
  var ago=timeAgo(n.timestamp);
- return'<div class="notif-item '+(n.read?"read":"unread")+'" onclick="readNotif(\''+n.fbId+'\')"><div class="ni-icon '+ic+'">'+emoji+'</div><div class="ni-body"><div class="ni-title">'+n.title+'</div><div class="ni-desc">'+n.message+'</div><div class="ni-time">'+ago+'</div></div></div>';
+ var extraCls=n._src==="broadcast"||n.type==="admin"?" admin-msg":"";
+ return'<div class="notif-item '+(n.read?"read":"unread")+extraCls+'" onclick="readNotif(\''+n.fbId+'\')">'
+ +(n._src==="broadcast"?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+emoji+'</div>')
+ +'<div class="ni-body"><div class="ni-title">'+(n._src==="broadcast"?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':'')+n.title+'</div><div class="ni-desc">'+n.message+'</div><div class="ni-time">'+ago+'</div></div></div>';
  }).join("");
  }
  document.getElementById("notifList").innerHTML=h;
- // Mark all as read after 2s
+ // Mark user-specific as read after 2s
  setTimeout(function(){
  NOTIFS.forEach(function(n){
- if(!n.read&&n.fbId&&db){
+ if(!n.read&&n.fbId&&db&&n._src==="user"){
  db.collection("notifications").doc(n.fbId).update({read:true}).catch(function(){});
+ n.read=true;
  }
  });
+ updateBell();
  },2000);
 }
 
@@ -2426,10 +2583,237 @@ function startFirebaseListeners(){
  },function(){});
  // Profile
  db.collection("users").doc(userEmail).get().then(function(doc){
- if(doc.exists){var d=doc.data();Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});rpf();}
+ if(doc.exists){
+ var d=doc.data();
+ Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});
+ // ── Cache profile client-side for instant next-load ──
+ try{localStorage.setItem("pca_pf_"+userEmail,JSON.stringify(pf));}catch(e){}
+ rpf();
+ }
  }).catch(function(){});
  // Games
  _listeners.games=db.collection("games").onSnapshot(function(s){
+// ═══════════════════════════════════════════
+// GROQ AI CUSTOMER SERVICE CHAT
+// ═══════════════════════════════════════════
+var GROQ_API_KEY = ""; // ← Paste your Groq API key here (from console.groq.com)
+var GROQ_MODEL = "llama-3.3-70b-versatile";
+var AI_CHAT_HISTORY = [];
+var AI_IS_TYPING = false;
+
+var AI_SYSTEM_PROMPT = `You are a friendly and helpful customer service AI assistant for PCA Store (also known as Dahlia Store), a premium game top-up store in Myanmar.
+
+About PCA Store:
+- We sell game currency (diamonds, UC, gems, etc.) for popular games
+- Games available: Mobile Legends (MLBB), Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Valorant, Roblox, Clash of Clans, Clash Royale, and more
+- Payment methods: KBZ Pay, Wave Pay, UAB Pay
+- Currency: Myanmar Kyat (MMK)
+- Delivery: Usually 5-15 minutes after payment confirmation
+- Operating hours: Admin reviews orders during working hours
+
+How to order:
+1. Select a game from the home screen
+2. Enter your User ID (and server if required)
+3. Tap "Confirm ID" to verify your in-game name
+4. Choose a diamond/currency package
+5. Select your payment method (KBZ Pay / Wave Pay / UAB Pay)
+6. Transfer the exact amount and upload your payment receipt screenshot
+7. Wait for admin approval (5-15 minutes)
+
+Common questions:
+- Orders are processed manually by admin staff
+- Refunds available within 24h if items not delivered — contact via Telegram
+- Check order status in the History tab (real-time updates)
+- PCA Store ID (DH-xxxxx) is your unique account identifier
+- If ID verification fails, double-check your game User ID
+
+Be warm, concise, and helpful. Answer in the same language the user writes in (Burmese or English). If the user writes in Burmese, reply in Burmese. Keep answers brief and clear. If you don't know something specific about their order, tell them to contact admin via Telegram or check the History tab. Never make up order statuses or specific prices.`;
+
+var AI_QUICK_SUGGESTIONS = [
+ "How to top up?",
+ "How long does delivery take?",
+ "ဘယ်လို order ပေးရမလဲ?",
+ "Payment methods?",
+ "How to check order status?",
+ "Refund policy?",
+ "What games are available?",
+ "ID verification failed?",
+];
+
+function openAiChat(){
+ var ov=document.getElementById("aiOv");
+ if(!ov)return;
+ ov.classList.add("v");
+ // Init with welcome message if empty
+ if(AI_CHAT_HISTORY.length===0){
+ var welcomeMsg={role:"assistant",content:"Hello! 👋 I'm your PCA Store AI assistant. I can help you with:\n\n• How to place an order\n• Payment & delivery questions\n• Order status & tracking\n• Account & profile help\n\nHow can I help you today?"};
+ AI_CHAT_HISTORY.push(welcomeMsg);
+ aiRenderMessages();
+ aiShowSuggestions(AI_QUICK_SUGGESTIONS.slice(0,4));
+ }
+ setTimeout(function(){
+ var msgs=document.getElementById("aiMsgs");
+ if(msgs)msgs.scrollTop=msgs.scrollHeight;
+ document.getElementById("aiInp").focus();
+ },200);
+}
+
+function closeAiChat(){
+ document.getElementById("aiOv").classList.remove("v");
+}
+document.addEventListener("DOMContentLoaded",function(){
+ var aiOv=document.getElementById("aiOv");
+ if(aiOv)aiOv.addEventListener("click",function(e){if(e.target===aiOv)closeAiChat();});
+});
+
+function aiRenderMessages(){
+ var container=document.getElementById("aiMsgs");
+ if(!container)return;
+ var h=AI_CHAT_HISTORY.map(function(msg){
+ if(msg.role==="assistant"){
+ return'<div class="ai-msg bot"><div class="ai-av"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="ai-bub">'+aiFormatText(msg.content)+'</div></div>';
+ } else {
+ return'<div class="ai-msg user"><div class="ai-av" style="background:var(--sf2);border:1px solid var(--bd)"><svg viewBox="0 0 24 24" stroke="var(--tx2)"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ai-bub">'+aiFormatText(msg.content)+'</div></div>';
+ }
+ }).join("");
+ container.innerHTML=h;
+ container.scrollTop=container.scrollHeight;
+}
+
+function aiFormatText(text){
+ // Convert markdown-like formatting to HTML
+ return text
+ .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+ .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+ .replace(/\*(.*?)\*/g,"<em>$1</em>")
+ .replace(/\n/g,"<br/>");
+}
+
+function aiShowTyping(){
+ var container=document.getElementById("aiMsgs");
+ if(!container)return;
+ var typDiv=document.createElement("div");
+ typDiv.className="ai-msg bot";typDiv.id="aiTypingRow";
+ typDiv.innerHTML='<div class="ai-av"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="ai-typing"><span></span><span></span><span></span></div>';
+ container.appendChild(typDiv);
+ container.scrollTop=container.scrollHeight;
+}
+function aiHideTyping(){
+ var t=document.getElementById("aiTypingRow");if(t)t.remove();
+}
+
+function aiShowSuggestions(items){
+ var sug=document.getElementById("aiSug");
+ if(!sug)return;
+ if(!items||!items.length){sug.innerHTML="";return;}
+ sug.innerHTML=items.map(function(s){
+ return'<button onclick="aiSendText(\''+s.replace(/'/g,"\\'")+'\')">'+(s.length>32?s.substring(0,32)+"…":s)+'</button>';
+ }).join("");
+}
+
+function aiKeydown(e){
+ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();aiSend();}
+}
+
+function aiSend(){
+ var inp=document.getElementById("aiInp");
+ if(!inp)return;
+ var text=inp.value.trim();
+ if(!text||AI_IS_TYPING)return;
+ inp.value="";inp.style.height="auto";
+ aiSendText(text);
+}
+
+function aiSendText(text){
+ if(!text.trim()||AI_IS_TYPING)return;
+ document.getElementById("aiSug").innerHTML="";
+ AI_CHAT_HISTORY.push({role:"user",content:text});
+ aiRenderMessages();
+ AI_IS_TYPING=true;
+ document.getElementById("aiSend").disabled=true;
+ aiShowTyping();
+
+ // Build messages for API
+ var apiMessages=[{role:"system",content:AI_SYSTEM_PROMPT}].concat(
+ AI_CHAT_HISTORY.slice(-16).map(function(m){return{role:m.role,content:m.content};})
+ );
+
+ // Call Groq API
+ if(!GROQ_API_KEY){
+ // Fallback if no API key
+ setTimeout(function(){
+ aiHideTyping();
+ var fallback=aiLocalFallback(text);
+ AI_CHAT_HISTORY.push({role:"assistant",content:fallback});
+ aiRenderMessages();
+ AI_IS_TYPING=false;
+ document.getElementById("aiSend").disabled=false;
+ aiShowSuggestions(aiNextSuggestions(text));
+ },800);
+ return;
+ }
+
+ fetch("https://api.groq.com/openai/v1/chat/completions",{
+ method:"POST",
+ headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_API_KEY},
+ body:JSON.stringify({model:GROQ_MODEL,messages:apiMessages,max_tokens:600,temperature:0.7,stream:false})
+ }).then(function(r){return r.json();}).then(function(data){
+ aiHideTyping();
+ var reply="";
+ if(data.choices&&data.choices[0]&&data.choices[0].message){
+ reply=data.choices[0].message.content||"";
+ }else if(data.error){
+ reply="Sorry, I encountered an error ("+data.error.message+"). Please try again or contact admin via Telegram.";
+ }else{
+ reply="Sorry, I couldn't get a response. Please try again or check the FAQ section.";
+ }
+ AI_CHAT_HISTORY.push({role:"assistant",content:reply});
+ aiRenderMessages();
+ AI_IS_TYPING=false;
+ document.getElementById("aiSend").disabled=false;
+ aiShowSuggestions(aiNextSuggestions(text));
+ }).catch(function(err){
+ aiHideTyping();
+ var errMsg="⚠️ Network issue. Please check your connection.\n\nFor urgent help, go to **Profile → Help & FAQ** or contact admin via **Telegram**.";
+ AI_CHAT_HISTORY.push({role:"assistant",content:errMsg});
+ aiRenderMessages();
+ AI_IS_TYPING=false;
+ document.getElementById("aiSend").disabled=false;
+ });
+}
+
+// Smart local fallback (when no API key set) — covers common questions
+function aiLocalFallback(q){
+ q=q.toLowerCase();
+ if(/order|topup|top.?up|ဖြည့်|ငွေ/.test(q))return"**How to Order:**\n1. Choose a game from Home\n2. Enter your User ID\n3. Tap **Confirm ID** to verify\n4. Select your package\n5. Choose payment method\n6. Transfer & upload receipt\n7. Wait for admin approval (5–15 min) ✅";
+ if(/long|time|fast|မြန်|delivery|deliver/.test(q))return"Delivery is usually **5–15 minutes** during working hours after your payment is confirmed by admin. You'll get a notification in the History tab when approved! 🚀";
+ if(/payment|pay|kbz|wave|uab|ငွေပေး/.test(q))return"We accept:\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nTransfer the exact amount and upload your receipt screenshot.";
+ if(/status|order|history|မှတ်တမ်း|check/.test(q))return"Check your order in the **History tab** (clock icon at bottom nav). Orders update in real-time when admin approves. You'll also get a notification! 🔔";
+ if(/refund|return|cancel|ပြန်/.test(q))return"If your items weren't delivered, contact admin via **Telegram** within 24 hours with your Order ID. We'll investigate and refund if confirmed. 🤝";
+ if(/game|mlbb|ml|ff|free.?fire|genshin|pubg|roblox/.test(q))return"We support **15+ games** including:\nMobile Legends, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Roblox, Clash of Clans, and more!\n\nAll available on the Home screen. 🎮";
+ if(/id|verify|verif|confirm|ကိုယ်/.test(q))return"**ID Verification:**\n1. Enter your in-game User ID\n2. Tap **Confirm ID**\n3. Admin will check your name\n4. Your in-game name appears if correct\n5. Confirm Yes to proceed ✅\n\nIf failed, double-check your User ID.";
+ if(/price|cost|much|ဘယ်လောက်|price/.test(q))return"Prices vary by game and package. Check the latest prices directly on the game's top-up page in the store. Prices are shown in **MMK**. 💰";
+ if(/safe|secure|trust|လုံခြုံ/.test(q))return"**Yes, PCA Store is safe!** ✅\n• Firebase secure database\n• Payment data encrypted\n• Manual admin review for every order\n• Operating in Myanmar since launch";
+ if(/contact|admin|telegram|help|ကူ/.test(q)){var tg=window._storeTgUser||"";return"For direct help, contact our admin on **Telegram**"+(tg?" @"+tg:"")+". We're responsive during business hours! 📱\n\nYou can also check the **FAQ section** in your Profile.";}
+ return"I'm here to help! 😊 You can ask me about:\n• How to order & top up\n• Payment methods\n• Delivery time\n• Order tracking\n• Refund policy\n• Available games\n\nOr type your question in **Burmese** if you prefer! 🇲🇲\n\n💡 *Tip: Add your Groq API key in the code for full AI responses.*";
+}
+
+function aiNextSuggestions(lastQ){
+ lastQ=(lastQ||"").toLowerCase();
+ if(/order|topup|how/.test(lastQ))return["Payment methods?","How long does delivery take?","How to check my order?"];
+ if(/time|long|fast|delivery/.test(lastQ))return["What if order is delayed?","How to check order status?","Refund policy?"];
+ if(/payment|pay|kbz|wave/.test(lastQ))return["How to upload receipt?","How long does delivery take?","Is it safe?"];
+ if(/status|history|check/.test(lastQ))return["How to contact admin?","Refund policy?","How to order?"];
+ return["How to top up?","Payment methods?","Contact admin"];
+}
+
+// Auto-close AI chat on overlay click
+(function(){
+ var ov=document.getElementById("aiOv");
+ if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closeAiChat();});
+})();
+
+// Wire closing script tag
  clearTimeout(_gamesLoadTimeout);
  var fbGames=[];var gIdx=0;
  s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"",c:g.c||g.color||"#FF8C00",cur:g.cur||"Diamonds",ci:g.ci||"",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
