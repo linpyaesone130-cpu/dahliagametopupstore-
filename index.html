@@ -1204,6 +1204,7 @@ function enterApp(user){hideSplash();
  loadPcaId();
  if(user)setTimeout(savePcaUser,500);
  initNotifs();
+ loadStoreChatKey();
 }
 
 function doLogout(){
@@ -2528,6 +2529,62 @@ function _startGamesTimeout(){
 }
 
 // Firebase listeners — called from enterApp() every time
+
+// ═══════════════════════════════════════════
+// GROQ AI CUSTOMER SERVICE CHAT
+// ═══════════════════════════════════════════
+var GROQ_API_KEY = ""; // Loaded from Firebase config/ai.storeChatKey
+var GROQ_MODEL = "llama-3.3-70b-versatile";
+var AI_CHAT_HISTORY = [];
+var AI_IS_TYPING = false;
+
+// Load Store Chat API key from Firebase (set via Admin Panel)
+function loadStoreChatKey(){
+ if(!fbReady||!db)return;
+ db.collection("config").doc("ai").get().then(function(d){
+  if(d.exists&&d.data().storeChatKey){GROQ_API_KEY=d.data().storeChatKey;}
+ }).catch(function(){});
+}
+
+var AI_SYSTEM_PROMPT = `You are a friendly and helpful customer service AI assistant for PCA Store (also known as Dahlia Store), a premium game top-up store in Myanmar.
+
+About PCA Store:
+- We sell game currency (diamonds, UC, gems, etc.) for popular games
+- Games available: Mobile Legends (MLBB), Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Valorant, Roblox, Clash of Clans, Clash Royale, and more
+- Payment methods: KBZ Pay, Wave Pay, UAB Pay
+- Currency: Myanmar Kyat (MMK)
+- Delivery: Usually 5-15 minutes after payment confirmation
+- Operating hours: Admin reviews orders during working hours
+
+How to order:
+1. Select a game from the home screen
+2. Enter your User ID (and server if required)
+3. Tap "Confirm ID" to verify your in-game name
+4. Choose a diamond/currency package
+5. Select your payment method (KBZ Pay / Wave Pay / UAB Pay)
+6. Transfer the exact amount and upload your payment receipt screenshot
+7. Wait for admin approval (5-15 minutes)
+
+Common questions:
+- Orders are processed manually by admin staff
+- Refunds available within 24h if items not delivered — contact via Telegram
+- Check order status in the History tab (real-time updates)
+- PCA Store ID (DH-xxxxx) is your unique account identifier
+- If ID verification fails, double-check your game User ID
+
+Be warm, concise, and helpful. Answer in the same language the user writes in (Burmese or English). If the user writes in Burmese, reply in Burmese. Keep answers brief and clear. If you don't know something specific about their order, tell them to contact admin via Telegram or check the History tab. Never make up order statuses or specific prices.`;
+
+var AI_QUICK_SUGGESTIONS = [
+ "How to top up?",
+ "How long does delivery take?",
+ "ဘယ်လို order ပေးရမလဲ?",
+ "Payment methods?",
+ "How to check order status?",
+ "Refund policy?",
+ "What games are available?",
+ "ID verification failed?",
+];
+
 function startFirebaseListeners(){
  if(!fbReady||!db)return;
  _listenersStarted=true;
@@ -2593,54 +2650,8 @@ function startFirebaseListeners(){
  }).catch(function(){});
  // Games
  _listeners.games=db.collection("games").onSnapshot(function(s){
-// ═══════════════════════════════════════════
-// GROQ AI CUSTOMER SERVICE CHAT
-// ═══════════════════════════════════════════
-var GROQ_API_KEY = ""; // ← Paste your Groq API key here (from console.groq.com)
-var GROQ_MODEL = "llama-3.3-70b-versatile";
-var AI_CHAT_HISTORY = [];
-var AI_IS_TYPING = false;
 
-var AI_SYSTEM_PROMPT = `You are a friendly and helpful customer service AI assistant for PCA Store (also known as Dahlia Store), a premium game top-up store in Myanmar.
-
-About PCA Store:
-- We sell game currency (diamonds, UC, gems, etc.) for popular games
-- Games available: Mobile Legends (MLBB), Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Valorant, Roblox, Clash of Clans, Clash Royale, and more
-- Payment methods: KBZ Pay, Wave Pay, UAB Pay
-- Currency: Myanmar Kyat (MMK)
-- Delivery: Usually 5-15 minutes after payment confirmation
-- Operating hours: Admin reviews orders during working hours
-
-How to order:
-1. Select a game from the home screen
-2. Enter your User ID (and server if required)
-3. Tap "Confirm ID" to verify your in-game name
-4. Choose a diamond/currency package
-5. Select your payment method (KBZ Pay / Wave Pay / UAB Pay)
-6. Transfer the exact amount and upload your payment receipt screenshot
-7. Wait for admin approval (5-15 minutes)
-
-Common questions:
-- Orders are processed manually by admin staff
-- Refunds available within 24h if items not delivered — contact via Telegram
-- Check order status in the History tab (real-time updates)
-- PCA Store ID (DH-xxxxx) is your unique account identifier
-- If ID verification fails, double-check your game User ID
-
-Be warm, concise, and helpful. Answer in the same language the user writes in (Burmese or English). If the user writes in Burmese, reply in Burmese. Keep answers brief and clear. If you don't know something specific about their order, tell them to contact admin via Telegram or check the History tab. Never make up order statuses or specific prices.`;
-
-var AI_QUICK_SUGGESTIONS = [
- "How to top up?",
- "How long does delivery take?",
- "ဘယ်လို order ပေးရမလဲ?",
- "Payment methods?",
- "How to check order status?",
- "Refund policy?",
- "What games are available?",
- "ID verification failed?",
-];
-
-function openAiChat(){
+ function openAiChat(){
  var ov=document.getElementById("aiOv");
  if(!ov)return;
  ov.classList.add("v");
