@@ -1656,6 +1656,10 @@ function openAcct(i){
 }
 
 // Gallery helpers
+function closeAcct(){
+  document.getElementById("acList").style.display="block";
+  document.getElementById("acDetail").style.display="none";
+}
 function acGallIdx(id){
  var sl=document.getElementById(id+"_sl");if(!sl)return 0;
  return Math.round(sl.scrollLeft/sl.offsetWidth);
@@ -2585,73 +2589,9 @@ var AI_QUICK_SUGGESTIONS = [
  "ID verification failed?",
 ];
 
-function startFirebaseListeners(){
- if(!fbReady||!db)return;
- _listenersStarted=true;
- var userEmail=curUser?curUser.email:"guest";
 
- // Orders — no orderBy (avoids composite index), sort client-side
- var ordUnsub=db.collection("orders").where("authUser","==",userEmail).limit(100).onSnapshot(function(s){
- var prevHL=HL.filter(function(h){return !h._local;}); // only compare firebase-sourced
- var newHL=[];
- s.forEach(function(d){
- var o=d.data();
- var rawStatus=o.status||"pending";
- var displayStatus=(rawStatus==="success"||rawStatus==="confirmed")?"confirmed":rawStatus;
- var gLive=D.find(function(g){return g.n===o.game;});
- newHL.push({
- id:o.txnId||d.id,fbId:d.id,
- g:o.game,gi:o.gameEmoji,gc:o.gameColor,
- gi_url:gLive&&gLive.img?gLive.img:(o.gameImg||""),
- ci:o.currencyIcon,cur:o.currency,q:o.amount,
- am:mmk(o.price),
- dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",
- s:displayStatus,
- _ts:o.timestamp||""
- });
- });
- // Sort newest first
- newHL.sort(function(a,b){return b._ts>a._ts?1:b._ts<a._ts?-1:0;});
-
- // Detect status changes and notify
- prevHL.forEach(function(prev){
- var cur=newHL.find(function(n){return n.id===prev.id;});
- if(cur&&prev.s==="pending"&&cur.s==="confirmed"){
- tst(cur.g+" order confirmed!","ok");
- try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.2)";setTimeout(function(){nb.style.background="";},6000);}}catch(e){}
- }
- if(cur&&prev.s==="pending"&&cur.s==="failed"){
- tst("Order rejected — contact admin","er");
- }
- });
-
- HL=newHL;
- // Save to localStorage so data persists on re-entry
- try{localStorage.setItem("pca_hl",JSON.stringify(HL.slice(0,30)));}catch(e){}
- rht();rhl();
- },function(err){
- console.warn("Orders listener error:",err.code,err.message);
- });
- _listeners.orders=ordUnsub;
- // Wallet
- _listeners.wallet=db.collection("wallets").doc(userEmail).onSnapshot(function(d){
- if(d.exists){wallet=d.data().balance||0;}else{wallet=0;}
- if(document.getElementById("walBal"))document.getElementById("walBal").textContent=mmk(wallet);
- },function(){});
- // Profile
- db.collection("users").doc(userEmail).get().then(function(doc){
- if(doc.exists){
- var d=doc.data();
- Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});
- // ── Cache profile client-side for instant next-load ──
- try{localStorage.setItem("pca_pf_"+userEmail,JSON.stringify(pf));}catch(e){}
- rpf();
- }
- }).catch(function(){});
- // Games
- _listeners.games=db.collection("games").onSnapshot(function(s){
-
- function openAiChat(){
+// ══ AI CHAT FUNCTIONS (global scope) ══
+function openAiChat(){
  var ov=document.getElementById("aiOv");
  if(!ov)return;
  ov.classList.add("v");
@@ -2823,6 +2763,74 @@ function aiNextSuggestions(lastQ){
  var ov=document.getElementById("aiOv");
  if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closeAiChat();});
 })();
+
+
+function startFirebaseListeners(){
+ if(!fbReady||!db)return;
+ _listenersStarted=true;
+ var userEmail=curUser?curUser.email:"guest";
+
+ // Orders — no orderBy (avoids composite index), sort client-side
+ var ordUnsub=db.collection("orders").where("authUser","==",userEmail).limit(100).onSnapshot(function(s){
+ var prevHL=HL.filter(function(h){return !h._local;}); // only compare firebase-sourced
+ var newHL=[];
+ s.forEach(function(d){
+ var o=d.data();
+ var rawStatus=o.status||"pending";
+ var displayStatus=(rawStatus==="success"||rawStatus==="confirmed")?"confirmed":rawStatus;
+ var gLive=D.find(function(g){return g.n===o.game;});
+ newHL.push({
+ id:o.txnId||d.id,fbId:d.id,
+ g:o.game,gi:o.gameEmoji,gc:o.gameColor,
+ gi_url:gLive&&gLive.img?gLive.img:(o.gameImg||""),
+ ci:o.currencyIcon,cur:o.currency,q:o.amount,
+ am:mmk(o.price),
+ dt:o.timestamp?new Date(o.timestamp).toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"",
+ s:displayStatus,
+ _ts:o.timestamp||""
+ });
+ });
+ // Sort newest first
+ newHL.sort(function(a,b){return b._ts>a._ts?1:b._ts<a._ts?-1:0;});
+
+ // Detect status changes and notify
+ prevHL.forEach(function(prev){
+ var cur=newHL.find(function(n){return n.id===prev.id;});
+ if(cur&&prev.s==="pending"&&cur.s==="confirmed"){
+ tst(cur.g+" order confirmed!","ok");
+ try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.2)";setTimeout(function(){nb.style.background="";},6000);}}catch(e){}
+ }
+ if(cur&&prev.s==="pending"&&cur.s==="failed"){
+ tst("Order rejected — contact admin","er");
+ }
+ });
+
+ HL=newHL;
+ // Save to localStorage so data persists on re-entry
+ try{localStorage.setItem("pca_hl",JSON.stringify(HL.slice(0,30)));}catch(e){}
+ rht();rhl();
+ },function(err){
+ console.warn("Orders listener error:",err.code,err.message);
+ });
+ _listeners.orders=ordUnsub;
+ // Wallet
+ _listeners.wallet=db.collection("wallets").doc(userEmail).onSnapshot(function(d){
+ if(d.exists){wallet=d.data().balance||0;}else{wallet=0;}
+ if(document.getElementById("walBal"))document.getElementById("walBal").textContent=mmk(wallet);
+ },function(){});
+ // Profile
+ db.collection("users").doc(userEmail).get().then(function(doc){
+ if(doc.exists){
+ var d=doc.data();
+ Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});
+ // ── Cache profile client-side for instant next-load ──
+ try{localStorage.setItem("pca_pf_"+userEmail,JSON.stringify(pf));}catch(e){}
+ rpf();
+ }
+ }).catch(function(){});
+ // Games
+ _listeners.games=db.collection("games").onSnapshot(function(s){
+
 
 // Wire closing script tag
  clearTimeout(_gamesLoadTimeout);
