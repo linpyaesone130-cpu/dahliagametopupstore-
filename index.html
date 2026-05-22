@@ -2413,9 +2413,13 @@ function _mergeNotifs(list,src){
  merged.sort(function(a,b){var ta=new Date(a.timestamp).getTime()||0;var tb=new Date(b.timestamp).getTime()||0;return tb-ta;});
  var prevCount=NOTIFS.length;
  NOTIFS=merged;
- if(prevCount>0&&NOTIFS.length>prevCount){
- var newest=NOTIFS[0];
- if(newest)pushNotify(newest.title||"PCA Store",newest.message||"You have a new notification");
+ var unreadNew=NOTIFS.filter(function(n){return !n.read;});
+ if(prevCount===0&&unreadNew.length>0){
+  // First load — push notify for most recent unread
+  pushNotify(unreadNew[0].title||"PCA Store",unreadNew[0].message||"You have a new notification");
+ } else if(prevCount>0&&NOTIFS.length>prevCount){
+  var newest=NOTIFS[0];
+  if(newest&&!newest.read)pushNotify(newest.title||"PCA Store",newest.message||"You have a new notification");
  }
  updateBell();
 }
@@ -2447,7 +2451,7 @@ function openNotif(){
  var extraCls=n._src==="broadcast"||n.type==="admin"?" admin-msg":"";
  return'<div class="notif-item '+(n.read?"read":"unread")+extraCls+'" onclick="readNotif(\''+n.fbId+'\')">'
  +(n._src==="broadcast"?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+emoji+'</div>')
- +'<div class="ni-body"><div class="ni-title">'+(n._src==="broadcast"?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':'')+n.title+'</div><div class="ni-desc">'+n.message+'</div><div class="ni-time">'+ago+'</div></div></div>';
+ +'<div class="ni-body"><div class="ni-title">'+(n._src==="broadcast"?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':'')+n.title+'</div><div class="ni-desc">'+( n.message||"").replace(/\n/g,"<br/>")+'</div><div class="ni-time">'+ago+'</div></div></div>';
  }).join("");
  }
  document.getElementById("notifList").innerHTML=h;
@@ -2576,16 +2580,16 @@ Common questions:
 - PCA Store ID (DH-xxxxx) is your unique account identifier
 - If ID verification fails, double-check your game User ID
 
-Be warm, concise, and helpful. Answer in the same language the user writes in (Burmese or English). If the user writes in Burmese, reply in Burmese. Keep answers brief and clear. If you don't know something specific about their order, tell them to contact admin via Telegram or check the History tab. Never make up order statuses or specific prices.`;
+Be warm, concise, and helpful. IMPORTANT: Always detect the language of the user's message. If the user writes in Burmese/Myanmar script, you MUST reply entirely in Burmese/Myanmar. If the user writes in English, reply in English. Never mix languages in a single response. Keep answers brief and clear. If you don't know something specific about their order, tell them to contact admin via Telegram or check the History tab. Never make up order statuses or specific prices.`;
 
 var AI_QUICK_SUGGESTIONS = [
- "How to top up?",
- "How long does delivery take?",
  "ဘယ်လို order ပေးရမလဲ?",
+ "ငွေပေးချေနည်းကဘာတွေလဲ?",
+ "ဘယ်နှစ်မိနစ် ကြာမလဲ?",
+ "Order status ဘယ်မှာကြည့်မလဲ?",
+ "How to top up?",
  "Payment methods?",
- "How to check order status?",
  "Refund policy?",
- "What games are available?",
  "ID verification failed?",
 ];
 
@@ -2735,27 +2739,94 @@ function aiSendText(text){
 
 // Smart local fallback (when no API key set) — covers common questions
 function aiLocalFallback(q){
+ var raw=q;
  q=q.toLowerCase();
- if(/order|topup|top.?up|ဖြည့်|ငွေ/.test(q))return"**How to Order:**\n1. Choose a game from Home\n2. Enter your User ID\n3. Tap **Confirm ID** to verify\n4. Select your package\n5. Choose payment method\n6. Transfer & upload receipt\n7. Wait for admin approval (5–15 min) ✅";
- if(/long|time|fast|မြန်|delivery|deliver/.test(q))return"Delivery is usually **5–15 minutes** during working hours after your payment is confirmed by admin. You'll get a notification in the History tab when approved! 🚀";
- if(/payment|pay|kbz|wave|uab|ငွေပေး/.test(q))return"We accept:\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nTransfer the exact amount and upload your receipt screenshot.";
- if(/status|order|history|မှတ်တမ်း|check/.test(q))return"Check your order in the **History tab** (clock icon at bottom nav). Orders update in real-time when admin approves. You'll also get a notification! 🔔";
- if(/refund|return|cancel|ပြန်/.test(q))return"If your items weren't delivered, contact admin via **Telegram** within 24 hours with your Order ID. We'll investigate and refund if confirmed. 🤝";
- if(/game|mlbb|ml|ff|free.?fire|genshin|pubg|roblox/.test(q))return"We support **15+ games** including:\nMobile Legends, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Roblox, Clash of Clans, and more!\n\nAll available on the Home screen. 🎮";
- if(/id|verify|verif|confirm|ကိုယ်/.test(q))return"**ID Verification:**\n1. Enter your in-game User ID\n2. Tap **Confirm ID**\n3. Admin will check your name\n4. Your in-game name appears if correct\n5. Confirm Yes to proceed ✅\n\nIf failed, double-check your User ID.";
- if(/price|cost|much|ဘယ်လောက်|price/.test(q))return"Prices vary by game and package. Check the latest prices directly on the game's top-up page in the store. Prices are shown in **MMK**. 💰";
- if(/safe|secure|trust|လုံခြုံ/.test(q))return"**Yes, PCA Store is safe!** ✅\n• Firebase secure database\n• Payment data encrypted\n• Manual admin review for every order\n• Operating in Myanmar since launch";
- if(/contact|admin|telegram|help|ကူ/.test(q)){var tg=window._storeTgUser||"";return"For direct help, contact our admin on **Telegram**"+(tg?" @"+tg:"")+". We're responsive during business hours! 📱\n\nYou can also check the **FAQ section** in your Profile.";}
- return"I'm here to help! 😊 You can ask me about:\n• How to order & top up\n• Payment methods\n• Delivery time\n• Order tracking\n• Refund policy\n• Available games\n\nOr type your question in **Burmese** if you prefer! 🇲🇲\n\n💡 *Tip: Add your Groq API key in the code for full AI responses.*";
+ // Detect language — if contains Myanmar unicode range
+ var isMM=/[\u1000-\u109F]/.test(raw);
+
+ // ── Order / Top-up ──
+ if(/order|topup|top.?up|ဝယ်|မှာ|ဖြည့်|ငွေဖြည့်|ဘယ်လို/.test(q)){
+  if(isMM)return"**Order ပေးနည်း 📋**\n1. Home မှ game တစ်ခု ရွေးပါ\n2. သင့် User ID ထည့်ပါ\n3. **Confirm ID** နှိပ်ပါ\n4. Package ရွေးပါ\n5. ငွေပေးချေမှုနည်းလမ်း ရွေးပါ\n6. ငွေလွှဲပြီး receipt screenshot တင်ပါ\n7. Admin approve လုပ်ရန် 5–15 မိနစ် စောင့်ပါ ✅";
+  return"**How to Order 📋**\n1. Choose a game from Home\n2. Enter your User ID\n3. Tap **Confirm ID** to verify\n4. Select your package\n5. Choose payment method\n6. Transfer & upload receipt\n7. Wait for admin approval (5–15 min) ✅";
+ }
+ // ── Delivery time ──
+ if(/long|time|fast|delivery|deliver|ဘယ်နှစ်|မြန်|နောင်|ကြာ|စောင့်/.test(q)){
+  if(isMM)return"Admin က payment confirm လုပ်ပြီးနောက် ပုံမှန် **5–15 မိနစ်** အတွင်း ရောက်ပါသည် 🚀\nHistory tab မှာ real-time update ကြည့်နိုင်သည်။";
+  return"Delivery is usually **5–15 minutes** after payment is confirmed. Check real-time updates in the History tab! 🚀";
+ }
+ // ── Payment ──
+ if(/payment|pay|kbz|wave|uab|ငွေပေး|ငွေလွှဲ|ငွေ/.test(q)){
+  if(isMM)return"ငွေပေးချေမှု နည်းလမ်းများ 💳\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nတိတိကျကျ ပမာဏ လွှဲပေးပြီး receipt screenshot တင်ပါ။";
+  return"We accept:\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nTransfer the exact amount and upload your receipt screenshot.";
+ }
+ // ── Order status / history ──
+ if(/status|history|မှတ်တမ်း|order.*check|စစ်|ကြည့်/.test(q)){
+  if(isMM)return"**History tab** (အောက်မှ clock icon) တွင် order status ကို real-time ကြည့်နိုင်သည် 🔔\nAdmin approve လုပ်သောအခါ notification ရပါမည်။";
+  return"Check your order status in the **History tab** (clock icon at bottom nav). Real-time updates when admin approves! 🔔";
+ }
+ // ── Refund ──
+ if(/refund|return|cancel|ပြန်|မရ|မပေး/.test(q)){
+  if(isMM)return"Item မရောက်ပါက Order ID နှင့်အတူ **24 နာရီ** အတွင်း Telegram မှ admin ကို ဆက်သွယ်ပါ 🤝\nစစ်ဆေးပြီး ပြန်အမ်းပေးပါမည်။";
+  return"If items weren't delivered, contact admin via **Telegram** within 24 hours with your Order ID. We'll refund if confirmed. 🤝";
+ }
+ // ── Games ──
+ if(/game|mlbb|mobile.?legend|free.?fire|genshin|pubg|roblox|clash|games|ဂိမ်း/.test(q)){
+  if(isMM)return"**15+ ဂိမ်း** ရနိုင်သည် 🎮\nMobile Legends, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Roblox, Clash of Clans နှင့် အခြားများ\n\nHome screen တွင် ရွေးနိုင်သည်။";
+  return"We support **15+ games** including:\nMobile Legends, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Roblox, Clash of Clans and more! 🎮";
+ }
+ // ── ID Verify ──
+ if(/id|verify|verif|confirm|ကိုယ်|user.?id|မသိ/.test(q)){
+  if(isMM)return"**ID စစ်ဆေးနည်း ✅**\n1. In-game User ID ထည့်ပါ\n2. **Confirm ID** နှိပ်ပါ\n3. Admin နာမည် စစ်ပေးမည်\n4. မှန်ရင် in-game နာမည် ပြမည်\n5. Yes နှိပ်ပြီး ဆက်သွားပါ\n\nမအောင်မြင်ပါက User ID ကို ထပ်စစ်ပါ။";
+  return"**ID Verification ✅**\n1. Enter your in-game User ID\n2. Tap **Confirm ID**\n3. Admin checks your name\n4. Your in-game name appears if correct\n5. Confirm Yes to proceed\n\nIf failed, double-check your User ID.";
+ }
+ // ── Price ──
+ if(/price|cost|much|ဘယ်လောက်|ဈေး|ဒဲ့/.test(q)){
+  if(isMM)return"ဈေးနှုန်းများ game နှင့် package ပေါ် မူတည်ပြောင်းသည်။\nStore ထဲ game page တွင် **MMK** ဖြင့် ပြသထားသည် 💰";
+  return"Prices vary by game and package. Check the latest prices on each game's page in the store. Shown in **MMK**. 💰";
+ }
+ // ── Safety ──
+ if(/safe|secure|trust|လုံခြုံ|ယုံ/.test(q)){
+  if(isMM)return"**PCA Store လုံခြုံသည် ✅**\n• Firebase secure database\n• ငွေပေးချေမှု data encrypted\n• Order တိုင်း admin manual review\n• Myanmar တွင် ယုံကြည်စိတ်ချ လည်ပတ်နေသည်";
+  return"**PCA Store is safe! ✅**\n• Firebase secure database\n• Payment data encrypted\n• Manual admin review for every order\n• Trusted store operating in Myanmar";
+ }
+ // ── Contact ──
+ if(/contact|admin|telegram|help|ကူ|ဆက်သွယ်|မေး/.test(q)){
+  var tg=window._storeTgUser||"";
+  if(isMM)return"Admin ကို **Telegram**"+(tg?" @"+tg:"")+" မှ တိုက်ရိုက် ဆက်သွယ်နိုင်သည် 📱\nProfile > Help & FAQ တွင်လည်း ကြည့်နိုင်သည်။";
+  return"Contact our admin on **Telegram**"+(tg?" @"+tg:"")+" for direct help 📱\nOr check **Help & FAQ** in your Profile.";
+ }
+ // ── Default ──
+ if(isMM)return"မင်္ဂလာပါ! 😊 အောက်ပါ အကြောင်းများကို မေးနိုင်သည်:\n• Order ဘယ်လိုပေးရမလဲ\n• ငွေပေးချေနည်း\n• ဘယ်နှစ်မိနစ် ကြာမလဲ\n• Order status ကြည့်နည်း\n• Refund policy\n• ရနိုင်သော ဂိမ်းများ\n\n💡 Admin ကို တိုက်ရိုက် မေးလိုပါက Telegram မှ ဆက်သွယ်ပါ။";
+ return"I'm here to help! 😊 Ask me about:\n• How to order & top up\n• Payment methods\n• Delivery time\n• Order tracking\n• Refund policy\n• Available games\n\n💡 Contact admin on Telegram for order-specific questions.";
 }
 
 function aiNextSuggestions(lastQ){
- lastQ=(lastQ||"").toLowerCase();
- if(/order|topup|how/.test(lastQ))return["Payment methods?","How long does delivery take?","How to check my order?"];
- if(/time|long|fast|delivery/.test(lastQ))return["What if order is delayed?","How to check order status?","Refund policy?"];
- if(/payment|pay|kbz|wave/.test(lastQ))return["How to upload receipt?","How long does delivery take?","Is it safe?"];
- if(/status|history|check/.test(lastQ))return["How to contact admin?","Refund policy?","How to order?"];
- return["How to top up?","Payment methods?","Contact admin"];
+ var raw=lastQ||"";
+ lastQ=raw.toLowerCase();
+ var isMM=/[\u1000-\u109F]/.test(raw);
+ if(/order|topup|မှာ|ဝယ်|ဖြည့်|how/.test(lastQ)){
+  return isMM
+   ?["ငွေပေးချေနည်း?","ဘယ်နှစ်မိနစ် ကြာမလဲ?","Order status ကြည့်နည်း?"]
+   :["Payment methods?","How long does delivery take?","How to check my order?"];
+ }
+ if(/time|long|fast|delivery|ကြာ|စောင့်/.test(lastQ)){
+  return isMM
+   ?["Order နောက်ကျရင် ဘာလုပ်မလဲ?","Order status ဘယ်မှာကြည့်မလဲ?","Refund ရနိုင်သလား?"]
+   :["What if order is delayed?","How to check order status?","Refund policy?"];
+ }
+ if(/payment|pay|kbz|wave|ငွေ/.test(lastQ)){
+  return isMM
+   ?["Receipt ဘယ်လို တင်မလဲ?","ဘယ်နှစ်မိနစ် ကြာမလဲ?","လုံခြုံသလား?"]
+   :["How to upload receipt?","How long does delivery take?","Is it safe?"];
+ }
+ if(/status|history|check|ကြည့်/.test(lastQ)){
+  return isMM
+   ?["Admin ဆက်သွယ်နည်း?","Refund policy?","Order ဘယ်လို မှာမလဲ?"]
+   :["How to contact admin?","Refund policy?","How to order?"];
+ }
+ return isMM
+  ?["Order ဘယ်လို မှာမလဲ?","ငွေပေးချေနည်း?","Admin ဆက်သွယ်မည်"]
+  :["How to top up?","Payment methods?","Contact admin"];
 }
 
 // Auto-close AI chat on overlay click
@@ -2797,11 +2868,40 @@ function startFirebaseListeners(){
  prevHL.forEach(function(prev){
  var cur=newHL.find(function(n){return n.id===prev.id;});
  if(cur&&prev.s==="pending"&&cur.s==="confirmed"){
- tst(cur.g+" order confirmed!","ok");
+ tst("✅ "+cur.g+" Order Confirm ဖြစ်ပါပြီ!","ok");
  try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.2)";setTimeout(function(){nb.style.background="";},6000);}}catch(e){}
+ // Write confirmation notification to Firebase
+ if(fbReady&&db&&curUser){
+  db.collection("notifications").add({
+   userId:curUser.email,
+   type:"approved",
+   title:"✅ Order Confirm ဖြစ်ပါပြီ — "+( cur.g||""),
+   message:"📦 Order ID: "+(cur.id||"—")+"\n💰 Amount: "+(cur.am||"—")+"\n💎 "+( cur.q||"")+" "+(cur.cur||"")+"\n\n✅ Item deliver ဖြစ်ပြီးပါပြီ။",
+   orderId:cur.id||"",
+   read:false,
+   timestamp:new Date().toISOString()
+  }).catch(function(){});
+ }
  }
  if(cur&&prev.s==="pending"&&cur.s==="failed"){
- tst("Order rejected — contact admin","er");
+ tst("❌ Order Reject ဖြစ်ပါသည် — Notification ကြည့်ပါ","er");
+ // Write rejection notification to Firebase (with rejectReason from order)
+ if(fbReady&&db&&curUser){
+  var _rOrder=cur;
+  db.collection("orders").doc(_rOrder.fbId).get().then(function(doc){
+   var reason="Order failed ဖြစ်ပါသည်။";
+   if(doc.exists&&doc.data().rejectReason)reason=doc.data().rejectReason;
+   db.collection("notifications").add({
+    userId:curUser.email,
+    type:"rejected",
+    title:"❌ Order Reject လုပ်ခြင်း — "+(_rOrder.g||""),
+    message:"📦 Order ID: "+(_rOrder.id||"—")+"\n💰 Amount: "+(_rOrder.am||"—")+"\n\n"+reason,
+    orderId:_rOrder.id||"",
+    read:false,
+    timestamp:new Date().toISOString()
+   }).catch(function(){});
+  }).catch(function(){});
+ }
  }
  });
 
