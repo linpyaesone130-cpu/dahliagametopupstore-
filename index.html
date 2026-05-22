@@ -2383,7 +2383,12 @@ function pushNotify(title,body){
 }
 
 function initNotifs(){
- if(!fbReady||!db)return;
+ // Retry up to 3s if Firebase not ready yet
+ if(!fbReady||!db){
+  setTimeout(function(){if(fbReady&&db)initNotifs();},800);
+  return;
+ }
+ if(notifUnsub){try{notifUnsub();}catch(e){}notifUnsub=null;} // clear old listener
  var uid=curUser?curUser.email:"guest";
  // Listen to user-specific notifications (order feedback, personal messages)
  notifUnsub=db.collection("notifications").where("userId","==",uid).orderBy("timestamp","desc").limit(30).onSnapshot(function(s){
@@ -2436,6 +2441,8 @@ function updateBell(){
 function openNotif(){
  var el=document.getElementById("notifOv");
  el.classList.add("v");
+ // If no notifications loaded yet, try re-init
+ if(NOTIFS.length===0&&fbReady&&db&&curUser){initNotifs();}
  var h="";
  if(NOTIFS.length===0){
  h='<div class="notif-empty">🔔 No notifications yet</div>';
@@ -2929,6 +2936,8 @@ function startFirebaseListeners(){
  }
  }).catch(function(){});
  // Games
+ // Re-init notifications after listeners are ready
+ if(curUser)initNotifs();
  _listeners.games=db.collection("games").onSnapshot(function(s){
 
 
