@@ -771,6 +771,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .notif-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;background:var(--rd);border-radius:8px;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;padding:0 3px;pointer-events:none;}
 /* ADMIN NOTIF ITEM */
 .notif-item.admin-msg{background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.2);}
+/* Rejected order notification — red tint */
+.notif-item.rejected-msg{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);}
+.notif-item.rejected-msg.unread{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
 /* AI CHAT BUTTON */
 .ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:16px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#FF8C00,#ff6b00);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,140,0,.45);z-index:55;transition:all .2s;font-family:var(--font);}
 .ai-fab:active{transform:scale(.88);}
@@ -2517,17 +2520,26 @@ function openNotif(){
  h='<div class="notif-empty">📭 Your inbox is empty</div>';
  }else{
  h=NOTIFS.map(function(n){
- var ic="blue",emoji="🔔";
- if(n.type==="approved"){ic="green";emoji="✅";}
- else if(n.type==="rejected"||n.type==="failed"){ic="red";emoji="❌";}
- else if(n.type==="order"){ic="yellow";emoji="🛒";}
- else if(n.type==="promo"){ic="blue";emoji="🎁";}
- else if(n.type==="admin"||n._src==="broadcast"){ic="blue";emoji="📢";}
+ var isRej=(n.type==="rejected"||n.type==="failed");
+ var isAppr=n.type==="approved";
+ var isBroadcast=n._src==="broadcast"||n.type==="admin";
+ var ic=isRej?"red":isAppr?"green":n.type==="order"?"yellow":"blue";
+ var emoji=isRej?"❌":isAppr?"✅":n.type==="order"?"🛒":n.type==="promo"?"🎁":"🔔";
  var ago=timeAgo(n.timestamp);
- var extraCls=n._src==="broadcast"||n.type==="admin"?" admin-msg":"";
+ var extraCls=isBroadcast?" admin-msg":isRej?" rejected-msg":"";
+ var msgHtml=(n.message||"").replace(/\n/g,"<br/>");
+ if(isRej){
+  var parts=(n.message||"").split("\n\n");
+  var topLines=parts[0]||"";
+  var reasonPart=parts.slice(1).join("\n\n");
+  msgHtml=topLines.replace(/\n/g,"<br/>");
+  if(reasonPart){msgHtml+='<div style="margin-top:6px;padding:7px 9px;border-radius:7px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);font-size:10px;color:var(--rd);line-height:1.5">'+reasonPart.replace(/\n/g,"<br/>")+'</div>';}
+ }
  return'<div class="notif-item '+(n.read?"read":"unread")+extraCls+'" onclick="readNotif(\''+n.fbId+'\')">'
- +(n._src==="broadcast"?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+emoji+'</div>')
- +'<div class="ni-body"><div class="ni-title">'+(n._src==="broadcast"?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':'')+n.title+'</div><div class="ni-desc">'+( n.message||"").replace(/\n/g,"<br/>")+'</div><div class="ni-time">'+ago+'</div></div></div>';
+ +(isBroadcast?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+(isRej?'<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--rd);fill:none;stroke-width:2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>':emoji)+'</div>')
+ +'<div class="ni-body"><div class="ni-title">'
+ +(isBroadcast?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':isRej?'<span style="font-size:9px;color:var(--rd);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Order Failed</span>':'')+n.title
+ +'</div><div class="ni-desc">'+msgHtml+'</div><div class="ni-time">'+ago+'</div></div></div>';
  }).join("");
  }
  document.getElementById("notifList").innerHTML=h;
@@ -2571,17 +2583,30 @@ function renderInboxPage(){
  return;
  }
  el.innerHTML=NOTIFS.map(function(n){
- var ic="blue",emoji="🔔";
- if(n.type==="approved"){ic="green";emoji="✅";}
- else if(n.type==="rejected"||n.type==="failed"){ic="red";emoji="❌";}
- else if(n.type==="order"){ic="yellow";emoji="🛒";}
- else if(n.type==="promo"){ic="blue";emoji="🎁";}
- else if(n.type==="admin"||n._src==="broadcast"){ic="blue";emoji="📢";}
+ var isRej=(n.type==="rejected"||n.type==="failed");
+ var isAppr=n.type==="approved";
+ var isBroadcast=n._src==="broadcast"||n.type==="admin";
+ var ic=isRej?"red":isAppr?"green":n.type==="order"?"yellow":"blue";
+ var emoji=isRej?"❌":isAppr?"✅":n.type==="order"?"🛒":n.type==="promo"?"🎁":"🔔";
  var ago=timeAgo(n.timestamp);
- var extraCls=n._src==="broadcast"||n.type==="admin"?" admin-msg":"";
+ var extraCls=isBroadcast?" admin-msg":isRej?" rejected-msg":"";
+ // Rejected: extract lines for cleaner display
+ var msgHtml=(n.message||"").replace(/\n/g,"<br/>");
+ if(isRej){
+  // Highlight reason block in red card
+  var parts=(n.message||"").split("\n\n");
+  var topLines=parts[0]||"";
+  var reasonPart=parts.slice(1).join("\n\n");
+  msgHtml=topLines.replace(/\n/g,"<br/>");
+  if(reasonPart){
+   msgHtml+='<div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);font-size:11px;color:var(--rd);line-height:1.5;white-space:pre-wrap">'+reasonPart.replace(/\n/g,"<br/>")+'</div>';
+  }
+ }
  return'<div class="notif-item '+(n.read?"read":"unread")+extraCls+'" onclick="readNotifInbox(\''+n.fbId+'\')">'
- +(n._src==="broadcast"?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+emoji+'</div>')
- +'<div class="ni-body"><div class="ni-title">'+(n._src==="broadcast"?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':'')+n.title+'</div><div class="ni-desc">'+(n.message||"").replace(/\n/g,"<br/>")+'</div><div class="ni-time">'+ago+'</div></div></div>';
+ +(isBroadcast?'<div class="ni-icon blue" style="background:rgba(255,140,0,.1)">📢</div>':'<div class="ni-icon '+ic+'">'+(isRej?'<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--rd);fill:none;stroke-width:2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>':emoji)+'</div>')
+ +'<div class="ni-body"><div class="ni-title">'
+ +(isBroadcast?'<span style="font-size:9px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">📢 Admin Announcement</span>':isRej?'<span style="font-size:9px;color:var(--rd);font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:2px">Order Failed</span>':'')+n.title
+ +'</div><div class="ni-desc">'+msgHtml+'</div><div class="ni-time">'+ago+'</div></div></div>';
  }).join("");
  // Mark all user-specific as read after 2s
  setTimeout(function(){
@@ -3012,24 +3037,33 @@ function startFirebaseListeners(){
  }
  }
  if(cur&&prev.s==="pending"&&cur.s==="failed"){
- tst("❌ Order Reject ဖြစ်ပါသည် — Notification ကြည့်ပါ","er");
- // Write rejection notification to Firebase (with rejectReason from order)
+ tst("❌ Order Reject ဖြစ်ပါသည် — Inbox ကြည့်ပါ","er");
+ // Highlight history nav tab red briefly
+ try{var _nb=document.querySelector('.nb[data-t="his"]');if(_nb){_nb.style.background="rgba(239,68,68,.18)";setTimeout(function(){_nb.style.background="";},6000);}}catch(e){}
+ // Send rejection notification only if admin hasn't already sent one
  if(fbReady&&db){
   var _rOrder=cur;
   var _notifUserId=userEmail;
-  db.collection("orders").doc(_rOrder.fbId).get().then(function(doc){
-   var reason="Order failed ဖြစ်ပါသည်။";
-   if(doc.exists&&doc.data().rejectReason)reason=doc.data().rejectReason;
-   db.collection("notifications").add({
-    userId:_notifUserId,
-    type:"rejected",
-    title:"❌ Order Reject လုပ်ခြင်း — "+(_rOrder.g||""),
-    message:"📦 Order ID: "+(_rOrder.id||"—")+"\n💰 Amount: "+(_rOrder.am||"—")+"\n\n"+reason,
-    orderId:_rOrder.id||"",
-    read:false,
-    timestamp:new Date().toISOString()
+  // First check if admin already sent a rejection notif for this order (avoid duplicate)
+  db.collection("notifications")
+   .where("userId","==",_notifUserId)
+   .where("orderId","==",(_rOrder.id||""))
+   .where("type","==","rejected")
+   .limit(1)
+   .get().then(function(existing){
+    if(!existing.empty){updateBell();return;} // admin already sent — skip
+    // Fetch order doc to get rejectReason
+    db.collection("orders").doc(_rOrder.fbId).get().then(function(doc){
+     var reason="Order reject ဖြစ်ပါသည်။ Admin ကို ဆက်သွယ်ပါ။";
+     var autoRej=false;
+     if(doc.exists){var od=doc.data();if(od.rejectReason)reason=od.rejectReason;if(od.autoRejected)autoRej=true;}
+     var title=autoRej?"⚡ Order Auto-Reject ဖြစ်ပါသည် — "+(_rOrder.g||""):"❌ Order Reject လုပ်ခြင်း — "+(_rOrder.g||"");
+     var msg="🎮 Game: "+(_rOrder.g||"—")+"\n📦 Order ID: "+(_rOrder.id||"—")+"\n💰 Amount: "+(_rOrder.am||"—")+"\n\n"+reason+"\n\n✅ ဘာလုပ်ရမလဲ:\nမှန်ကန်သော receipt ဖြင့် Order အသစ် ပြန်တင်ပါ (သို့) Admin ကို ဆက်သွယ်ပါ။";
+     db.collection("notifications").add({userId:_notifUserId,type:"rejected",title:title,message:msg,orderId:_rOrder.id||"",read:false,timestamp:new Date().toISOString()}).catch(function(){});
+    }).catch(function(){
+     db.collection("notifications").add({userId:_notifUserId,type:"rejected",title:"❌ Order Reject — "+(_rOrder.g||""),message:"📦 Order: "+(_rOrder.id||"—")+"\n\n❌ Order reject ဖြစ်ပါသည်။ Admin ကို ဆက်သွယ်ပါ။",orderId:_rOrder.id||"",read:false,timestamp:new Date().toISOString()}).catch(function(){});
+    });
    }).catch(function(){});
-  }).catch(function(){});
  }
  }
  });
