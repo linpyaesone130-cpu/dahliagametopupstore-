@@ -1345,14 +1345,27 @@ function loadPcaId(){
 function savePcaUser(){
  if(!fbReady||!db||!curUser)return;
  var ua=navigator.userAgent;var plt=navigator.platform||"";
- var dev=/Android/i.test(ua)?"Android":/iPhone|iPad/i.test(ua)?"iOS":/Windows/i.test(ua)?"Windows":/Mac/i.test(ua)?"Mac":"Other";
+ // OS detection
+ var os=/Android/i.test(ua)?"Android":/iPhone/i.test(ua)?"iOS (iPhone)":/iPad/i.test(ua)?"iOS (iPad)":/Windows NT 10/i.test(ua)?"Windows 10":/Windows NT 11/i.test(ua)?"Windows 11":/Windows/i.test(ua)?"Windows":/Mac OS X/i.test(ua)?"macOS":"Other";
+ // Browser detection
+ var br=/EdgA?\/[\d.]+/i.test(ua)?"Edge":/OPR\/[\d.]+/i.test(ua)||/Opera/i.test(ua)?"Opera":/SamsungBrowser\/[\d.]+/i.test(ua)?"Samsung Internet":/Chrome\/[\d.]+/i.test(ua)&&!/Chromium/i.test(ua)?"Chrome":/Firefox\/[\d.]+/i.test(ua)?"Firefox":/Safari\/[\d.]+/i.test(ua)?"Safari":"Other";
+ // Device model detection from User Agent
+ var model="Unknown";
+ var mMatch=ua.match(/\(Linux.*?;\s*Android[\d. ]*;\s*([^)]+?)\s*(?:Build|wv|\))/i);
+ if(mMatch&&mMatch[1]){model=mMatch[1].trim();}
+ else if(/iPhone/i.test(ua)){var iMatch=ua.match(/iPhone OS ([\d_]+)/i);model="iPhone (iOS "+(iMatch?iMatch[1].replace(/_/g,"."):"")+")";}
+ else if(/iPad/i.test(ua)){var ipMatch=ua.match(/CPU OS ([\d_]+)/i);model="iPad (iOS "+(ipMatch?ipMatch[1].replace(/_/g,"."):"")+")";}
+ else if(/Windows/i.test(ua)){model="PC (Windows)";}
+ else if(/Mac OS X/i.test(ua)){model="Mac";}
  db.collection("users").doc(curUser.email).set({
  pcaId:pcaId,
  name:curUser.displayName||pf.nm,
  email:curUser.email,
  loginMethod:curUser.providerData&&curUser.providerData[0]?curUser.providerData[0].providerId:"email",
- device:dev,
- browser:ua.substring(0,100),
+ device:os,
+ deviceModel:model,
+ browser:br,
+ userAgent:ua.substring(0,200),
  platform:plt,
  screenSize:screen.width+"x"+screen.height,
  language:navigator.language||"",
