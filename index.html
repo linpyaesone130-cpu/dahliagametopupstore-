@@ -932,7 +932,7 @@ if(dk!=="1"){document.documentElement.classList.add("theme-light");}
  <span id="logoText" style="display:none">PCA</span>
  <span id="logoSub" style="display:none;color:var(--ac2);font-weight:600">STORE</span>
  </div>
- <div class="hdr-icons"><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" id="inboxBtn" onclick="go('inbox')" style="position:relative" title="Inbox"><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg><span id="notifBadge" style="display:none" class="notif-badge">0</span></div></div>
+ <div class="hdr-icons"><div class="hdr-btn" onclick="go('gv')" style="position:relative"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div><div class="hdr-btn" id="inboxBtn" onclick="go('inbox')" style="display:none;position:relative" title="Inbox"><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg><span id="notifBadge" style="display:none" class="notif-badge">0</span></div></div>
  </div>
 
  <div class="cnt" id="cnt">
@@ -1842,22 +1842,42 @@ document.getElementById("emod").addEventListener("click",function(e){if(e.target
 function otrk(idx){
  var flt=hfl==="all"?HL:HL.filter(function(h){return h.s===hfl});
  var h=flt[idx];if(!h)return;
- document.getElementById("trkInfo").innerHTML='<div class="trk-info-r"><span class="til">Order</span><span class="tiv" style="font-family:var(--mono)">'+h.id+'</span></div><div class="trk-info-r"><span class="til">Game</span><span class="tiv">'+h.gi+' '+h.g+'</span></div><div class="trk-info-r"><span class="til">Package</span><span class="tiv">'+h.ci+' '+h.q+' '+h.cur+'</span></div><div class="trk-info-r"><span class="til">Amount</span><span class="tiv" style="color:var(--ac2)">'+h.am+'</span></div>';
  var isConf=h.s==="confirmed"||h.s==="success";
  var isFail=h.s==="failed";
- var cur=isConf?4:isFail?0:1;
- var steps=[
- {lb:"Order Placed",tm:h.dt,ic:'<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'},
- {lb:"Payment Checking",tm:isConf?"Checked ":isFail?"Checked":"Admin reviewing...",ic:'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'},
- {lb:"Processing Top-Up",tm:isConf?"Completed":"In progress...",ic:'<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>'},
- {lb:isConf?" Delivered!":"Delivered",tm:isConf?"Top-up complete! ":"Waiting...",ic:'<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
- ];
- var tl="";steps.forEach(function(st,i){
- var cls=i<cur?"done":i===cur?"active":"future";
- tl+='<div class="trk-step '+cls+'"><div class="trk-dot">'+(i<cur?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':i===cur?'<svg viewBox="0 0 24 24" stroke="var(--ac2)"><circle cx="12" cy="12" r="3" fill="var(--ac2)"/></svg>':'')+'</div><div class="trk-txt"><div class="trk-lb">'+st.lb+'</div><div class="trk-tm">'+st.tm+'</div></div></div>';
- });
- document.getElementById("trkTl").innerHTML=tl;
- document.getElementById("trkOv").classList.add("v");
+
+ function _renderTrk(rejectReason){
+  document.getElementById("trkInfo").innerHTML='<div class="trk-info-r"><span class="til">Order</span><span class="tiv" style="font-family:var(--mono)">'+h.id+'</span></div><div class="trk-info-r"><span class="til">Game</span><span class="tiv">'+h.gi+' '+h.g+'</span></div><div class="trk-info-r"><span class="til">Package</span><span class="tiv">'+h.ci+' '+h.q+' '+h.cur+'</span></div><div class="trk-info-r"><span class="til">Amount</span><span class="tiv" style="color:var(--ac2)">'+h.am+'</span></div>'+(isFail&&rejectReason?'<div style="margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)"><div style="font-size:9px;font-weight:800;color:var(--rd);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">❌ ငြင်းပယ်ရသည့် အကြောင်းအရင်း</div><div style="font-size:12px;color:var(--rd);line-height:1.6;white-space:pre-wrap">'+rejectReason+'</div></div>':'');
+  var cur=isConf?4:isFail?0:1;
+  var steps=[
+  {lb:"Order Placed",tm:h.dt,ic:'<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'},
+  {lb:"Payment Checking",tm:isConf?"Checked ":isFail?"❌ Rejected":"Admin reviewing...",ic:'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'},
+  {lb:"Processing Top-Up",tm:isConf?"Completed":isFail?"—":"In progress...",ic:'<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>'},
+  {lb:isConf?" Delivered!":"Delivered",tm:isConf?"Top-up complete! ":isFail?"—":"Waiting...",ic:'<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
+  ];
+  var tl="";steps.forEach(function(st,i){
+  var cls=isFail?(i===0?"done":"future"):(i<cur?"done":i===cur?"active":"future");
+  tl+='<div class="trk-step '+cls+'"><div class="trk-dot">'+(cls==="done"?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':cls==="active"?'<svg viewBox="0 0 24 24" stroke="var(--ac2)"><circle cx="12" cy="12" r="3" fill="var(--ac2)"/></svg>':'')+'</div><div class="trk-txt"><div class="trk-lb">'+st.lb+'</div><div class="trk-tm">'+st.tm+'</div></div></div>';
+  });
+  if(isFail){
+   tl+='<div style="margin-top:8px;padding:10px 12px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--rd);fill:none;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span style="font-size:12px;font-weight:700;color:var(--rd)">Order Reject ဖြစ်ပါသည်</span></div>';
+  }
+  document.getElementById("trkTl").innerHTML=tl;
+  document.getElementById("trkOv").classList.add("v");
+ }
+
+ // For failed orders, fetch rejectReason from Firebase
+ if(isFail&&fbReady&&db&&h.fbId){
+  document.getElementById("trkInfo").innerHTML='<div style="text-align:center;padding:20px;color:var(--tx3);font-size:12px">Loading...</div>';
+  document.getElementById("trkTl").innerHTML="";
+  document.getElementById("trkOv").classList.add("v");
+  db.collection("orders").doc(h.fbId).get().then(function(doc){
+   var reason="Order reject ဖြစ်ပါသည်။ Admin ကို ဆက်သွယ်ပါ။";
+   if(doc.exists&&doc.data().rejectReason)reason=doc.data().rejectReason;
+   _renderTrk(reason);
+  }).catch(function(){_renderTrk(null);});
+ } else {
+  _renderTrk(null);
+ }
 }
 function ctrk(){document.getElementById("trkOv").classList.remove("v");}
 document.getElementById("trkOv").addEventListener("click",function(e){if(e.target===this)ctrk();});
