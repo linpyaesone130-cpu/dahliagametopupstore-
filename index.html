@@ -2438,6 +2438,7 @@ function toggleTheme(dark){
 // IN-APP NOTIFICATIONS 
 var NOTIFS=[];
 var notifUnsub=null;
+var notifBroadcastUnsub=null;
 var prevNotifCount=0;
 
 // Request notification permission
@@ -2458,17 +2459,18 @@ function initNotifs(){
   return;
  }
  if(notifUnsub){try{notifUnsub();}catch(e){}notifUnsub=null;} // clear old listener
+ if(notifBroadcastUnsub){try{notifBroadcastUnsub();}catch(e){}notifBroadcastUnsub=null;} // clear broadcast listener
  var uid=curUser?curUser.email:"guest";
  // Listen to user-specific notifications (order feedback, personal messages)
  notifUnsub=db.collection("notifications").where("userId","==",uid).orderBy("timestamp","desc").limit(30).onSnapshot(function(s){
  var userNotifs=[];
  s.forEach(function(d){var n=d.data();n.fbId=d.id;n._src="user";userNotifs.push(n);});
  _mergeNotifs(userNotifs,"user");
- },function(){});
+ },function(err){console.warn("Notif user listener error:",err);});
  // Listen to broadcast notifications (admin announcements → all users)
  // Order-related types are NEVER broadcast — they are user-specific only
  var ORDER_TYPES=["approved","rejected","failed","order","topup","refund"];
- db.collection("notifications").where("userId","==","all").orderBy("timestamp","desc").limit(20).onSnapshot(function(s){
+ notifBroadcastUnsub=db.collection("notifications").where("userId","==","all").orderBy("timestamp","desc").limit(20).onSnapshot(function(s){
  var broadNotifs=[];
  s.forEach(function(d){
  var n=d.data();n.fbId=d.id;n._src="broadcast";
@@ -2477,7 +2479,7 @@ function initNotifs(){
  broadNotifs.push(n);
  });
  _mergeNotifs(broadNotifs,"broadcast");
- },function(){});
+ },function(err){console.warn("Notif broadcast listener error:",err);});
 }
 var _notifUser=[];var _notifBroadcast=[];
 function _mergeNotifs(list,src){
@@ -2578,7 +2580,13 @@ function renderInboxPage(){
  if(!el)return;
  // Highlight inbox button
  document.querySelectorAll(".nb").forEach(function(n){n.classList.remove("on");});
+ // If NOTIFS empty, retry init (like openNotif does) and show loading state
  if(NOTIFS.length===0){
+  if(fbReady&&db&&curUser){
+   el.innerHTML='<div style="text-align:center;padding:60px 0;color:var(--tx3)"><div style="font-size:13px;font-weight:600">Loading...</div></div>';
+   initNotifs();
+   return;
+  }
  el.innerHTML='<div style="text-align:center;padding:60px 0;color:var(--tx3)"><svg viewBox="0 0 24 24" style="width:40px;height:40px;stroke:var(--tx3);fill:none;margin:0 auto 12px;display:block;stroke-width:1.3"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg><div style="font-size:13px;font-weight:600">Your inbox is empty</div><div style="font-size:11px;margin-top:6px">Order updates and announcements appear here</div></div>';
  return;
  }
