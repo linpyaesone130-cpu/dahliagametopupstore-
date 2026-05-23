@@ -102,7 +102,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .gc{display:flex;flex-direction:column;cursor:pointer;border-radius:var(--r2);border:1px solid var(--bd);background:var(--sf);transition:all .2s;overflow:hidden;gap:0;}
 .gc:active{transform:scale(.93);}
 .gc:hover{border-color:var(--ac3);box-shadow:0 4px 16px var(--acg);}
-.gi{width:100%;aspect-ratio:3/4;border-radius:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.gi{width:100%;aspect-ratio:1/1;border-radius:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
 .gi::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.7) 100%);pointer-events:none;}
 .gi.sk::after{display:none;}
 .gi span{font-size:32px;position:relative;z-index:1;}
@@ -1461,7 +1461,6 @@ function rgrd(l){
  var bgStyle=g.img?'background:#1a1a1a':'background:'+g.c;
  return'<div class="gc" onclick="og('+g.id+')">'
  +'<div class="gi" style="'+bgStyle+'">'+inner+'</div>'
- +'<span class="gn">'+g.n+'</span>'
  +'</div>';
  }).join("");
 }
@@ -1484,9 +1483,9 @@ function og(id){
  var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
  var bnSrc=sg.bannerImg||sg.img;
  if(bnSrc){
- h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px;border-radius:var(--r3)"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.7))"><div class="bn-t" style="color:#fff;font-size:20px">'+sg.n+'</div><div class="bn-s" style="color:rgba(255,255,255,.7)">'+sg.cur+' • Instant</div></div></div>';
+ h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px;border-radius:var(--r3)"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:cover"/></div>';
  }else{
- h+='<div class="bn" style="background:'+sg.c+';position:relative;overflow:hidden"><div class="bn-t">'+sg.n+'</div><div class="bn-s">'+sg.cur+' • Instant</div></div>';
+ h+='<div class="bn" style="background:'+sg.c+';position:relative;overflow:hidden"></div>';
  }
  var showSid=sg.showSid===true||sg.showSid==="true";
  h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
