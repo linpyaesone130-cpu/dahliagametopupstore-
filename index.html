@@ -641,6 +641,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .evd-rwc .rwc-nm{font-size:10px;font-weight:700;color:var(--tx);line-height:1.3;}
 .evd-join-btn{width:100%;padding:14px;border-radius:var(--r);border:none;background:linear-gradient(135deg,#FF8C00,#FFA533);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);text-transform:uppercase;letter-spacing:.5px;box-shadow:0 6px 20px rgba(255,140,0,.25);margin-bottom:10px;}
 .evd-join-btn:active{transform:scale(.97);}
+.evd-join-btn:disabled{transform:none!important;opacity:.95;}
 
 /* NAME CHECK */
 .nc-loading{display:flex;align-items:center;gap:8px;padding:10px 12px;margin-top:10px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--bd);animation:pgIn .2s ease;}
@@ -2325,7 +2326,17 @@ function oevd(id){
  h+='<div class="evd-row"><span class="edl"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>Duration</span><span class="edv">Mar '+ev.startDay+' — '+ev.endDay+', 2026</span></div>';
  h+='<div class="evd-row"><span class="edl"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Status</span><span class="edv" style="color:'+(ev.badge==="live"?"var(--rd)":ev.badge==="new"?"var(--ac2)":"var(--yw)")+'">'+ev.badge.toUpperCase()+'</span></div>';
  h+='<div class="evd-row"><span class="edl"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Difficulty</span><span class="edv">All Players</span></div></div>';
- h+='<button class="evd-join-btn" onclick="joinEvGame(\''+ev.game.replace(/'/g,"\\'")+'\')"> Top Up for This Event</button>';
+ var _evKey='prereg_'+ev.id;
+ var _isReg=localStorage.getItem(_evKey)==='1';
+ if(ev.badge==='soon'){
+  if(_isReg){
+   h+='<button class="evd-join-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 6px 20px rgba(34,197,94,.25);cursor:default" disabled><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;vertical-align:-2px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg> Registered — Coming Soon</button>';
+  }else{
+   h+='<button class="evd-join-btn" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);box-shadow:0 6px 20px rgba(109,40,217,.3)" onclick="preRegEv('+ev.id+',\''+ev.game.replace(/'/g,"\\'")+'\')">🔔 Pre-Register for This Event</button>';
+  }
+ }else{
+  h+='<button class="evd-join-btn" onclick="joinEvGame(\''+ev.game.replace(/'/g,"\\'")+'\')"> Top Up for This Event</button>';
+ }
  h+='</div>';
  document.getElementById("pg-det").innerHTML=h;shw("det");
 }
@@ -2363,6 +2374,13 @@ function openDeepLink(gameName){
 }
 
 // Join Event Button: Deep Link modal 
+function preRegEv(evId,gameName){
+ var key='prereg_'+evId;
+ localStorage.setItem(key,'1');
+ tst('🔔 Pre-Registered! Event ချိန်ရောက်မှ Top Up လုပ်နိုင်မည်','ok');
+ // Re-render the detail page
+ oevd(evId);
+}
 function joinEvGame(gameName){
  // Find game in store
  var g=D.find(function(x){return x.n===gameName;});
@@ -2981,9 +2999,9 @@ function startFirebaseListeners(){
  tst("✅ "+cur.g+" Order Confirm ဖြစ်ပါပြီ!","ok");
  try{var nb=document.querySelector('.nb[data-t="his"]');if(nb){nb.style.background="rgba(16,185,129,.2)";setTimeout(function(){nb.style.background="";},6000);}}catch(e){}
  // Write confirmation notification to Firebase
- if(fbReady&&db&&curUser){
+ if(fbReady&&db){
   db.collection("notifications").add({
-   userId:curUser.email,
+   userId:userEmail,
    type:"approved",
    title:"✅ Order Confirm ဖြစ်ပါပြီ — "+( cur.g||""),
    message:"📦 Order ID: "+(cur.id||"—")+"\n💰 Amount: "+(cur.am||"—")+"\n💎 "+( cur.q||"")+" "+(cur.cur||"")+"\n\n✅ Item deliver ဖြစ်ပြီးပါပြီ။",
@@ -2996,13 +3014,14 @@ function startFirebaseListeners(){
  if(cur&&prev.s==="pending"&&cur.s==="failed"){
  tst("❌ Order Reject ဖြစ်ပါသည် — Notification ကြည့်ပါ","er");
  // Write rejection notification to Firebase (with rejectReason from order)
- if(fbReady&&db&&curUser){
+ if(fbReady&&db){
   var _rOrder=cur;
+  var _notifUserId=userEmail;
   db.collection("orders").doc(_rOrder.fbId).get().then(function(doc){
    var reason="Order failed ဖြစ်ပါသည်။";
    if(doc.exists&&doc.data().rejectReason)reason=doc.data().rejectReason;
    db.collection("notifications").add({
-    userId:curUser.email,
+    userId:_notifUserId,
     type:"rejected",
     title:"❌ Order Reject လုပ်ခြင်း — "+(_rOrder.g||""),
     message:"📦 Order ID: "+(_rOrder.id||"—")+"\n💰 Amount: "+(_rOrder.am||"—")+"\n\n"+reason,
