@@ -102,7 +102,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .gc{display:flex;flex-direction:column;cursor:pointer;border-radius:var(--r2);border:1px solid var(--bd);background:var(--sf);transition:all .2s;overflow:hidden;gap:0;}
 .gc:active{transform:scale(.93);}
 .gc:hover{border-color:var(--ac3);box-shadow:0 4px 16px var(--acg);}
-.gi{width:100%;aspect-ratio:3/4;border-radius:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
+.gi{width:100%;aspect-ratio:3/4;border-radius:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;background:#1a1a1a;}
 .gi::after{display:none;}
 .gi.sk::after{display:none;}
 .gi span{font-size:32px;position:relative;z-index:1;}
@@ -1469,7 +1469,7 @@ function rgrd(l){
  l.forEach(function(g,i){if(g.id===undefined)g.id=i;});
  e.innerHTML=l.map(function(g){
  var inner=g.img
- ?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>'
+ ?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;max-width:none"/>'
  :'';
  var bgStyle=g.img?'background:#1a1a1a':'background:'+g.c;
  return'<div class="gc" onclick="og('+g.id+')">'
