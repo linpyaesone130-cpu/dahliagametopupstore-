@@ -997,8 +997,9 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 .notif-item.rejected-msg.unread{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
 /* AI CHAT BUTTON */
 /* ── ROBOT FAB ── */
-.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:14px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#0f1923,#1a2d42);border:1px solid rgba(42,171,238,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:55;transition:all .2s cubic-bezier(.25,.46,.45,.94);font-family:var(--font);padding:0;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 1px rgba(42,171,238,.1);}
-.ai-fab:active{transform:scale(.91);}
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:14px;width:56px;height:56px;border-radius:18px;background:#ffffff;border:1.5px solid rgba(42,171,238,.25);cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:box-shadow .2s,border-color .2s;font-family:var(--font);padding:0;box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);user-select:none;touch-action:none;}
+.app:not(.light) .ai-fab{background:#1e2d3e;border-color:rgba(42,171,238,.3);box-shadow:0 4px 20px rgba(0,0,0,.35),0 0 0 1px rgba(42,171,238,.12);}
+.ai-fab:active{cursor:grabbing;box-shadow:0 8px 30px rgba(42,171,238,.25),0 2px 8px rgba(0,0,0,.1);}
 .ai-fab svg{width:52px;height:52px;}
 .ai-fab .ai-fab-dot{display:none;}
 
@@ -1996,6 +1997,20 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <!-- HISTORY -->
  <div class="pg" id="pg-his">
  <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Transaction History</div>
+ <!-- KANBAN LIVE ORDER BOARD -->
+ <div class="kanban-wrap" id="kanbanWrap" style="margin-bottom:20px">
+  <div class="kanban-header">
+   <div class="kanban-title"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Live Order Board</div>
+   <div class="kanban-live-dot"><span></span>Live</div>
+  </div>
+  <div class="kanban-cols">
+   <div class="kc kc-pending"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Pending</div><div class="kc-count" id="kc-cnt-pending">0</div></div><div id="kc-pending"></div></div>
+   <div class="kc kc-processing"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Processing</div><div class="kc-count" id="kc-cnt-processing">0</div></div><div id="kc-processing"></div></div>
+   <div class="kc kc-done"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Done</div><div class="kc-count" id="kc-cnt-done">0</div></div><div id="kc-done"></div></div>
+   <div class="kc kc-failed"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Failed</div><div class="kc-count" id="kc-cnt-failed">0</div></div><div id="kc-failed"></div></div>
+  </div>
+  <div class="kanban-hint"><svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Swipe to see more columns</div>
+ </div>
  <div class="tabs" id="htabs"></div>
  <div style="font-size:11px;color:var(--tx3);font-weight:700;margin-bottom:10px" id="hcnt"></div>
  <div id="hlist"></div>
@@ -4094,7 +4109,7 @@ var AI_SYSTEM_PROMPT = `You are "PCA Bot" 🤖 — the fun, chill assistant for 
 - Be fun, use light humor, gaming slang is welcome (ez, gg, bro, ngl, fr fr, no cap, etc.)
 - Use emoji naturally but don't overdo it (2-4 per reply max)
 - Keep replies SHORT — 3-5 lines usually enough. No walls of text
-- Call the user "bro/sis" or "boss" casually
+- Call the user by their account display name (passed as USER_NAME below). If no name, use "bro/sis" casually but NEVER use "boss"
 - If you genuinely don't know something (specific order status, exact prices) — say "ngl I can't check that directly, History tab မှာ ကြည့်ပြီး မရရင် Telegram မှာ admin ကို direct message ဆက်လိုက်ပေ့ 📲"
 - Never make up order statuses, prices, or delivery times beyond 5-15 min estimate
 - If someone just wants to chat/vibe, chat back! Don't be robotic. You're a gamer too 🎮
@@ -4119,9 +4134,14 @@ function openAiChat(){
  var ov=document.getElementById("aiOv");
  if(!ov)return;
  ov.classList.add("v");
+ // Build dynamic system prompt with username
+ var _uname=(curUser&&(curUser.displayName||pf&&pf.nm))||"";
+ var _nameStr=_uname?"User's name is "+_uname+". Address them by name naturally (e.g. 'ဟေး "+_uname+"!')":"Use 'bro/sis' casually. Never say 'boss'.";
+ window._AI_DYNAMIC_PROMPT=AI_SYSTEM_PROMPT+"\n\nUSER_NAME: "+_nameStr;
  // Init with welcome message if empty
  if(AI_CHAT_HISTORY.length===0){
- var welcomeMsg={role:"assistant",content:"ဟေး! 👋 PCA Bot ပါ — game top-up store ရဲ့ chill assistant လေးပါ 😄\n\nOrder ပေးနည်း, payment, ID verify, ဘာပဲ မေးမေး help ပေးနိုင်တယ်! Or just vibe လဲ ရတယ်ဗျ lol 🎮\n\nဘာကိစ္စ ရှိလဲ boss? 👇"};
+ var _greet=_uname?"ဟေး "+_uname+"! 👋":"ဟေး! 👋";
+ var welcomeMsg={role:"assistant",content:_greet+" PCA Bot ပါ — game top-up store ရဲ့ chill assistant လေးပါ 😄\n\nOrder ပေးနည်း, payment, ID verify, ဘာပဲ မေးမေး help ပေးနိုင်တယ်! Or just vibe လဲ ရတယ်ဗျ lol 🎮\n\nဘာကိစ္စ ရှိလဲ? 👇"};
  AI_CHAT_HISTORY.push(welcomeMsg);
  aiRenderMessages();
  aiShowSuggestions(AI_QUICK_SUGGESTIONS.slice(0,4));
@@ -4209,7 +4229,8 @@ function aiSendText(text){
  aiShowTyping();
 
  // Build messages for API
- var apiMessages=[{role:"system",content:AI_SYSTEM_PROMPT}].concat(
+ var _sysPr=window._AI_DYNAMIC_PROMPT||AI_SYSTEM_PROMPT;
+ var apiMessages=[{role:"system",content:_sysPr}].concat(
  AI_CHAT_HISTORY.slice(-16).map(function(m){return{role:m.role,content:m.content};})
  );
 
@@ -4261,8 +4282,9 @@ function aiSendText(text){
 function aiLocalFallback(q){
  var raw=q;
  q=q.toLowerCase();
- // Detect language — if contains Myanmar unicode range
  var isMM=/[\u1000-\u109F]/.test(raw);
+ var _un=(curUser&&(curUser.displayName||pf&&pf.nm))||"";
+ var _callUser=_un||"bro";
 
  // ── Order / Top-up ──
  if(/order|topup|top.?up|ဝယ်|မှာ|ဖြည့်|ငွေဖြည့်|ဘယ်လို/.test(q)){
@@ -4353,6 +4375,53 @@ function aiNextSuggestions(lastQ){
 (function(){
  var ov=document.getElementById("aiOv");
  if(ov)ov.addEventListener("click",function(e){if(e.target===ov)closeAiChat();});
+})();
+
+// DRAGGABLE AI FAB
+(function(){
+ var fab=document.getElementById("aiFab");
+ if(!fab)return;
+ var isDragging=false,startX=0,startY=0,origX=0,origY=0,moved=false;
+ function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+ function onStart(e){
+  isDragging=true;moved=false;
+  var t=e.touches?e.touches[0]:e;
+  startX=t.clientX;startY=t.clientY;
+  var r=fab.getBoundingClientRect();
+  origX=r.left;origY=r.top;
+  fab.style.transition="none";
+  e.preventDefault();
+ }
+ function onMove(e){
+  if(!isDragging)return;
+  var t=e.touches?e.touches[0]:e;
+  var dx=t.clientX-startX,dy=t.clientY-startY;
+  if(Math.abs(dx)>4||Math.abs(dy)>4)moved=true;
+  if(!moved)return;
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var fw=fab.offsetWidth,fh=fab.offsetHeight;
+  var nx=clamp(origX+dx,8,vw-fw-8);
+  var ny=clamp(origY+dy,8,vh-fh-80);
+  fab.style.right="auto";fab.style.bottom="auto";
+  fab.style.left=nx+"px";fab.style.top=ny+"px";
+  e.preventDefault();
+ }
+ function onEnd(e){
+  if(!isDragging)return;
+  isDragging=false;
+  fab.style.transition="box-shadow .2s,border-color .2s";
+  if(!moved){openAiChat();return;}
+  var vw=window.innerWidth,fw=fab.offsetWidth;
+  var cx=parseFloat(fab.style.left||0)+fw/2;
+  if(cx>vw/2){fab.style.left="auto";fab.style.right="14px";}
+  else{fab.style.right="auto";fab.style.left="14px";}
+ }
+ fab.addEventListener("mousedown",onStart);
+ fab.addEventListener("touchstart",onStart,{passive:false});
+ document.addEventListener("mousemove",onMove);
+ document.addEventListener("touchmove",onMove,{passive:false});
+ document.addEventListener("mouseup",onEnd);
+ document.addEventListener("touchend",onEnd);
 })();
 
 
