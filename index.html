@@ -3442,96 +3442,84 @@ function rLdb(forceRefresh){
  if(forceRefresh)_ldbData=null;
  if(_ldbData){_renderLdb(_ldbData);return;}
 
- // Show loading
  document.getElementById("ldbList").innerHTML='<div class="lb-loading"><div class="lb-spin"></div></div>';
  document.getElementById("ldbPodium").innerHTML="";
  document.getElementById("ldbMyRank").innerHTML="";
 
- if(!fbReady||!db){
- // Fallback: generate mock leaderboard
- _ldbData=_genMockLdb();
- _renderLdb(_ldbData);
- return;
- }
+ if(!fbReady||!db){_renderLdb([]);return;}
 
- // Try Firebase orders collection
- var now=new Date();
- var cutoff=new Date();
+ var now=new Date();var cutoff=new Date();
  if(_ldbFilter==="weekly")cutoff.setDate(now.getDate()-7);
  else if(_ldbFilter==="monthly")cutoff.setMonth(now.getMonth()-1);
  else cutoff=new Date(0);
 
- db.collection("orders")
- .where("status","==","confirmed")
- .orderBy("timestamp","desc")
- .limit(200)
- .get()
- .then(function(snap){
+ db.collection("users").get().then(function(userSnap){
+ var userMap={};
+ userSnap.forEach(function(doc){var d=doc.data();userMap[doc.id]={name:d.name||doc.id.split("@")[0]||"Player",avatar:d.avatar||""};});
+ db.collection("orders").where("status","==","confirmed").orderBy("timestamp","desc").limit(300).get().then(function(snap){
  var tally={};
  snap.forEach(function(doc){
- var d=doc.data();
- var ts=d.timestamp?new Date(d.timestamp):new Date(0);
- if(ts<cutoff)return;
- var email=d.authUser||d.authName||"Guest";
- var name=d.authName||email.split("@")[0]||"Player";
+ var d=doc.data();var ts=d.timestamp?new Date(d.timestamp):new Date(0);if(ts<cutoff)return;
+ var email=d.authUser||"guest";
+ var uInfo=userMap[email]||{name:d.authName||email.split("@")[0]||"Player",avatar:""};
  var price=d.price||0;
- if(!tally[email]){tally[email]={name:name,email:email,total:0,count:0};}
- tally[email].total+=price;
- tally[email].count++;
+ if(!tally[email]){tally[email]={name:uInfo.name,email:email,avatar:uInfo.avatar,total:0,count:0};}
+ tally[email].total+=price;tally[email].count++;
  });
  var arr=Object.values(tally).sort(function(a,b){return b.total-a.total;}).slice(0,20);
- if(arr.length<3){arr=arr.concat(_genMockLdb().slice(arr.length,10));}
- _ldbData=arr;
- _renderLdb(arr);
- }).catch(function(){
- _ldbData=_genMockLdb();
- _renderLdb(_ldbData);
- });
+ _ldbData=arr;_renderLdb(arr);
+ }).catch(function(){_renderLdb([]);});
+ }).catch(function(){_renderLdb([]);});
 }
 
 function ldbSetFilter(f){
- _ldbFilter=f;
- _ldbData=null;
- rLdb(false);
- // Update tabs
- document.querySelectorAll(".lb-tab").forEach(function(t){
- t.classList.toggle("on",t.textContent.trim()===(f==="weekly"?"This Week":f==="monthly"?"This Month":"All Time"));
- });
+ _ldbFilter=f;_ldbData=null;rLdb(false);
 }
 
-function _genMockLdb(){
- var names=["ShadowKing","DragonX","NightHawk","PhoenixMM","CyberWolf","IronBlade","StarFire","LightBringer","ThunderBolt","MoonRider","StormChaser","NexusRay","AceHunter","FlameKnight","FrostGiant","VoidWalker","NovaPulse","ApexLord","EliteSniper","ProGamer"];
- return names.map(function(n,i){
- var hash=n.charCodeAt(0)*13+n.length*7+i*31;
- return{name:n,email:n.toLowerCase()+"@player.com",total:(20000+Math.abs(hash%480000)),count:1+Math.abs(hash%50)};
- }).sort(function(a,b){return b.total-a.total;});
+function _avatarHtml(p,size,fontSize){
+ size=size||40;fontSize=fontSize||16;
+ if(p.avatar&&p.avatar.indexOf("<svg")===0){
+ var s=Math.round(size*0.55);
+ return'<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0">'+p.avatar.replace(/width='\d+'/g,"width='"+s+"'").replace(/height='\d+'/g,"height='"+s+"'")+'</div>';
+ }
+ if(p.avatar&&p.avatar.indexOf("data:image")===0){
+ return'<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;overflow:hidden;flex-shrink:0"><img src="'+p.avatar+'" style="width:100%;height:100%;object-fit:cover"/></div>';
+ }
+ var initials=(p.name||"?").substring(0,2).toUpperCase();
+ return'<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-size:'+fontSize+'px;font-weight:900;color:#fff;flex-shrink:0">'+initials+'</div>';
+}
+
+function _podAvHtml(p,avSize,rankBg,isMe){
+ var avFs=Math.round(avSize*0.38);
+ if(p.avatar&&p.avatar.indexOf("data:image")===0){
+ return'<div style="width:'+avSize+'px;height:'+avSize+'px;border-radius:50%;overflow:hidden">'+'<img src="'+p.avatar+'" style="width:100%;height:100%;object-fit:cover"/></div>';
+ }
+ if(p.avatar&&p.avatar.indexOf("<svg")===0){
+ var s=Math.round(avSize*0.55);
+ return'<div style="width:'+avSize+'px;height:'+avSize+'px;border-radius:50%;background:'+rankBg+';display:flex;align-items:center;justify-content:center;color:#fff">'+p.avatar.replace(/width='\d+'/g,"width='"+s+"'").replace(/height='\d+'/g,"height='"+s+"'")+'</div>';
+ }
+ return'<div style="width:'+avSize+'px;height:'+avSize+'px;border-radius:50%;background:'+rankBg+';display:flex;align-items:center;justify-content:center;font-size:'+avFs+'px;font-weight:900;color:#fff">'+( isMe?"Me":p.name.substring(0,2).toUpperCase() )+'</div>';
 }
 
 function _renderLdb(data){
  if(!data||!data.length){
- document.getElementById("ldbList").innerHTML='<div class="lb-empty">No data yet. Be the first top buyer!</div>';
  document.getElementById("ldbPodium").innerHTML="";
  document.getElementById("ldbMyRank").innerHTML="";
+ document.getElementById("ldbList").innerHTML='<div class="lb-empty">No confirmed orders yet.<br>Be the first top buyer!</div>';
  return;
  }
-
- // My rank
  var myEmail=curUser?curUser.email:"";
  var myRank=myEmail?data.findIndex(function(d){return d.email===myEmail;})+1:0;
  var myRankEl=document.getElementById("ldbMyRank");
  if(myRankEl){
  if(myRank>0){
- myRankEl.innerHTML='<div class="lb-my-rank"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--ac2);fill:none;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg><div><div class="lmr-l">Your Rank</div><div class="lmr-v">#'+myRank+'</div></div><div style="margin-left:auto;text-align:right"><div class="lmr-l">Total Spent</div><div class="lmr-v" style="font-size:14px">'+mmk(data[myRank-1].total)+'</div></div></div>';
+ var me=data[myRank-1];
+ myRankEl.innerHTML='<div class="lb-my-rank">'+_avatarHtml(me,28,11)+'<div><div class="lmr-l">Your Rank</div><div class="lmr-v">#'+myRank+'</div></div><div style="margin-left:auto;text-align:right"><div class="lmr-l">Total Spent</div><div class="lmr-v" style="font-size:14px">'+mmk(me.total)+'</div></div></div>';
  }else if(myEmail){
- myRankEl.innerHTML='<div class="lb-my-rank" style="background:var(--sf2)"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--tx3);fill:none;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg><div style="color:var(--tx3);font-size:12px">Order more to appear on leaderboard!</div></div>';
- }else{
- myRankEl.innerHTML="";
+ myRankEl.innerHTML='<div class="lb-my-rank" style="background:var(--sf2);color:var(--tx3);font-size:12px;gap:8px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--tx3);fill:none;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg>Order more to appear on leaderboard!</div>';
+ }else{myRankEl.innerHTML="";}
  }
- }
-
- // Podium (top 3)
- var top3=data.slice(0,3);
- var podOrder=[1,0,2]; // 2nd, 1st, 3rd display order
+ var top3=data.slice(0,3);var podOrder=[1,0,2];
  var podiumEl=document.getElementById("ldbPodium");
  if(podiumEl&&top3.length>=3){
  var podHtml='<div class="lb-podium">';
@@ -3539,13 +3527,14 @@ function _renderLdb(data){
  var p=top3[idx];if(!p)return;
  var rank=idx+1;
  var cls=rank===1?"first":rank===2?"second":"third";
- var crown=rank===1?'<div class="pod-crown">👑</div>':"";
- var medal=rank===1?"🥇":rank===2?"🥈":"🥉";
- var initials=p.name.substring(0,2).toUpperCase();
+ var crown=rank===1?'<div class="pod-crown">\u{1F451}</div>':"";
+ var medal=rank===1?"\u{1F947}":rank===2?"\u{1F948}":"\u{1F949}";
  var isMe=myEmail&&p.email===myEmail;
+ var avSize=rank===1?64:52;
+ var rankBg=rank===1?"linear-gradient(135deg,#FFD700,#FFA500)":rank===2?"linear-gradient(135deg,#C0C0C0,#a0a0a0)":"linear-gradient(135deg,#CD7F32,#a0622a)";
  podHtml+='<div class="lb-pod '+cls+'">';
- podHtml+='<div class="pod-av">'+(isMe?'<svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg>':initials)+crown+'</div>';
- podHtml+='<div class="pod-nm">'+(isMe?"You":p.name)+'</div>';
+ podHtml+='<div class="pod-av" style="background:none;box-shadow:none">'+_podAvHtml(p,avSize,rankBg,isMe)+crown+'</div>';
+ podHtml+='<div class="pod-nm">'+( isMe?"You":p.name )+'</div>';
  podHtml+='<div class="pod-am">'+mmk(p.total)+'</div>';
  podHtml+='<div class="pod-base">'+medal+'</div>';
  podHtml+='</div>';
@@ -3553,27 +3542,24 @@ function _renderLdb(data){
  podHtml+='</div>';
  podiumEl.innerHTML=podHtml;
  }
-
- // List (rank 4+)
  var rest=data.slice(3);
- var badgeMap={3:"gold",4:"silver",5:"bronze"};
+ var badgeMap={4:"gold",5:"silver",6:"bronze"};
  var listHtml='<div class="lb-list">';
  rest.forEach(function(p,i){
- var rank=i+4;
- var isMe=myEmail&&p.email===myEmail;
- var initials=p.name.substring(0,2).toUpperCase();
+ var rank=i+4;var isMe=myEmail&&p.email===myEmail;
  var badgeCls=badgeMap[rank]||"regular";
  var badgeTxt=rank<=10?"Top "+rank:"#"+rank;
- listHtml+='<div class="lb-row'+(isMe?" me":"")+'">';
+ listHtml+='<div class="lb-row'+( isMe?" me":"" )+'">';
  listHtml+='<div class="lb-rank">#'+rank+'</div>';
- listHtml+='<div class="lb-av">'+initials+'</div>';
- listHtml+='<div class="lb-info"><div class="lb-nm">'+(isMe?"You ("+p.name+")":p.name)+'</div><div><span class="lb-badge '+badgeCls+'">'+badgeTxt+'</span></div></div>';
+ listHtml+=_avatarHtml(p,36,13);
+ listHtml+='<div class="lb-info"><div class="lb-nm">'+( isMe?"You ("+p.name+")":p.name )+'</div><div><span class="lb-badge '+badgeCls+'">'+badgeTxt+'</span></div></div>';
  listHtml+='<div class="lb-amt">'+mmk(p.total)+'</div>';
  listHtml+='</div>';
  });
  listHtml+='</div>';
  document.getElementById("ldbList").innerHTML=listHtml;
 }
+
 
 // ═══════════════════════════════════════
 // OPTIMISTIC UI — instant order feedback
