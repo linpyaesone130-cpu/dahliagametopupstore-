@@ -41,8 +41,14 @@
  --glass:rgba(23,33,43,.8);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
+/* Prevent transform-induced blur on cards */
+.gc, .pk, .py-glass, .hc, .lb-row {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
 ::-webkit-scrollbar{display:none;}
-body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;letter-spacing:-.01em;}
+body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smoothing:antialiased;-webkit-text-stroke:0;text-rendering:optimizeLegibility;overflow-x:hidden;letter-spacing:-.01em;}
 
 /* GLOBAL IMAGE AUTO-ADJUST */
 .app img{max-width:100%;display:block;object-fit:cover;object-position:center;}
@@ -137,7 +143,7 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
   object-fit:cover!important;object-position:center!important;
   display:block;max-width:none!important;
 }
-.gn{font-size:10px;font-weight:700;color:var(--tx);text-align:center;line-height:1.35;letter-spacing:.05px;padding:7px 5px 9px;width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;}
+.gn{font-size:10px;font-weight:700;color:var(--tx);text-align:center;line-height:1.3;letter-spacing:.02px;padding:6px 4px 8px;width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;}
 .ge{text-align:center;grid-column:1/-1;color:var(--tx3);font-size:13px;padding:32px 0;}
 
 /* SKELETON LOADING */
@@ -221,13 +227,13 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 
 /* PACKAGE */
 .pk-g{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
-.pk{border-radius:18px;padding:16px 14px 14px;text-align:left;border:1px solid var(--bd);background:var(--sf);cursor:pointer;transition:all .2s;font-family:var(--font);display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:0;position:relative;overflow:hidden;min-height:88px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+.pk{border-radius:18px;padding:14px 12px 12px;text-align:center;border:1px solid var(--bd);background:var(--sf);cursor:pointer;transition:all .2s;font-family:var(--font);display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:0;position:relative;overflow:hidden;min-height:80px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
 .pk-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.25;pointer-events:none;transition:.2s;border-radius:inherit;}.pk.on .pk-img{opacity:.35;}
 .pk .pk-a,.pk .pk-p{text-shadow:none;}
 .pk:active{transform:scale(.95);}
 .pk.on{border-color:var(--ac);background:rgba(42,171,238,.06);box-shadow:0 0 0 2px rgba(42,171,238,.18),0 4px 20px rgba(42,171,238,.10);}
-.pk .pk-a{font-size:clamp(12px,3.6vw,15px);font-weight:800;color:var(--tx);position:relative;z-index:1;line-height:1.3;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;margin-bottom:auto;}.pk.on .pk-a{color:var(--ac2);}
-.pk .pk-p{font-size:12px;color:#0A6FA0;font-weight:800;font-family:var(--mono);margin-top:14px;position:relative;z-index:1;letter-spacing:.2px;}
+.pk .pk-a{font-size:clamp(11px,3.2vw,13px);font-weight:800;color:var(--tx);position:relative;z-index:1;line-height:1.3;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;margin-bottom:auto;text-align:center;}.pk.on .pk-a{color:var(--ac2);}
+.pk .pk-p{font-size:11px;color:#0A6FA0;font-weight:800;font-family:var(--mono);margin-top:10px;position:relative;z-index:1;letter-spacing:.2px;text-align:center;}
 
 /* PAYMENT */
 .py-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
@@ -660,6 +666,81 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 
 /* LIGHT MODE */
 .app.light{--bg:#F4F4F5;--bg2:#EBEBEC;--sf:#ffffff;--sf2:#F4F4F5;--sf3:#E8E8E9;--bd:#E0E0E2;--bd2:#D0D0D3;--bd3:#C0C0C3;--tx:#000000;--tx2:#707579;--tx3:#A0A0A5;--ac:#0B8FD4;--ac2:#0A7AB8;--ac3:#0A7AB8;--acg:rgba(11,143,212,.14);--acg2:rgba(11,143,212,.07);--gn:#27AE60;--gng:rgba(39,174,96,.08);--yw:#E08B00;--ywg:rgba(224,139,0,.06);--rd:#E53935;--rdg:rgba(229,57,53,.06);}
+
+/* ═══════════════════════════════════════
+   SMOOTH THEME TRANSITION
+═══════════════════════════════════════ */
+.app.theme-transitioning,
+.app.theme-transitioning *,
+.app.theme-transitioning *::before,
+.app.theme-transitioning *::after {
+  transition:
+    background-color .35s cubic-bezier(.4,0,.2,1),
+    background .35s cubic-bezier(.4,0,.2,1),
+    border-color .35s cubic-bezier(.4,0,.2,1),
+    color .35s cubic-bezier(.4,0,.2,1),
+    box-shadow .35s cubic-bezier(.4,0,.2,1) !important;
+}
+
+/* ═══════════════════════════════════════
+   IMPROVED SKELETON LOADING
+═══════════════════════════════════════ */
+@keyframes shimmerPro{0%{background-position:-800px 0}100%{background-position:800px 0}}
+.sk{background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 80%),#1C2733;background-size:800px 100%;animation:shimmerPro 1.8s ease-in-out infinite;border-radius:inherit;}
+.app.light .sk{background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.05) 40%,rgba(0,0,0,0) 80%),#EBEBEC;background-size:800px 100%;animation:shimmerPro 1.8s ease-in-out infinite;}
+.sk-card{position:relative;overflow:hidden;}
+.sk-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(42,171,238,.03) 50%,transparent 60%);animation:skCardPulse 2.5s ease-in-out infinite;}
+@keyframes skCardPulse{0%,100%{opacity:0}50%{opacity:1}}
+
+/* ═══════════════════════════════════════
+   VIDEO BANNER
+═══════════════════════════════════════ */
+.vid-banner-wrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--r3);overflow:hidden;margin-bottom:16px;background:#000;border:1px solid var(--bd);}
+.vid-banner-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;}
+.vid-banner-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.5));z-index:1;pointer-events:none;}
+.vid-banner-badge{position:absolute;top:10px;left:10px;z-index:2;display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);font-size:9px;font-weight:800;color:#fff;letter-spacing:.5px;}
+.vid-banner-badge span{width:6px;height:6px;border-radius:50%;background:var(--rd);animation:blink 1.5s infinite;}
+.vid-mute-btn{position:absolute;bottom:10px;right:10px;z-index:2;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;}
+.vid-mute-btn:active{transform:scale(.85);}
+.vid-mute-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;}
+
+/* ═══════════════════════════════════════
+   KANBAN LIVE ORDER BOARD
+═══════════════════════════════════════ */
+.kanban-wrap{padding-bottom:8px;}
+.kanban-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.kanban-title{font-size:15px;font-weight:900;display:flex;align-items:center;gap:8px;color:var(--tx);}
+.kanban-title svg{width:16px;height:16px;stroke:var(--ac2);fill:none;}
+.kanban-live-dot{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:800;color:var(--gn);text-transform:uppercase;letter-spacing:.5px;}
+.kanban-live-dot span{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:blink 1.5s infinite;}
+.kanban-cols{display:flex;gap:8px;overflow-x:auto;padding:0 0 8px;scroll-snap-type:x mandatory;}
+.kanban-cols::-webkit-scrollbar{display:none;}
+.kc{flex:0 0 calc(80vw);max-width:280px;min-width:0;scroll-snap-align:start;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r2);padding:12px;display:flex;flex-direction:column;gap:8px;min-height:160px;}
+.kc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.kc-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:6px;}
+.kc-label .kc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.kc-count{font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px;}
+.kc.kc-pending{border-top:2px solid var(--yw);}.kc.kc-pending .kc-label{color:var(--yw);}.kc.kc-pending .kc-dot{background:var(--yw);}.kc.kc-pending .kc-count{background:rgba(255,185,48,.12);color:var(--yw);}
+.kc.kc-processing{border-top:2px solid var(--ac2);}.kc.kc-processing .kc-label{color:var(--ac2);}.kc.kc-processing .kc-dot{background:var(--ac2);}.kc.kc-processing .kc-count{background:var(--acg);color:var(--ac2);}
+.kc.kc-done{border-top:2px solid var(--gn);}.kc.kc-done .kc-label{color:var(--gn);}.kc.kc-done .kc-dot{background:var(--gn);}.kc.kc-done .kc-count{background:var(--gng);color:var(--gn);}
+.kc.kc-failed{border-top:2px solid var(--rd);}.kc.kc-failed .kc-label{color:var(--rd);}.kc.kc-failed .kc-dot{background:var(--rd);}.kc.kc-failed .kc-count{background:var(--rdg);color:var(--rd);}
+.kk{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:5px;cursor:pointer;transition:all .2s;animation:pgIn .25s ease;}
+.kk:active{transform:scale(.96);}.kk:hover{border-color:var(--bd2);}
+.kk-game{display:flex;align-items:center;gap:7px;}
+.kk-gi{width:28px;height:28px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--sf3);display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;}
+.kk-gi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.kk-gname{font-size:11px;font-weight:800;color:var(--tx);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kk-time{font-size:9px;color:var(--tx3);font-weight:600;flex-shrink:0;}
+.kk-pkg{font-size:10px;color:var(--tx2);font-weight:600;padding:3px 8px;background:var(--sf);border-radius:6px;width:fit-content;}
+.kk-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.kk-price{font-size:11px;font-weight:900;color:var(--ac2);font-family:var(--mono);}
+.kk-uid{font-size:9px;color:var(--tx3);font-family:var(--mono);}
+.kc-empty{text-align:center;padding:20px 8px;color:var(--tx3);font-size:10px;font-weight:600;border:1px dashed var(--bd);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;gap:6px;}
+.kc-empty svg{width:20px;height:20px;stroke:var(--tx3);fill:none;opacity:.5;}
+.kanban-hint{text-align:center;font-size:9px;color:var(--tx3);margin-top:6px;display:flex;align-items:center;justify-content:center;gap:4px;}
+.kk-live-pulse{display:inline-flex;align-items:center;gap:4px;font-size:8px;color:var(--ac2);font-weight:800;text-transform:uppercase;letter-spacing:.3px;}
+.kk-live-pulse span{width:5px;height:5px;border-radius:50%;background:var(--ac2);animation:blink 1.2s infinite;}
+
 .app.light .hdr{background:rgba(255,255,255,.97);border-bottom-color:var(--bd);}
 .app.light .nb.on{background:rgba(11,143,212,.12)!important;}
 .app.light .nb.on svg{stroke:#0B8FD4!important;}
@@ -834,7 +915,7 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 /* MAGAZINE EVENTS */
 .ev-featured{border-radius:var(--r3);overflow:hidden;position:relative;margin-bottom:16px;cursor:pointer;transition:all .2s;border:1px solid var(--bd);}
 .ev-featured:active{transform:scale(.98);}
-.ev-ft-banner{height:160px;display:flex;align-items:flex-end;position:relative;overflow:hidden;}
+.ev-ft-banner{aspect-ratio:16/9;height:auto;display:flex;align-items:flex-end;position:relative;overflow:hidden;}
 .ev-ft-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.7));}
 .ev-ft-banner .ft-em{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:52px;z-index:0;filter:drop-shadow(0 4px 16px rgba(0,0,0,.3));}
 .ev-ft-banner .ft-badge{position:absolute;top:10px;left:10px;z-index:2;padding:4px 12px;border-radius:8px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
@@ -1129,18 +1210,18 @@ body { font-size: 15px; font-family: var(--font); }
 .gc:active { transform: scale(.91) translateY(0); }
 .gi { border-radius: 18px 18px 0 0; }
 .gn {
-  font-size: 12px !important; font-weight: 800;
-  padding: 8px 6px 10px; letter-spacing: -.1px;
+  font-size: 10px !important; font-weight: 700;
+  padding: 6px 5px 8px; letter-spacing: 0;
   background: linear-gradient(180deg, transparent, rgba(0,0,0,.15));
 }
 
 /* ── SEARCH BAR: Elevated style ── */
 .srch input {
-  padding: 13px 14px 13px 42px;
+  padding: 12px 14px 12px 42px;
   border-radius: 16px;
   background: rgba(28,39,51,.9);
   border: 1px solid rgba(42,171,238,.12);
-  font-size: 14px; font-family: var(--font);
+  font-size: 13px; font-family: var(--font);
   box-shadow: 0 2px 12px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.03);
 }
 .srch input:focus {
@@ -1152,8 +1233,8 @@ body { font-size: 15px; font-family: var(--font); }
 
 /* ── FILTER TABS: Pill upgrade ── */
 .tb {
-  padding: 8px 18px; border-radius: 24px;
-  font-size: 12px !important; font-weight: 700;
+  padding: 7px 15px; border-radius: 24px;
+  font-size: 11px !important; font-weight: 700;
   border: 1px solid rgba(255,255,255,.08);
   background: rgba(28,39,51,.8);
   color: var(--tx2);
@@ -1175,11 +1256,11 @@ body { font-size: 15px; font-family: var(--font); }
 
 /* ── SECTION LABELS ── */
 .lb {
-  font-size: 15px !important; font-weight: 900;
-  letter-spacing: -.3px;
+  font-size: 13px !important; font-weight: 800;
+  letter-spacing: -.2px;
   color: var(--tx);
 }
-.lb svg { stroke: var(--ac2); width: 17px; height: 17px; }
+.lb svg { stroke: var(--ac2); width: 15px; height: 15px; }
 
 /* ── HISTORY CARDS: Elevated ── */
 .hc {
@@ -1192,10 +1273,10 @@ body { font-size: 15px; font-family: var(--font); }
 .hc.s-s { background: rgba(16,185,129,.07) !important; border: 1px solid rgba(16,185,129,.18) !important; box-shadow: 0 4px 20px rgba(16,185,129,.06); }
 .hc.s-p { background: rgba(245,158,11,.07) !important; border: 1px solid rgba(245,158,11,.18) !important; box-shadow: 0 4px 20px rgba(245,158,11,.06); }
 .hc.s-f { background: rgba(239,68,68,.07) !important; border: 1px solid rgba(239,68,68,.18) !important; box-shadow: 0 4px 20px rgba(239,68,68,.06); }
-.hc-gn { font-size: 14px !important; font-weight: 900 !important; letter-spacing: -.1px; }
-.hc-cur { font-size: 12px !important; color: var(--tx2); margin-top: 3px !important; }
-.hc-am { font-size: 15px !important; font-weight: 900 !important; color: var(--ac2) !important; }
-.hc-dt { font-size: 11px !important; color: var(--tx3); }
+.hc-gn { font-size: 13px !important; font-weight: 800 !important; letter-spacing: -.1px; }
+.hc-cur { font-size: 11px !important; color: var(--tx2); margin-top: 3px !important; }
+.hc-am { font-size: 13px !important; font-weight: 800 !important; color: var(--ac2) !important; }
+.hc-dt { font-size: 10px !important; color: var(--tx3); }
 .hc-gi { width: 44px !important; height: 44px !important; border-radius: 14px !important; }
 .hc-bg { font-size: 10px !important; padding: 4px 12px !important; border-radius: 20px !important; font-weight: 800 !important; }
 .hc-bg.b-s { background: rgba(16,185,129,.15) !important; }
@@ -1267,6 +1348,8 @@ body { font-size: 15px; font-family: var(--font); }
   background: linear-gradient(145deg, rgba(36,47,61,.95), rgba(26,36,48,.95)) !important;
   box-shadow: 0 4px 20px rgba(0,0,0,.15) !important;
   transition: all .2s cubic-bezier(.25,.46,.45,.94) !important;
+  align-items: center !important;
+  text-align: center !important;
 }
 .pk:active { transform: scale(.95) !important; }
 .pk.on {
@@ -1274,8 +1357,8 @@ body { font-size: 15px; font-family: var(--font); }
   background: linear-gradient(145deg, rgba(42,171,238,.1), rgba(42,171,238,.04)) !important;
   box-shadow: 0 0 0 2px rgba(42,171,238,.2), 0 8px 28px rgba(42,171,238,.12) !important;
 }
-.pk .pk-a { font-size: clamp(13px,3.6vw,15px) !important; font-weight: 900 !important; }
-.pk .pk-p { font-size: 13px !important; color: var(--ac2) !important; font-weight: 900 !important; }
+.pk .pk-a { font-size: clamp(11px,3.2vw,13px) !important; font-weight: 800 !important; text-align: center !important; }
+.pk .pk-p { font-size: 11px !important; color: var(--ac2) !important; font-weight: 800 !important; text-align: center !important; }
 
 /* ── INPUT CARDS ── */
 .icard {
@@ -1353,6 +1436,438 @@ body { font-size: 15px; font-family: var(--font); }
 .app.light .icard { background: rgba(255,255,255,.95) !important; border-color: rgba(42,171,238,.12) !important; }
 .app.light .pf-c,.app.light .st-c { background: #fff !important; border-color: rgba(0,0,0,.06) !important; }
 
+/* ══════════════════════════════════════════
+   NAV RIPPLE EFFECT
+══════════════════════════════════════════ */
+.nb { position: relative; overflow: hidden; }
+.nb-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(42,171,238,.35);
+  transform: scale(0);
+  animation: nbRippleAnim .55s cubic-bezier(.25,.46,.45,.94) forwards;
+  pointer-events: none;
+}
+@keyframes nbRippleAnim {
+  to { transform: scale(3.5); opacity: 0; }
+}
+
+/* ══════════════════════════════════════════
+   GLASSMORPHISM RECEIPT CARD
+══════════════════════════════════════════ */
+#rcptCard {
+  position: relative;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  border-radius: 22px !important;
+  padding: 20px !important;
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(255,255,255,.04);
+}
+/* Shimmer stripe top */
+#rcptCard::before {
+  content:'';
+  position: absolute;
+  top:0; left:0; right:0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ac2), var(--gold2), var(--ac2), transparent);
+  opacity: .8;
+}
+/* Ambient glow orb */
+#rcptCard::after {
+  content:'';
+  position: absolute;
+  top: -60px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(42,171,238,.14), transparent 70%);
+  pointer-events: none;
+}
+/* Receipt header badge */
+#rcptCard .rcpt-hdr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(42,171,238,.14);
+  border: 1px solid rgba(42,171,238,.25);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--ac2);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+/* Receipt rows */
+#rcptBody .rcpt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+#rcptBody .rcpt-row .rl {
+  font-size: 11px;
+  color: var(--tx3);
+  font-weight: 600;
+}
+#rcptBody .rcpt-row .rv {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--tx);
+}
+/* Dashed divider */
+.rcpt-dash {
+  border: none;
+  border-top: 1.5px dashed rgba(255,255,255,.1);
+  margin: 10px 0;
+}
+/* Total row */
+.rcpt-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+/* Holographic badge in corner */
+.rcpt-holo {
+  position: absolute;
+  bottom: 14px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #2AABEE, #E8A920, #34C5FF, #2AABEE);
+  opacity: .18;
+  filter: blur(2px);
+  pointer-events: none;
+}
+/* Light mode receipt */
+.app.light #rcptCard {
+  background: rgba(255,255,255,.75) !important;
+  border-color: rgba(42,171,238,.15) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+.app.light #rcptCard::after {
+  background: radial-gradient(circle, rgba(42,171,238,.08), transparent 70%);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ① SCROLL-TO-TOP BUTTON
+══════════════════════════════════════════════════════════════ */
+#scrollTopBtn {
+  position: fixed;
+  bottom: 90px; right: 16px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--tg-gradient);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(42,171,238,.4);
+  opacity: 0; transform: scale(0) translateY(10px);
+  transition: all .3s cubic-bezier(.34,1.3,.64,1);
+  z-index: 55; pointer-events: none;
+}
+#scrollTopBtn.visible {
+  opacity: 1; transform: scale(1) translateY(0);
+  pointer-events: all;
+}
+#scrollTopBtn:active { transform: scale(.88); }
+#scrollTopBtn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2.5; }
+
+/* ══════════════════════════════════════════════════════════════
+   ② PULL-TO-REFRESH INDICATOR
+══════════════════════════════════════════════════════════════ */
+#pullIndicator {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%) translateY(-60px);
+  width: 40px; height: 40px;
+  background: var(--sf); border: 1px solid var(--bd);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  transition: transform .25s ease, opacity .25s;
+  z-index: 70; opacity: 0;
+}
+#pullIndicator.pulling { opacity: 1; }
+#pullIndicator svg { width: 18px; height: 18px; stroke: var(--ac2); fill: none; stroke-width: 2; transition: transform .3s; }
+#pullIndicator.ready svg { stroke: var(--gn); transform: rotate(180deg); }
+#pullIndicator.refreshing svg { animation: spinSvg .8s linear infinite; stroke: var(--ac2); }
+@keyframes spinSvg { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════════════════════════
+   ③ NETWORK STATUS BANNER
+══════════════════════════════════════════════════════════════ */
+#netBanner {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%) translateY(-48px);
+  width: 100%; max-width: 430px;
+  padding: 10px 20px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700;
+  z-index: 200;
+  transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+}
+#netBanner.show { transform: translateX(-50%) translateY(0); }
+#netBanner.offline { background: linear-gradient(135deg,#dc2626,#b91c1c); color: #fff; }
+#netBanner.online  { background: linear-gradient(135deg,#059669,#047857); color: #fff; }
+#netBanner svg { width: 15px; height: 15px; stroke: #fff; fill: none; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   ④ PAGE LOAD PROGRESS BAR (top)
+══════════════════════════════════════════════════════════════ */
+#pageProgress {
+  position: fixed; top: 0; left: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--ac2), var(--gold2), var(--ac2));
+  background-size: 200% 100%;
+  animation: progressShimmer 1.4s linear infinite;
+  z-index: 300;
+  transition: width .3s ease, opacity .4s;
+  width: 0%; opacity: 0;
+}
+#pageProgress.active { opacity: 1; }
+@keyframes progressShimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑤ CARD PRESS HAPTIC VISUAL FEEDBACK (game cards)
+══════════════════════════════════════════════════════════════ */
+.gc { transition: transform .18s cubic-bezier(.25,.46,.45,.94), box-shadow .18s, border-color .18s !important; }
+.gc.press-flash { animation: cardFlash .22s ease; }
+@keyframes cardFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(42,171,238,.5); }
+  50%  { box-shadow: 0 0 0 8px rgba(42,171,238,.15); }
+  100% { box-shadow: 0 0 0 0 rgba(42,171,238,0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑥ SWIPE GESTURE NAV INDICATOR
+══════════════════════════════════════════════════════════════ */
+#swipeEdge {
+  position: fixed; top: 50%; left: 0;
+  transform: translateY(-50%);
+  width: 4px; height: 60px;
+  border-radius: 0 4px 4px 0;
+  background: var(--ac2);
+  opacity: 0; z-index: 60;
+  transition: opacity .2s, width .2s;
+  pointer-events: none;
+}
+#swipeEdge.active { opacity: .5; width: 6px; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑦ BADGE BOUNCE ANIMATION
+══════════════════════════════════════════════════════════════ */
+@keyframes badgePop {
+  0%  { transform: scale(0); }
+  65% { transform: scale(1.3); }
+  100%{ transform: scale(1); }
+}
+.notif-badge { animation: badgePop .35s cubic-bezier(.34,1.3,.64,1) forwards; }
+#navInboxBadge { animation: badgePop .35s cubic-bezier(.34,1.3,.64,1) forwards; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑧ ANIMATED COUNTER (stats / totals)
+══════════════════════════════════════════════════════════════ */
+.count-up { display: inline-block; transition: transform .1s; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑨ PACKAGE CARD SELECTION GLOW PULSE
+══════════════════════════════════════════════════════════════ */
+.pk.on { animation: pkPulse .4s ease; }
+@keyframes pkPulse {
+  0%  { box-shadow: 0 0 0 0 rgba(42,171,238,.5); }
+  60% { box-shadow: 0 0 0 10px rgba(42,171,238,.0); }
+  100%{ box-shadow: 0 0 0 2px rgba(42,171,238,.18), 0 4px 20px rgba(42,171,238,.1); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑩ SMOOTH IMAGE REVEAL (lazy load)
+══════════════════════════════════════════════════════════════ */
+img.img-reveal { opacity: 0; transition: opacity .4s ease; }
+img.img-reveal.loaded { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑪ FLOATING LABEL INPUT ANIMATION
+══════════════════════════════════════════════════════════════ */
+.fl-wrap { position: relative; }
+.fl-wrap input { padding-top: 18px !important; padding-bottom: 6px !important; }
+.fl-wrap .fl-label {
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px; color: var(--tx3);
+  pointer-events: none;
+  transition: all .2s cubic-bezier(.25,.46,.45,.94);
+  font-weight: 600;
+}
+.fl-wrap input:focus ~ .fl-label,
+.fl-wrap input:not(:placeholder-shown) ~ .fl-label {
+  top: 8px; transform: translateY(0);
+  font-size: 9px; letter-spacing: .5px;
+  text-transform: uppercase; color: var(--ac2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑫ SKELETON WAVE UPGRADE (per-element shimmer)
+══════════════════════════════════════════════════════════════ */
+.sk::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.07) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: skWave 1.5s infinite;
+}
+@keyframes skWave { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.sk { position: relative; overflow: hidden; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑬ HISTORY CARD SWIPE-TO-TRACK HINT
+══════════════════════════════════════════════════════════════ */
+.hc { position: relative; overflow: hidden; }
+.hc::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, transparent, rgba(42,171,238,.3), transparent);
+  opacity: 0; transition: opacity .2s;
+}
+.hc:active::after { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑭ SECTION HEADER REVEAL ANIMATION
+══════════════════════════════════════════════════════════════ */
+.lb { transition: opacity .3s ease, transform .3s ease; }
+.lb.reveal-anim { animation: lbReveal .4s ease forwards; }
+@keyframes lbReveal {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑮ STAGGER GRID ENTRY ANIMATION
+══════════════════════════════════════════════════════════════ */
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(16px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.gc.stagger { opacity: 0; animation: staggerIn .35s ease forwards; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑯ THEME TOGGLE TRANSITION
+══════════════════════════════════════════════════════════════ */
+.app { transition: background .4s ease, color .3s ease; }
+
+/* ══════════════════════════════════════════════════════════════
+   ⑰ PAYMENT METHOD SELECTED GLOW
+══════════════════════════════════════════════════════════════ */
+.py-glass.on { animation: pyGlow .35s ease; }
+@keyframes pyGlow {
+  0%  { box-shadow: 0 0 0 0 rgba(42,171,238,.6); }
+  70% { box-shadow: 0 0 0 12px rgba(42,171,238,.0); }
+  100%{ box-shadow: 0 0 0 2px rgba(42,171,238,.15), 0 8px 32px rgba(42,171,238,.12); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑱ TOAST SLIDE-UP UPGRADE
+══════════════════════════════════════════════════════════════ */
+.toast {
+  transition: opacity .25s, transform .3s cubic-bezier(.34,1.2,.64,1) !important;
+  transform: translateY(20px) translateX(-50%) scale(.9);
+}
+.toast.v {
+  transform: translateY(0) translateX(-50%) scale(1) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑲ INPUT FOCUS GLOW RING
+══════════════════════════════════════════════════════════════ */
+.icard input:focus {
+  border-color: var(--ac) !important;
+  box-shadow: 0 0 0 3px rgba(42,171,238,.15), 0 2px 8px rgba(42,171,238,.1) !important;
+  background: rgba(42,171,238,.02) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ⑳ ACTIVE ORDER TRACKING PULSE DOT
+══════════════════════════════════════════════════════════════ */
+.live-order-dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--rd);
+  margin-right: 5px;
+  animation: liveOrderPulse 1.4s ease infinite;
+  vertical-align: middle;
+}
+@keyframes liveOrderPulse {
+  0%,100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,90,90,.5); }
+  50%      { opacity: .8; transform: scale(1.2); box-shadow: 0 0 0 5px rgba(255,90,90,0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ㉑ SCROLL SNAP INDICATOR (bottom dots for carousels)
+══════════════════════════════════════════════════════════════ */
+.snap-dots { display: flex; justify-content: center; gap: 5px; margin-top: 8px; }
+.snap-dot {
+  width: 6px; height: 6px; border-radius: 3px;
+  background: var(--bd3); transition: all .25s cubic-bezier(.25,.46,.45,.94);
+}
+.snap-dot.on { width: 18px; background: var(--ac2); }
+
+/* ══════════════════════════════════════════════════════════════
+   ㉒ CONFIRM ORDER MODAL UPGRADE
+══════════════════════════════════════════════════════════════ */
+.ov .sh {
+  position: relative; overflow: hidden;
+}
+.ov .sh::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ac2), var(--gold2), var(--ac2), transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ㉓ BACK BUTTON MICRO-ANIMATION
+══════════════════════════════════════════════════════════════ */
+.bk { transition: all .18s cubic-bezier(.25,.46,.45,.94) !important; }
+.bk:active { transform: translateX(-3px) scale(.95) !important; }
+.bk svg { transition: transform .18s; }
+.bk:active svg { transform: translateX(-2px); }
+
+/* ══════════════════════════════════════════════════════════════
+   ㉔ GLOW BUTTON ON ORDER PLACE
+══════════════════════════════════════════════════════════════ */
+.abtn.go {
+  position: relative; overflow: hidden;
+}
+.abtn.go::before {
+  content: '';
+  position: absolute; top: -50%; left: -60%;
+  width: 50%; height: 200%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.18), transparent);
+  animation: btnShine 2.5s infinite;
+}
+@keyframes btnShine { 0%{left:-60%} 100%{left:120%} }
+
+/* ══════════════════════════════════════════════════════════════
+   ㉕ SUCCESS OVERLAY CONFETTI ANIM
+══════════════════════════════════════════════════════════════ */
+.confetti-canvas {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 0; border-radius: inherit;
+}
+.su-c { position: relative; overflow: hidden; }
+
+/* ══════════════════════════════════════════════════════════════
+   ㉖ VERIFIED ID SHINE EFFECT
+══════════════════════════════════════════════════════════════ */
+#verifyStatus > div {
+  position: relative; overflow: hidden;
+}
+#verifyStatus > div::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.12), transparent);
+  animation: idShine 2s ease 0.3s 1 forwards;
+}
+@keyframes idShine { 0%{left:-60%} 100%{left:120%} }
 
 </style>
 <script>(function(){try{var dk=localStorage.getItem("pca_dark");if(dk==="1"){document.write("<style>.app{background:#06090f!important;color:#e5e7eb!important}.app.light{background:#17212B!important;color:#F5F5F5!important}</style>")}if(localStorage.getItem("pca_logged")==="1"){var s=document.createElement("style");s.textContent=".auth{display:none!important}.app.hide{display:block!important}";document.head.appendChild(s);}
@@ -1440,7 +1955,22 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <div class="pg" id="pg-det"></div>
  <!-- HISTORY -->
  <div class="pg" id="pg-his">
- <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Transaction History</div>
+ <!-- KANBAN LIVE BOARD -->
+ <div class="kanban-wrap" id="kanbanWrap">
+  <div class="kanban-header">
+   <div class="kanban-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="8" rx="1"/></svg>Live Order Board</div>
+   <div class="kanban-live-dot"><span></span>Real-time</div>
+  </div>
+  <div class="kanban-cols" id="kanbanCols">
+   <div class="kc kc-pending"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Pending</div><div class="kc-count" id="kc-cnt-pending">0</div></div><div id="kc-pending"><div class="kc-empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>No pending</div></div></div>
+   <div class="kc kc-processing"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Processing</div><div class="kc-count" id="kc-cnt-processing">0</div></div><div id="kc-processing"><div class="kc-empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>No processing</div></div></div>
+   <div class="kc kc-done"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Done</div><div class="kc-count" id="kc-cnt-done">0</div></div><div id="kc-done"><div class="kc-empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>No completed</div></div></div>
+   <div class="kc kc-failed"><div class="kc-head"><div class="kc-label"><div class="kc-dot"></div>Failed</div><div class="kc-count" id="kc-cnt-failed">0</div></div><div id="kc-failed"><div class="kc-empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>No failed</div></div></div>
+  </div>
+  <div class="kanban-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Swipe to see all columns</div>
+ </div>
+ <div style="height:1px;background:var(--bd);margin:16px 0 14px"></div>
+ <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Transaction History</div>
  <div class="tabs" id="htabs"></div>
  <div style="font-size:11px;color:var(--tx3);font-weight:700;margin-bottom:10px" id="hcnt"></div>
  <div id="hlist"></div>
@@ -1448,14 +1978,14 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <!-- ACCOUNT -->
  <div class="pg" id="pg-pro">
  <div id="acList">
- <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account</div>
+ <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Account</div>
  <div id="prlist"></div>
  </div>
  <div id="acDetail" style="display:none"></div>
  </div>
  <!-- EVENTS -->
  <div class="pg" id="pg-ev">
- <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</div>
+ <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</div>
  <div class="ds-wrap"><div class="ds-head" id="dsHead"></div><div class="ds-scroll" id="dsScroll"></div></div>
  <div class="tabs" id="evTabs"></div>
  <div id="evFeatured"></div>
@@ -1464,7 +1994,7 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  </div>
  <!-- FAQ -->
  <div class="pg" id="pg-faq">
- <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help & FAQ</div>
+ <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help & FAQ</div>
  <div id="faqList"></div>
  </div>
  <!-- INBOX PAGE -->
@@ -1479,7 +2009,7 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  </div>
  <!-- GIVEAWAYS -->
  <div class="pg" id="pg-gv">
- <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Giveaways</div>
+ <div class="lb" style="font-size:15px;margin-bottom:12px"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Giveaways</div>
  <div id="gvList"></div>
  </div>
  <!-- LEADERBOARD -->
@@ -1515,20 +2045,40 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  
  <div class="toast" id="tst"></div>
  <div class="nav-transition-bar" id="navBar"></div>
+
+ <!-- ① SCROLL TO TOP BUTTON -->
+ <button id="scrollTopBtn" onclick="_scrollTop()" aria-label="Scroll to top">
+   <svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+ </button>
+
+ <!-- ② PULL TO REFRESH INDICATOR -->
+ <div id="pullIndicator">
+   <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+ </div>
+
+ <!-- ③ NETWORK STATUS BANNER -->
+ <div id="netBanner">
+   <svg viewBox="0 0 24 24" id="netIcon"></svg>
+   <span id="netMsg"></span>
+ </div>
+
+ <!-- ④ PAGE PROGRESS BAR -->
+ <div id="pageProgress"></div>
  <div class="ov" id="cmod"><div class="sh"><div class="m-h"></div><div class="m-t">Confirm Order</div><div class="m-d" id="md"></div><div class="m-a"><button class="m-c" onclick="cm(0)">Cancel</button><button class="m-ok" onclick="cm(1)">Confirm Pay</button></div></div></div>
  <div class="su" id="sov"><div class="su-c" style="max-width:340px;padding:24px 20px;text-align:left">
  <div style="text-align:center;margin-bottom:16px"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(42,171,238,.1));margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:#10b981;stroke-width:1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="su-t" style="font-size:18px">Order Placed!</div></div>
  <div id="rcptCard" style="background:var(--sf2);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px">
- <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--bd2)">
- <div style="font-size:9px;font-weight:700;color:var(--ac2);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--ac2);fill:none;stroke-width:2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Order Receipt</div>
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.08)">
+ <span class="rcpt-hdr-badge"><svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Order Receipt</span>
  <div id="rcptId" style="font-size:9px;font-family:var(--mono);color:var(--tx3)"></div>
  </div>
  <div id="rcptBody"></div>
- <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd2);display:flex;justify-content:space-between">
- <span style="font-size:11px;font-weight:600;color:var(--tx3)">Total</span>
- <span id="rcptTotal" style="font-size:14px;font-weight:900;color:var(--ac2);font-family:var(--mono)"></span>
+ <hr class="rcpt-dash"/>
+ <div class="rcpt-total-row">
+ <span style="font-size:12px;font-weight:700;color:var(--tx3)">Total</span>
+ <span id="rcptTotal" style="font-size:16px;font-weight:900;color:var(--ac2);font-family:var(--mono)"></span>
  </div>
- <div id="rcptDate" style="font-size:9px;color:var(--tx3);text-align:right;margin-top:4px"></div>
+ <div id="rcptDate" style="font-size:9px;color:var(--tx3);text-align:right;margin-top:6px;opacity:.7"></div>
  </div>
  <div style="display:flex;gap:8px">
  <button style="flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--bd2);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:5px" onclick="copyRcpt()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>
@@ -2191,7 +2741,7 @@ function og(id){
  var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
  var bnSrc=sg.bannerImg||sg.img;
  if(bnSrc){
- h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;height:180px;border-radius:var(--r3)"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:cover"/></div>';
+ h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;aspect-ratio:16/9;width:100%;border-radius:var(--r3)"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"/></div>';
  }else{
  h+='<div class="bn" style="background:'+sg.c+';position:relative;overflow:hidden"></div>';
  }
@@ -2289,10 +2839,18 @@ function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
  HL.unshift({id:order.txnId,g:order.game,gi:order.gameEmoji,gc:order.gameColor,ci:order.currencyIcon,cur:order.currency,q:order.amount,am:mmk(order.price),dt:new Date().toLocaleString("en-US",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}),s:"pending",_local:true,_localTs:Date.now()});
  // Populate receipt
  document.getElementById("rcptId").textContent=order.txnId;
- var rw=function(l,v){return'<div style="display:flex;justify-content:space-between;padding:3px 0"><span style="font-size:11px;color:var(--tx3)">'+l+'</span><span style="font-size:11px;font-weight:700">'+v+'</span></div>'};
- document.getElementById("rcptBody").innerHTML=rw("Game",order.gameEmoji+" "+order.game)+rw("Package",order.currencyIcon+" "+order.amount+" "+order.currency)+rw("User ID",order.userId+(order.serverId?" ("+order.serverId+")":""))+rw("Payment",order.payment)+rw("Status",'<span style="color:var(--yw)">Pending</span>');
+ var rw=function(l,v){return'<div class="rcpt-row"><span class="rl">'+l+'</span><span class="rv">'+v+'</span></div>'};
+ document.getElementById("rcptBody").innerHTML=
+   rw("Game",order.gameEmoji+" "+order.game)+
+   rw("Package",order.currencyIcon+" "+order.amount+" "+order.currency)+
+   rw("User ID",order.userId+(order.serverId?" ("+order.serverId+")":""))+
+   rw("Payment",'<span style="display:inline-flex;align-items:center;gap:4px">'+order.payment+'</span>')+
+   rw("Status",'<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;background:rgba(255,185,48,.1);color:var(--yw);font-size:10px;font-weight:900">● Pending</span>');
  document.getElementById("rcptTotal").textContent=mmk(order.price);
  document.getElementById("rcptDate").textContent=new Date().toLocaleString("en-US",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"});
+ // Inject holographic decoration
+ var _holo=document.createElement("div");_holo.className="rcpt-holo";
+ var _rc=document.getElementById("rcptCard");if(_rc&&!_rc.querySelector(".rcpt-holo"))_rc.appendChild(_holo);
  document.getElementById("sov").classList.add("v");
  setTimeout(_pulseHistoryTab,800);
 }}
@@ -3158,25 +3716,7 @@ function joinEvGame(gameName){
 }
 
 // THEME TOGGLE 
-function toggleTheme(dark){
- pf.dk=dark;
- try{localStorage.setItem("pca_dark",dark?"1":"0");}catch(e){}
- var app=document.getElementById("mainApp");
- if(app){
-  if(dark){app.classList.remove("light");}
-  else{app.classList.add("light");}
- }
- // Sync auth screen theme
- var authEl=document.getElementById("authScreen");
- if(authEl){
-  if(dark){authEl.classList.remove("theme-light");}
-  else{authEl.classList.add("theme-light");}
- }
- var mt=document.querySelector("meta[name=theme-color]");
- if(mt)mt.setAttribute("content",dark?"#000000":"#f4f6fa");
- if(!D||!D.length){rgrd([]);}
- rpf();
-}
+// toggleTheme moved to enhanced version below
 
 // IN-APP NOTIFICATIONS 
 var NOTIFS=[];
@@ -4124,11 +4664,577 @@ function _pulseHistoryTab(){
  setTimeout(function(){nb.style.transform="scale(1)";nb.style.transition="";},500);
 }
 
+// ═══════════════════════════════════════
+// 1. SMOOTH DARK/LIGHT MODE TRANSITION
+// ═══════════════════════════════════════
+function toggleTheme(dark){
+ pf.dk=dark;
+ try{localStorage.setItem("pca_dark",dark?"1":"0");}catch(e){}
+ var app=document.getElementById("mainApp");
+ if(app){
+  // Add transition class
+  app.classList.add("theme-transitioning");
+  setTimeout(function(){
+   if(dark){app.classList.remove("light");}
+   else{app.classList.add("light");}
+   // Remove transition class after animation
+   setTimeout(function(){app.classList.remove("theme-transitioning");},400);
+  },10);
+ }
+ var authEl=document.getElementById("authScreen");
+ if(authEl){
+  if(dark){authEl.classList.remove("theme-light");}
+  else{authEl.classList.add("theme-light");}
+ }
+ var mt=document.querySelector("meta[name=theme-color]");
+ if(mt)mt.setAttribute("content",dark?"#17212B":"#F4F4F5");
+ if(!D||!D.length){rgrd([]);}
+ setTimeout(rpf,20);
+}
+
+// ═══════════════════════════════════════
+// 2. VIDEO BANNER SUPPORT
+// ═══════════════════════════════════════
+function _buildVideoBanner(cfg){
+ if(!cfg||!cfg.videoBanner)return null;
+ var wrap=document.createElement("div");
+ wrap.className="vid-banner-wrap";
+ var muted=true;
+ wrap.innerHTML=
+  '<video autoplay loop muted playsinline id="heroBannerVid" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>'+
+  '<div class="vid-banner-overlay"></div>'+
+  '<div class="vid-banner-badge"><span></span>LIVE</div>'+
+  '<div class="vid-mute-btn" id="vidMuteBtn" onclick="toggleVidMute()">'+
+   '<svg id="vidMuteIcon" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'+
+  '</div>';
+ var vid=wrap.querySelector("video");
+ vid.src=cfg.videoBanner;
+ vid.load();
+ return wrap;
+}
+
+function toggleVidMute(){
+ var vid=document.getElementById("heroBannerVid");
+ var icon=document.getElementById("vidMuteIcon");
+ if(!vid)return;
+ vid.muted=!vid.muted;
+ if(vid.muted){
+  icon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+ }else{
+  icon.innerHTML='<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>';
+ }
+}
+
+// Patch _revealLogoHero to support video banners
+var _origRevealLogoHero=_revealLogoHero;
+_revealLogoHero=function(cfg){
+ // Check for video banner first
+ if(cfg&&cfg.videoBanner){
+  var carousel=document.getElementById("heroCarousel");
+  if(carousel){
+   // Check if video already added
+   if(!document.getElementById("heroBannerVid")){
+    var heroSkel=document.getElementById("heroSkel");
+    var heroSlides=document.getElementById("heroSlides");
+    if(heroSkel)heroSkel.style.display="none";
+    if(heroSlides)heroSlides.style.display="none";
+    var vb=_buildVideoBanner(cfg);
+    if(vb)carousel.insertBefore(vb,carousel.firstChild);
+   }
+   // Still load logo/config
+   if(cfg.tgUsername!==undefined)window._storeTgUser=cfg.tgUsername;
+   var lmSkel=document.getElementById("logoMarkSkel");
+   var ltSkel=document.getElementById("logoTextSkel");
+   var lm=document.getElementById("logoMark");
+   var lt=document.getElementById("logoText");
+   var ls=document.getElementById("logoSub");
+   if(cfg.logoImg){if(lm){lm.innerHTML='<img src="'+cfg.logoImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';lm.style.display="flex";}}else{if(lm)lm.style.display="flex";}
+   if(lt)lt.style.display="inline";if(ls)ls.style.display="inline";
+   if(lmSkel)lmSkel.style.display="none";if(ltSkel)ltSkel.style.display="none";
+   return;
+  }
+ }
+ _origRevealLogoHero(cfg);
+};
+
+// ═══════════════════════════════════════
+// 3. KANBAN LIVE ORDER BOARD
+// ═══════════════════════════════════════
+function _timeAgo(tsStr){
+ if(!tsStr)return"";
+ var d=new Date(tsStr);var now=new Date();
+ var diff=Math.floor((now-d)/1000);
+ if(diff<60)return diff+"s ago";
+ if(diff<3600)return Math.floor(diff/60)+"m ago";
+ if(diff<86400)return Math.floor(diff/3600)+"h ago";
+ return Math.floor(diff/86400)+"d ago";
+}
+
+function _kanbanCard(h){
+ var gData=D.find(function(g){return g.n===h.g;});
+ var img=gData&&gData.img
+  ?'<img src="'+gData.img+'"/>'
+  :(h.gi||"🎮");
+ var isProcessing=h.s==="pending"&&h._ts&&(new Date()-new Date(h._ts))<300000; // <5min = "hot"
+ var liveTag=isProcessing?'<div class="kk-live-pulse"><span></span>Active</div>':'';
+ return'<div class="kk" onclick="otrk('+HL.indexOf(h)+')" title="'+h.id+'">'+
+  '<div class="kk-game">'+
+   '<div class="kk-gi">'+img+'</div>'+
+   '<div class="kk-gname">'+h.g+'</div>'+
+   '<div class="kk-time">'+_timeAgo(h._ts)+'</div>'+
+  '</div>'+
+  '<div class="kk-pkg">'+h.ci+' '+h.q+' '+h.cur+'</div>'+
+  '<div class="kk-footer">'+
+   '<div class="kk-price">'+h.am+'</div>'+
+   (liveTag||'<div class="kk-uid">'+h.id.substring(0,12)+'...</div>')+
+  '</div>'+
+ '</div>';
+}
+
+function rKanban(){
+ var cols={pending:[],processing:[],done:[],failed:[]};
+ HL.forEach(function(h){
+  var s=h.s;
+  if(s==="confirmed"||s==="success")cols.done.push(h);
+  else if(s==="failed")cols.failed.push(h);
+  else if(s==="pending"){
+   // Recent <10min = "processing", older = "pending"
+   var age=h._ts?(new Date()-new Date(h._ts)):999999999;
+   if(age<600000)cols.processing.push(h);
+   else cols.pending.push(h);
+  }
+ });
+ // Limit display: show latest 8 per column
+ Object.keys(cols).forEach(function(k){cols[k]=cols[k].slice(0,8);});
+
+ function renderCol(id,items){
+  var el=document.getElementById("kc-"+id);
+  var cntEl=document.getElementById("kc-cnt-"+id);
+  if(!el)return;
+  var emptyIcons={
+   pending:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>',
+   processing:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>',
+   done:'<polyline points="20 6 9 17 4 12"/>',
+   failed:'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
+  };
+  var emptyLabels={pending:"No pending",processing:"No active",done:"No completed",failed:"No failed"};
+  if(cntEl)cntEl.textContent=items.length;
+  if(!items.length){
+   el.innerHTML='<div class="kc-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">'+emptyIcons[id]+'</svg>'+emptyLabels[id]+'</div>';
+  }else{
+   el.innerHTML=items.map(_kanbanCard).join("");
+  }
+ }
+ renderCol("pending",cols.pending);
+ renderCol("processing",cols.processing);
+ renderCol("done",cols.done);
+ renderCol("failed",cols.failed);
+}
+
+// ═══════════════════════════════════════
+// PATCH: rhl() to also update Kanban
+// ═══════════════════════════════════════
+var _origRhl=rhl;
+rhl=function(){
+ _origRhl();
+ // Update kanban if history page is visible
+ var hisPg=document.getElementById("pg-his");
+ if(hisPg&&hisPg.classList.contains("on"))rKanban();
+};
+
+// Also patch go() to render kanban when navigating to history
+var _origGo=go;
+go=function(t){
+ _origGo(t);
+ if(t==="his")setTimeout(rKanban,50);
+};
+
 // Wire Google button
 ;(function(){
  var btn=document.getElementById("btnGoogleLogin");
  if(btn)btn.addEventListener("click",function(){doGoogle();});
 })();
+
+// ══════════════════════════════════════════════
+// NAV BUTTON RIPPLE EFFECT
+// ══════════════════════════════════════════════
+(function(){
+ function addRipple(e){
+  var btn=e.currentTarget;
+  var rect=btn.getBoundingClientRect();
+  var x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+  var y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+  var size=Math.max(rect.width,rect.height)*1.6;
+  var rpl=document.createElement("span");
+  rpl.className="nb-ripple";
+  rpl.style.cssText="width:"+size+"px;height:"+size+"px;left:"+(x-size/2)+"px;top:"+(y-size/2)+"px";
+  btn.appendChild(rpl);
+  rpl.addEventListener("animationend",function(){rpl.remove();});
+ }
+ document.querySelectorAll(".nb").forEach(function(btn){
+  btn.addEventListener("mousedown",addRipple);
+  btn.addEventListener("touchstart",addRipple,{passive:true});
+ });
+ window._attachNavRipple=function(){
+  document.querySelectorAll(".nb").forEach(function(btn){
+   if(btn._rippleAttached)return;
+   btn._rippleAttached=true;
+   btn.addEventListener("mousedown",addRipple);
+   btn.addEventListener("touchstart",addRipple,{passive:true});
+  });
+ };
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ① SCROLL-TO-TOP BUTTON
+// ════════════════════════════════════════════════════════════════
+function _scrollTop(){
+ var cnt=document.getElementById("cnt");
+ if(cnt)cnt.scrollTo({top:0,behavior:"smooth"});
+}
+(function(){
+ var cnt=document.getElementById("cnt");
+ var btn=document.getElementById("scrollTopBtn");
+ if(!cnt||!btn)return;
+ cnt.addEventListener("scroll",function(){
+  if(cnt.scrollTop>220){btn.classList.add("visible");}
+  else{btn.classList.remove("visible");}
+ },{passive:true});
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ② PULL-TO-REFRESH (Home page only)
+// ════════════════════════════════════════════════════════════════
+(function(){
+ var cnt=document.getElementById("cnt");
+ var ind=document.getElementById("pullIndicator");
+ if(!cnt||!ind)return;
+ var startY=0,pulling=false,threshold=72;
+ cnt.addEventListener("touchstart",function(e){
+  if(cnt.scrollTop===0&&document.getElementById("pg-home").classList.contains("on")){
+   startY=e.touches[0].clientY;pulling=true;
+  }
+ },{passive:true});
+ cnt.addEventListener("touchmove",function(e){
+  if(!pulling)return;
+  var dy=e.touches[0].clientY-startY;
+  if(dy<=0){ind.style.transform="translateX(-50%) translateY(-60px)";ind.classList.remove("pulling","ready");return;}
+  dy=Math.min(dy,threshold*1.4);
+  var pct=dy/threshold;
+  ind.style.transform="translateX(-50%) translateY("+Math.min(dy*.7,48)+"px)";
+  ind.classList.add("pulling");
+  if(pct>=1){ind.classList.add("ready");}else{ind.classList.remove("ready");}
+ },{passive:true});
+ cnt.addEventListener("touchend",function(){
+  if(!pulling)return;
+  var isReady=ind.classList.contains("ready");
+  pulling=false;
+  if(isReady){
+   ind.classList.add("refreshing");ind.classList.remove("ready");
+   // Trigger a data refresh (reload games)
+   if(typeof rgrd==="function"&&typeof D!=="undefined"){
+    setTimeout(function(){
+     ind.style.transform="translateX(-50%) translateY(-60px)";
+     ind.classList.remove("pulling","refreshing");
+     tst("Refreshed!","ok");
+    },1000);
+   }
+  }else{
+   ind.style.transform="translateX(-50%) translateY(-60px)";
+   ind.classList.remove("pulling","ready","refreshing");
+  }
+ });
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ③ NETWORK STATUS BANNER
+// ════════════════════════════════════════════════════════════════
+(function(){
+ var banner=document.getElementById("netBanner");
+ var icon=document.getElementById("netIcon");
+ var msg=document.getElementById("netMsg");
+ if(!banner)return;
+ var hideT=null;
+ function showNet(online){
+  banner.className="show "+(online?"online":"offline");
+  if(icon)icon.innerHTML=online
+   ?'<path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>'
+   :'<line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0119 12.55"/><path d="M5 12.55a10.94 10.94 0 015.17-2.39"/><path d="M10.71 5.05A16 16 0 0122.56 9"/><path d="M1.42 9a15.91 15.91 0 014.7-2.88"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>';
+  if(msg)msg.textContent=online?"Back online":"No internet connection";
+  clearTimeout(hideT);
+  if(online){hideT=setTimeout(function(){banner.classList.remove("show");},2500);}
+ }
+ window.addEventListener("offline",function(){showNet(false);});
+ window.addEventListener("online",function(){showNet(true);});
+ // Check on load
+ if(!navigator.onLine){setTimeout(function(){showNet(false);},1500);}
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ④ PAGE PROGRESS BAR on navigation
+// ════════════════════════════════════════════════════════════════
+(function(){
+ var bar=document.getElementById("pageProgress");
+ if(!bar)return;
+ var _origGo=window.go;
+ window.go=function(t){
+  bar.style.width="0%";bar.classList.add("active");
+  var w=0;
+  var iv=setInterval(function(){
+   w+=Math.random()*28+8;if(w>88)w=88;
+   bar.style.width=w+"%";
+  },80);
+  setTimeout(function(){
+   clearInterval(iv);
+   bar.style.width="100%";
+   setTimeout(function(){bar.classList.remove("active");bar.style.width="0%";},320);
+  },280);
+  _origGo(t);
+ };
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ⑤ GAME CARD PRESS FLASH
+// ════════════════════════════════════════════════════════════════
+document.addEventListener("touchstart",function(e){
+ var gc=e.target.closest(".gc");
+ if(gc){
+  gc.classList.remove("press-flash");
+  void gc.offsetWidth;
+  gc.classList.add("press-flash");
+  gc.addEventListener("animationend",function(){gc.classList.remove("press-flash");},{once:true});
+  // Haptic
+  if(navigator.vibrate){navigator.vibrate(8);}
+ }
+},{passive:true});
+
+// ════════════════════════════════════════════════════════════════
+// ⑥ SWIPE LEFT/RIGHT to navigate pages
+// ════════════════════════════════════════════════════════════════
+(function(){
+ var _pgNav=["home","his","inbox","ev","ldb","pf"];
+ var sx=0,sy=0,swipeActive=false;
+ var edge=document.getElementById("swipeEdge");
+ document.addEventListener("touchstart",function(e){
+  if(e.touches.length!==1)return;
+  sx=e.touches[0].clientX;sy=e.touches[0].clientY;
+  swipeActive=true;
+  if(edge&&sx<20)edge.classList.add("active");
+ },{passive:true});
+ document.addEventListener("touchmove",function(e){
+  if(!swipeActive)return;
+  var dx=e.touches[0].clientX-sx;
+  var dy=e.touches[0].clientY-sy;
+  if(Math.abs(dy)>Math.abs(dx)+10){swipeActive=false;return;}
+ },{passive:true});
+ document.addEventListener("touchend",function(e){
+  if(edge)edge.classList.remove("active");
+  if(!swipeActive)return;
+  swipeActive=false;
+  var dx=e.changedTouches[0].clientX-sx;
+  var dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dy)>60)return;
+  // Only swipe from edge (first 32px)
+  if(sx>32&&dx>0)return;
+  var cur=document.querySelector(".pg.on");
+  if(!cur)return;
+  var curId=cur.id.replace("pg-","");
+  var idx=_pgNav.indexOf(curId);
+  if(idx<0)return;
+  if(dx<-60&&idx<_pgNav.length-1){if(typeof go==="function")go(_pgNav[idx+1]);}
+  if(dx>60&&idx>0){if(typeof go==="function")go(_pgNav[idx-1]);}
+ });
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ⑦ BADGE POP RE-TRIGGER on update
+// ════════════════════════════════════════════════════════════════
+var _origUpdateBell=window.updateBell;
+window.updateBell=function(){
+ if(_origUpdateBell)_origUpdateBell();
+ var b=document.getElementById("notifBadge");
+ var n=document.getElementById("navInboxBadge");
+ [b,n].forEach(function(el){
+  if(el&&el.style.display!=="none"){
+   el.style.animation="none";void el.offsetWidth;
+   el.style.animation="badgePop .35s cubic-bezier(.34,1.3,.64,1) forwards";
+  }
+ });
+};
+
+// ════════════════════════════════════════════════════════════════
+// ⑧ ANIMATED NUMBER COUNTER
+// ════════════════════════════════════════════════════════════════
+function animateCount(el,target,duration){
+ if(!el)return;
+ var start=0,startTime=null;
+ var isMMK=String(target).indexOf("MMK")>=0;
+ var num=parseInt(String(target).replace(/[^0-9]/g,""))||0;
+ function step(ts){
+  if(!startTime)startTime=ts;
+  var progress=Math.min((ts-startTime)/duration,1);
+  var ease=1-Math.pow(1-progress,3);
+  var cur=Math.floor(ease*num);
+  el.textContent=isMMK?cur.toLocaleString("en-US")+" MMK":cur.toLocaleString("en-US");
+  if(progress<1)requestAnimationFrame(step);
+  else el.textContent=isMMK?num.toLocaleString("en-US")+" MMK":num.toLocaleString("en-US");
+ }
+ requestAnimationFrame(step);
+}
+window.animateCount=animateCount;
+
+// ════════════════════════════════════════════════════════════════
+// ⑨ STAGGER GRID ENTRY ANIMATION
+// ════════════════════════════════════════════════════════════════
+var _origRgrd=window.rgrd;
+window.rgrd=function(l){
+ _origRgrd(l);
+ var cards=document.querySelectorAll(".gc");
+ cards.forEach(function(c,i){
+  c.classList.add("stagger");
+  c.style.animationDelay=(i*38)+"ms";
+  c.addEventListener("animationend",function(){c.style.animationDelay="";c.classList.remove("stagger");},{once:true});
+ });
+};
+
+// ════════════════════════════════════════════════════════════════
+// ⑩ SMOOTH IMAGE REVEAL
+// ════════════════════════════════════════════════════════════════
+(function(){
+ function revealImgs(){
+  document.querySelectorAll("img:not(.img-reveal)").forEach(function(img){
+   if(img.dataset.noReveal)return;
+   img.classList.add("img-reveal");
+   if(img.complete&&img.naturalWidth){img.classList.add("loaded");}
+   else{img.addEventListener("load",function(){img.classList.add("loaded");});}
+  });
+ }
+ // Run after each page load
+ var _origGo2=window.go;
+ // Already patched by progress bar — run after
+ var _origGo3=window.go;
+ window.go=function(t){_origGo3(t);setTimeout(revealImgs,100);};
+ revealImgs();
+})();
+
+// ════════════════════════════════════════════════════════════════
+// ⑪ SECTION LABEL REVEAL on page change
+// ════════════════════════════════════════════════════════════════
+var _origGo4=window.go;
+window.go=function(t){
+ _origGo4(t);
+ setTimeout(function(){
+  var pg=document.getElementById("pg-"+t);
+  if(!pg)return;
+  pg.querySelectorAll(".lb").forEach(function(el,i){
+   el.classList.remove("reveal-anim");
+   void el.offsetWidth;
+   el.style.animationDelay=(i*60)+"ms";
+   el.classList.add("reveal-anim");
+   el.addEventListener("animationend",function(){el.style.animationDelay="";el.classList.remove("reveal-anim");},{once:true});
+  });
+ },50);
+};
+
+// ════════════════════════════════════════════════════════════════
+// ⑫ HAPTIC FEEDBACK on nav / package / payment selection
+// ════════════════════════════════════════════════════════════════
+function _haptic(ms){try{if(navigator.vibrate)navigator.vibrate(ms||6);}catch(e){}}
+// Patch ppk and ppy for haptic
+var _origPpk=window.ppk;
+window.ppk=function(i){_haptic(10);_origPpk(i);};
+var _origPpy=window.ppy;
+window.ppy=function(i){_haptic(10);_origPpy(i);};
+
+// ════════════════════════════════════════════════════════════════
+// ⑬ CONFETTI ON ORDER SUCCESS
+// ════════════════════════════════════════════════════════════════
+function _launchConfetti(){
+ var sov=document.querySelector(".su-c");
+ if(!sov)return;
+ var cv=document.createElement("canvas");
+ cv.className="confetti-canvas";
+ sov.insertBefore(cv,sov.firstChild);
+ var W=sov.offsetWidth||320,H=sov.offsetHeight||520;
+ cv.width=W;cv.height=H;
+ var ctx=cv.getContext("2d");
+ var colors=["#2AABEE","#FFD060","#4DDB6B","#FF5A5A","#FF9500","#34C5FF"];
+ var pieces=Array.from({length:52},function(){return{
+  x:Math.random()*W,y:-10,
+  r:Math.random()*4+2,
+  c:colors[Math.floor(Math.random()*colors.length)],
+  vx:(Math.random()-0.5)*3,vy:Math.random()*4+2,
+  rot:Math.random()*360,vr:(Math.random()-0.5)*8,
+  shape:Math.random()>.5?"circle":"rect"
+ };});
+ var frame=0,maxFrame=90;
+ function draw(){
+  ctx.clearRect(0,0,W,H);
+  pieces.forEach(function(p){
+   p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.vy+=.12;
+   if(p.y>H+20)return;
+   ctx.save();ctx.globalAlpha=Math.max(0,1-(frame/maxFrame)*.6);
+   ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+   ctx.fillStyle=p.c;
+   if(p.shape==="circle"){ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}
+   else{ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);}
+   ctx.restore();
+  });
+  frame++;
+  if(frame<maxFrame)requestAnimationFrame(draw);
+  else cv.remove();
+ }
+ draw();
+}
+// Patch cm to trigger confetti
+var _origCm=window.cm;
+window.cm=function(ok){
+ _origCm(ok);
+ if(ok){setTimeout(_launchConfetti,300);_haptic([20,60,20]);}
+};
+
+// ════════════════════════════════════════════════════════════════
+// ⑭ AUTO FLOATING LABEL for UID / SID inputs
+// ════════════════════════════════════════════════════════════════
+function _wrapFloatingLabels(){
+ var icard=document.querySelector(".icard");
+ if(!icard||icard.dataset.flWrapped)return;
+ icard.dataset.flWrapped="1";
+ icard.querySelectorAll(".ic").forEach(function(ic){
+  var lbl=ic.querySelector("label");
+  var inp=ic.querySelector("input");
+  if(!lbl||!inp||inp.parentElement.classList.contains("fl-wrap"))return;
+  var wrap=document.createElement("div");
+  wrap.className="fl-wrap";
+  inp.parentNode.insertBefore(wrap,inp);
+  wrap.appendChild(inp);
+  inp.placeholder=" ";
+  // Move label inside wrap
+  var newLbl=document.createElement("span");
+  newLbl.className="fl-label";
+  newLbl.textContent=lbl.textContent.trim().replace(/^\s*[\u2800-\uFFFF]/,"").trim();
+  wrap.appendChild(newLbl);
+ });
+}
+// Run after game detail opens
+var _origOg=window.og;
+window.og=function(id){_origOg(id);setTimeout(_wrapFloatingLabels,60);};
+
+// ════════════════════════════════════════════════════════════════
+// ⑮ COUNTER ANIMATION on History page totals
+// ════════════════════════════════════════════════════════════════
+var _origRht=window.rht;
+window.rht=function(){
+ _origRht();
+ // Animate order count badge
+ setTimeout(function(){
+  var hcnt=document.getElementById("hcnt");
+  if(hcnt){
+   var n=parseInt(hcnt.textContent)||0;
+   if(n>0)animateCount(hcnt,n+" transaction"+(n!==1?"s":""),600);
+  }
+ },80);
+};
 
 </script>
 </body>
