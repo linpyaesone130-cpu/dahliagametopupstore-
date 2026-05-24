@@ -487,6 +487,133 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-font-s
 .itab.on .itab-c{background:var(--ac);color:#fff;}
 .itab.sk{border:1px solid var(--bd);pointer-events:none;}
 
+/* ═══════════════════════════════════════
+   SMOOTH PAGE TRANSITIONS
+═══════════════════════════════════════ */
+.pg{display:none;}.pg.on{display:block;}
+.pg.slide-in-right{animation:slideInRight .32s cubic-bezier(.25,.46,.45,.94) both;}
+.pg.slide-in-left{animation:slideInLeft .32s cubic-bezier(.25,.46,.45,.94) both;}
+.pg.slide-out-right{animation:slideOutRight .28s cubic-bezier(.55,.06,.68,.19) both;}
+.pg.slide-out-left{animation:slideOutLeft .28s cubic-bezier(.55,.06,.68,.19) both;}
+.pg.fade-up{animation:fadeUp .3s cubic-bezier(.25,.46,.45,.94) both;}
+@keyframes slideInRight{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-48px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(48px)}}
+@keyframes slideOutLeft{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-48px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV transition indicator */
+.nav-transition-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:0%;max-width:430px;height:2px;background:var(--ac);z-index:70;transition:width .2s ease,opacity .2s;opacity:0;}
+.nav-transition-bar.active{width:100%;opacity:1;}
+
+/* ═══════════════════════════════════════
+   GLASSMORPHISM PAYMENT CARDS
+═══════════════════════════════════════ */
+.py-g-glass{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.py-glass{
+ position:relative;display:flex;flex-direction:column;align-items:center;
+ justify-content:center;gap:8px;padding:16px 6px;border-radius:18px;
+ border:1px solid rgba(255,255,255,.08);
+ background:rgba(255,255,255,.04);
+ backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+ cursor:pointer;transition:all .25s cubic-bezier(.25,.46,.45,.94);
+ overflow:hidden;
+}
+.py-glass::before{
+ content:'';position:absolute;inset:0;border-radius:inherit;
+ background:radial-gradient(ellipse at 50% 0%,rgba(255,140,0,.12),transparent 70%);
+ opacity:0;transition:.25s;
+}
+.py-glass:hover::before,.py-glass.on::before{opacity:1;}
+.py-glass::after{
+ content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+ background:conic-gradient(from 180deg at 50% 50%,transparent 0deg,rgba(255,140,0,.04) 60deg,transparent 120deg);
+ animation:glassRotate 8s linear infinite;opacity:0;transition:.25s;
+}
+.py-glass:hover::after,.py-glass.on::after{opacity:1;}
+@keyframes glassRotate{to{transform:rotate(360deg);}}
+.py-glass:active{transform:scale(.93);}
+.py-glass.on{
+ border-color:rgba(255,140,0,.4);
+ background:rgba(255,140,0,.08);
+ box-shadow:0 0 0 2px rgba(255,140,0,.15),0 8px 32px rgba(255,140,0,.12),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.py-glass .py-i{width:44px;height:44px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;position:relative;z-index:1;}
+.py-glass .py-n{font-size:11px;font-weight:800;color:var(--tx2);text-transform:uppercase;letter-spacing:.3px;position:relative;z-index:1;transition:.2s;}
+.py-glass.on .py-n{color:var(--ac2);}
+.py-glass .py-ck{position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);transition:all .2s;z-index:1;}
+.py-glass.on .py-ck{background:var(--ac);border-color:var(--ac);box-shadow:0 0 8px rgba(255,140,0,.5);}
+.py-glass.on .py-ck::after{content:'';width:5px;height:3px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg);display:block;margin:4px 0 0 3.5px;}
+/* Glow stripe behind card */
+.py-glass .py-glow{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:60%;height:12px;border-radius:50%;background:var(--ac);filter:blur(10px);opacity:0;transition:.25s;z-index:0;}
+.py-glass.on .py-glow{opacity:.4;}
+.app.light .py-glass{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.06);}
+.app.light .py-glass::before{background:radial-gradient(ellipse at 50% 0%,rgba(37,99,235,.08),transparent 70%);}
+.app.light .py-glass.on{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.3);}
+.app.light .py-glass.on .py-n{color:var(--ac);}
+
+/* ═══════════════════════════════════════
+   GAME CARD PARALLAX
+═══════════════════════════════════════ */
+.gc{perspective:600px;transform-style:preserve-3d;}
+.gc-inner{width:100%;transform-style:preserve-3d;transition:transform .12s ease;border-radius:inherit;}
+.gc-inner .gi{transform:translateZ(6px);border-radius:inherit;}
+.gc-inner .gn{transform:translateZ(2px);}
+.gc:hover .gc-inner{transform:rotateY(var(--rotY,0deg)) rotateX(var(--rotX,0deg));}
+.gc-shine{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.15),transparent 65%);opacity:0;transition:opacity .2s;z-index:2;}
+.gc:hover .gc-shine{opacity:1;}
+
+/* ═══════════════════════════════════════
+   LEADERBOARD
+═══════════════════════════════════════ */
+.lb-pg{padding-bottom:16px;}
+.lb-podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:24px;padding:0 8px;}
+.lb-pod{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;max-width:110px;}
+.lb-pod .pod-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;position:relative;flex-shrink:0;}
+.lb-pod.first .pod-av{width:64px;height:64px;font-size:26px;background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 4px 20px rgba(255,215,0,.4);}
+.lb-pod.second .pod-av{background:linear-gradient(135deg,#C0C0C0,#a0a0a0);box-shadow:0 4px 14px rgba(192,192,192,.3);}
+.lb-pod.third .pod-av{background:linear-gradient(135deg,#CD7F32,#a0622a);box-shadow:0 4px 14px rgba(205,127,50,.3);}
+.lb-pod .pod-crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:18px;}
+.lb-pod .pod-nm{font-size:11px;font-weight:800;color:var(--tx);text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lb-pod .pod-am{font-size:10px;font-weight:700;color:var(--ac2);font-family:var(--mono);}
+.lb-pod .pod-base{width:100%;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:rgba(255,255,255,.6);}
+.lb-pod.first .pod-base{height:72px;background:linear-gradient(180deg,rgba(255,215,0,.2),rgba(255,215,0,.06));border:1px solid rgba(255,215,0,.2);}
+.lb-pod.second .pod-base{height:52px;background:linear-gradient(180deg,rgba(192,192,192,.15),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.15);}
+.lb-pod.third .pod-base{height:40px;background:linear-gradient(180deg,rgba(205,127,50,.15),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.15);}
+.lb-list{display:flex;flex-direction:column;gap:8px;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--sf);border:1px solid var(--bd);transition:all .2s;}
+.lb-row:hover{border-color:var(--bd2);transform:translateX(2px);}
+.lb-rank{width:24px;text-align:center;font-size:13px;font-weight:900;color:var(--tx3);font-family:var(--mono);flex-shrink:0;}
+.lb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;}
+.lb-info{flex:1;min-width:0;}
+.lb-nm{font-size:13px;font-weight:800;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-sub{font-size:10px;color:var(--tx3);margin-top:1px;}
+.lb-amt{font-size:12px;font-weight:800;color:var(--ac2);font-family:var(--mono);text-align:right;flex-shrink:0;}
+.lb-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
+.lb-badge.gold{background:rgba(255,215,0,.12);color:#FFD700;}
+.lb-badge.silver{background:rgba(192,192,192,.1);color:#a0a0a0;}
+.lb-badge.bronze{background:rgba(205,127,50,.1);color:#CD7F32;}
+.lb-badge.regular{background:var(--acg2);color:var(--ac2);}
+.lb-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.lb-tab{padding:7px 16px;border-radius:20px;font-size:11px;font-weight:700;border:1.5px solid var(--bd);background:var(--sf);color:var(--tx3);cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .2s;}
+.lb-tab.on{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 4px 14px rgba(255,140,0,.2);}
+.lb-empty{text-align:center;padding:40px 0;color:var(--tx3);font-size:13px;}
+.lb-loading{text-align:center;padding:30px 0;}
+.lb-loading .lb-spin{width:28px;height:28px;border:2.5px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+/* My rank highlight */
+.lb-row.me{background:var(--acg);border-color:rgba(255,140,0,.25);}
+.lb-row.me .lb-nm{color:var(--ac2);}
+/* Header row */
+.lb-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.lb-hdr-title{font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px;}
+.lb-hdr-title svg{width:18px;height:18px;stroke:var(--ac2);fill:none;}
+.lb-my-rank{padding:10px 14px;background:var(--acg);border:1px solid rgba(255,140,0,.2);border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.lb-my-rank .lmr-l{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;}
+.lb-my-rank .lmr-v{font-size:20px;font-weight:900;color:var(--ac2);font-family:var(--mono);}
+.lb-refresh{width:28px;height:28px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.lb-refresh:active{transform:rotate(180deg);}
+.lb-refresh svg{width:14px;height:14px;stroke:var(--tx2);fill:none;}
+
 /* DARK MODE EXPLICIT OVERRIDES (when .light class is absent) */
 .app:not(.light){--bg:#000000;--bg2:#0a0a0a;--sf:#111111;--sf2:#181818;--sf3:#202020;--bd:#2a2a2a;--bd2:#333333;--bd3:#3d3d3d;--tx:#f0f0f0;--tx2:#999999;--tx3:#555555;--ac:#FF8C00;--ac2:#FFA533;--ac3:#FFB84D;--acg:rgba(255,140,0,.13);--acg2:rgba(255,140,0,.06);--gn:#22c55e;--gng:rgba(34,197,94,.12);--yw:#f59e0b;--ywg:rgba(245,158,11,.1);--rd:#ef4444;--rdg:rgba(239,68,68,.1);}
 .app:not(.light){background:var(--bg);color:var(--tx);}
@@ -998,6 +1125,22 @@ if(dk!=="1"){document.documentElement.classList.add("theme-light");}
  <div class="lb" style="font-size:17px;margin-bottom:14px"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Giveaways</div>
  <div id="gvList"></div>
  </div>
+ <!-- LEADERBOARD -->
+ <div class="pg" id="pg-ldb">
+ <div class="lb-hdr">
+ <div class="lb-hdr-title">
+ <svg viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
+ Top Buyers
+ </div>
+ <button class="lb-refresh" onclick="rLdb(true)" title="Refresh">
+ <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+ </button>
+ </div>
+ <div class="lb-tabs" id="ldbTabs"></div>
+ <div id="ldbMyRank"></div>
+ <div id="ldbPodium"></div>
+ <div id="ldbList"></div>
+ </div>
  <!-- PROFILE -->
  <div class="pg" id="pg-pf"></div>
  </div>
@@ -1008,11 +1151,13 @@ if(dk!=="1"){document.documentElement.classList.add("theme-light");}
  <button class="nb" data-t="his" onclick="go('his')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="nl">History</span></button>
  <button class="nb" data-t="pro" onclick="go('pro')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nl">Account</span></button>
  <button class="nb" data-t="ev" onclick="go('ev')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="nl">Events</span></button>
+ <button class="nb" data-t="ldb" onclick="go('ldb')"><svg viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg><span class="nl">Ranks</span></button>
  <button class="nb" data-t="pf" onclick="go('pf')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg><span class="nl">Profile</span></button>
  </div>
 
  
  <div class="toast" id="tst"></div>
+ <div class="nav-transition-bar" id="navBar"></div>
  <div class="ov" id="cmod"><div class="sh"><div class="m-h"></div><div class="m-t">Confirm Order</div><div class="m-d" id="md"></div><div class="m-a"><button class="m-c" onclick="cm(0)">Cancel</button><button class="m-ok" onclick="cm(1)">Confirm Pay</button></div></div></div>
  <div class="su" id="sov"><div class="su-c" style="max-width:340px;padding:24px 20px;text-align:left">
  <div style="text-align:center;margin-bottom:16px"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(255,140,0,.1));margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:#10b981;stroke-width:1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="su-t" style="font-size:18px">Order Placed!</div></div>
@@ -1381,23 +1526,50 @@ var _homeScrollY=0;
 function _saveHomeScroll(){_homeScrollY=document.getElementById("cnt").scrollTop;}
 function _restoreHomeScroll(){setTimeout(function(){document.getElementById("cnt").scrollTop=_homeScrollY;},0);}
 
+// PAGE ORDER for direction detection
+var _pgOrder=["home","det","his","pro","ev","ldb","pf","faq","gv","inbox"];
+var _prevPgId="home";
+
 function go(t){
  // Save scroll if leaving home
  var prevPg=document.querySelector(".pg.on");
  if(prevPg&&prevPg.id==="pg-home")_saveHomeScroll();
+
+ var prevId=prevPg?prevPg.id.replace("pg-",""):"home";
+ var prevIdx=_pgOrder.indexOf(prevId);
+ var nextIdx=_pgOrder.indexOf(t);
+ var dir=nextIdx>=prevIdx?1:-1; // 1=right, -1=left
+
  sg=null;sp=null;ss=null;sy=null;ck=false;rc=false;
- document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on")});
+
+ // Nav bar flash
+ var bar=document.getElementById("navBar");
+ if(bar){bar.classList.add("active");setTimeout(function(){bar.classList.remove("active");},300);}
+
+ // Remove all classes
+ document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on","slide-in-right","slide-in-left","fade-up");});
  document.querySelectorAll(".nb").forEach(function(n){n.classList.remove("on")});
- var pg=document.getElementById("pg-"+t);if(pg)pg.classList.add("on");
+
+ var pg=document.getElementById("pg-"+t);
+ if(pg){
+ pg.classList.add("on");
+ // Apply animation class
+ if(t==="det"||t==="his"||t==="pf"){pg.classList.add("fade-up");}
+ else if(dir>0){pg.classList.add("slide-in-right");}
+ else{pg.classList.add("slide-in-left");}
+ }
  var nb=document.querySelector('.nb[data-t="'+t+'"]');if(nb)nb.classList.add("on");
+
  if(t==="home"){document.getElementById("cnt").scrollTop=0;_homeScrollY=0;rpt();fltG();}
  else{document.getElementById("cnt").scrollTop=0;}
  if(t==="pf")rpf();
  if(t==="ev")rEvPage();
  if(t==="gv")rGv();if(t==="faq")rFaq();
  if(t==="his"){rht();rhl();}
+ if(t==="ldb")rLdb(false);
  if(t==="pro"){document.getElementById("acList").style.display="block";document.getElementById("acDetail").style.display="none";rpr();}
  if(t==="inbox"){renderInboxPage();}
+ _prevPgId=t;
 }
 function shw(p){
  // Save home scroll before leaving
@@ -1467,9 +1639,11 @@ function rgrd(l){
  ?'<img src="'+g.img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;max-width:none"/>'
  :'';
  var bgStyle=g.img?'background:#1a1a1a':'background:'+g.c;
- return'<div class="gc" onclick="og('+g.id+')">'
- +'<div class="gi" style="'+bgStyle+'">'+inner+'</div>'
+ return'<div class="gc" onclick="og('+g.id+')" onmousemove="_gcTilt(event,this)" onmouseleave="_gcReset(this)">'
+ +'<div class="gc-inner">'
+ +'<div class="gi" style="'+bgStyle+'">'+inner+'<div class="gc-shine"></div></div>'
  +'<span class="gn">'+g.n+'</span>'
+ +'</div>'
  +'</div>';
  }).join("");
 }
@@ -1499,7 +1673,7 @@ function og(id){
  var showSid=sg.showSid===true||sg.showSid==="true";
  h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
  h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
- h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g">'+PY.map(function(p,i){return'<div class="py" onclick="ppy('+i+')"><div class="py-ck"></div><div class="py-i" style="background:'+p.col+';overflow:hidden;border-radius:10px">'+(p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/>':p.ic)+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
+ h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g-glass">'+PY.map(function(p,i){return'<div class="py-glass" onclick="ppy('+i+')"><div class="py-glow"></div><div class="py-ck"></div><div class="py-i" style="background:'+p.col+';overflow:hidden;border-radius:10px">'+(p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/>':p.ic)+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
  h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
  h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
  document.getElementById("pg-det").innerHTML=h;shw("det");usum();
@@ -1523,7 +1697,7 @@ function ppk(i){sp=i;sy=null;ck=false;if(selRegion!==null&&sg.regions&&sg.region
  usum();ubtn();
 }
 function ppy(i){sy=i;ck=false;rc=false;
- document.querySelectorAll(".py").forEach(function(e,x){e.classList.toggle("on",x===i)});
+ document.querySelectorAll(".py-glass").forEach(function(e,x){e.classList.toggle("on",x===i)});
  var pm=PY[i],cp=pm.ph.replace(/-/g,"");
  document.getElementById("trS").style.display="block";
  document.getElementById("trS").innerHTML='<div class="tr-c"><div class="tr-h"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Transfer to '+pm.n+'</div><div class="tr-r"><span class="tl">Name</span><span class="tv">'+pm.hd+'</span></div><div class="tr-ph" onclick="cph(\''+cp+'\')"><span class="tpn">'+pm.ph+'</span><span class="tpc"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</span></div><div class="qr-wrap"><div class="qr-box">'+(pm.qr?'<img src="'+pm.qr+'" alt="QR"/>':'<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(pm.k+"://pay?phone="+cp+"&amount="+sg.pr[sp].p+"&name="+pm.hd)+'" alt="QR"/>')+'</div><div class="qr-hint">Scan QR to pay '+mmk(sg.pr[sp].p)+' via '+pm.n+'</div></div><div class="tr-r"><span class="tl">Amount</span><span class="tv" style="color:var(--ac2);font-size:15px;font-family:var(--mono)">'+mmk(sg.pr[sp].p)+'</span></div><div class="tr-nt">Tap phone number to copy or scan QR. Transfer exact amount, then confirm below.</div></div>';
@@ -3223,8 +3397,223 @@ function _revealLogoHero(cfg){
 }
 
 
-// Wire Google button
-;(function(){
+// ═══════════════════════════════════════
+// PARALLAX TILT FOR GAME CARDS
+// ═══════════════════════════════════════
+function _gcTilt(e,card){
+ var r=card.getBoundingClientRect();
+ var mx=e.clientX-r.left;
+ var my=e.clientY-r.top;
+ var cx=r.width/2,cy=r.height/2;
+ var rotY=((mx-cx)/cx)*6; // max 6deg
+ var rotX=-((my-cy)/cy)*4; // max 4deg
+ card.style.setProperty("--rotY",rotY+"deg");
+ card.style.setProperty("--rotX",rotX+"deg");
+ // Shine position
+ var shine=card.querySelector(".gc-shine");
+ if(shine){
+ shine.style.setProperty("--mx",(mx/r.width*100)+"%");
+ shine.style.setProperty("--my",(my/r.height*100)+"%");
+ }
+}
+function _gcReset(card){
+ card.style.setProperty("--rotY","0deg");
+ card.style.setProperty("--rotX","0deg");
+}
+
+// ═══════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════
+var _ldbFilter="weekly";
+var _ldbData=null;
+var _ldbLoading=false;
+
+function rLdb(forceRefresh){
+ var tabsEl=document.getElementById("ldbTabs");
+ if(tabsEl){
+ tabsEl.innerHTML=[
+ {k:"weekly",l:"This Week"},
+ {k:"monthly",l:"This Month"},
+ {k:"alltime",l:"All Time"}
+ ].map(function(t){
+ return'<button class="lb-tab'+(_ldbFilter===t.k?" on":"")+'" onclick="ldbSetFilter(\''+t.k+'\')">'+t.l+'</button>';
+ }).join("");
+ }
+
+ if(forceRefresh)_ldbData=null;
+ if(_ldbData){_renderLdb(_ldbData);return;}
+
+ // Show loading
+ document.getElementById("ldbList").innerHTML='<div class="lb-loading"><div class="lb-spin"></div></div>';
+ document.getElementById("ldbPodium").innerHTML="";
+ document.getElementById("ldbMyRank").innerHTML="";
+
+ if(!fbReady||!db){
+ // Fallback: generate mock leaderboard
+ _ldbData=_genMockLdb();
+ _renderLdb(_ldbData);
+ return;
+ }
+
+ // Try Firebase orders collection
+ var now=new Date();
+ var cutoff=new Date();
+ if(_ldbFilter==="weekly")cutoff.setDate(now.getDate()-7);
+ else if(_ldbFilter==="monthly")cutoff.setMonth(now.getMonth()-1);
+ else cutoff=new Date(0);
+
+ db.collection("orders")
+ .where("status","==","confirmed")
+ .orderBy("timestamp","desc")
+ .limit(200)
+ .get()
+ .then(function(snap){
+ var tally={};
+ snap.forEach(function(doc){
+ var d=doc.data();
+ var ts=d.timestamp?new Date(d.timestamp):new Date(0);
+ if(ts<cutoff)return;
+ var email=d.authUser||d.authName||"Guest";
+ var name=d.authName||email.split("@")[0]||"Player";
+ var price=d.price||0;
+ if(!tally[email]){tally[email]={name:name,email:email,total:0,count:0};}
+ tally[email].total+=price;
+ tally[email].count++;
+ });
+ var arr=Object.values(tally).sort(function(a,b){return b.total-a.total;}).slice(0,20);
+ if(arr.length<3){arr=arr.concat(_genMockLdb().slice(arr.length,10));}
+ _ldbData=arr;
+ _renderLdb(arr);
+ }).catch(function(){
+ _ldbData=_genMockLdb();
+ _renderLdb(_ldbData);
+ });
+}
+
+function ldbSetFilter(f){
+ _ldbFilter=f;
+ _ldbData=null;
+ rLdb(false);
+ // Update tabs
+ document.querySelectorAll(".lb-tab").forEach(function(t){
+ t.classList.toggle("on",t.textContent.trim()===(f==="weekly"?"This Week":f==="monthly"?"This Month":"All Time"));
+ });
+}
+
+function _genMockLdb(){
+ var names=["ShadowKing","DragonX","NightHawk","PhoenixMM","CyberWolf","IronBlade","StarFire","LightBringer","ThunderBolt","MoonRider","StormChaser","NexusRay","AceHunter","FlameKnight","FrostGiant","VoidWalker","NovaPulse","ApexLord","EliteSniper","ProGamer"];
+ return names.map(function(n,i){
+ var hash=n.charCodeAt(0)*13+n.length*7+i*31;
+ return{name:n,email:n.toLowerCase()+"@player.com",total:(20000+Math.abs(hash%480000)),count:1+Math.abs(hash%50)};
+ }).sort(function(a,b){return b.total-a.total;});
+}
+
+function _renderLdb(data){
+ if(!data||!data.length){
+ document.getElementById("ldbList").innerHTML='<div class="lb-empty">No data yet. Be the first top buyer!</div>';
+ document.getElementById("ldbPodium").innerHTML="";
+ document.getElementById("ldbMyRank").innerHTML="";
+ return;
+ }
+
+ // My rank
+ var myEmail=curUser?curUser.email:"";
+ var myRank=myEmail?data.findIndex(function(d){return d.email===myEmail;})+1:0;
+ var myRankEl=document.getElementById("ldbMyRank");
+ if(myRankEl){
+ if(myRank>0){
+ myRankEl.innerHTML='<div class="lb-my-rank"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--ac2);fill:none;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg><div><div class="lmr-l">Your Rank</div><div class="lmr-v">#'+myRank+'</div></div><div style="margin-left:auto;text-align:right"><div class="lmr-l">Total Spent</div><div class="lmr-v" style="font-size:14px">'+mmk(data[myRank-1].total)+'</div></div></div>';
+ }else if(myEmail){
+ myRankEl.innerHTML='<div class="lb-my-rank" style="background:var(--sf2)"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--tx3);fill:none;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg><div style="color:var(--tx3);font-size:12px">Order more to appear on leaderboard!</div></div>';
+ }else{
+ myRankEl.innerHTML="";
+ }
+ }
+
+ // Podium (top 3)
+ var top3=data.slice(0,3);
+ var podOrder=[1,0,2]; // 2nd, 1st, 3rd display order
+ var podiumEl=document.getElementById("ldbPodium");
+ if(podiumEl&&top3.length>=3){
+ var podHtml='<div class="lb-podium">';
+ podOrder.forEach(function(idx){
+ var p=top3[idx];if(!p)return;
+ var rank=idx+1;
+ var cls=rank===1?"first":rank===2?"second":"third";
+ var crown=rank===1?'<div class="pod-crown">👑</div>':"";
+ var medal=rank===1?"🥇":rank===2?"🥈":"🥉";
+ var initials=p.name.substring(0,2).toUpperCase();
+ var isMe=myEmail&&p.email===myEmail;
+ podHtml+='<div class="lb-pod '+cls+'">';
+ podHtml+='<div class="pod-av">'+(isMe?'<svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6"/></svg>':initials)+crown+'</div>';
+ podHtml+='<div class="pod-nm">'+(isMe?"You":p.name)+'</div>';
+ podHtml+='<div class="pod-am">'+mmk(p.total)+'</div>';
+ podHtml+='<div class="pod-base">'+medal+'</div>';
+ podHtml+='</div>';
+ });
+ podHtml+='</div>';
+ podiumEl.innerHTML=podHtml;
+ }
+
+ // List (rank 4+)
+ var rest=data.slice(3);
+ var badgeMap={3:"gold",4:"silver",5:"bronze"};
+ var listHtml='<div class="lb-list">';
+ rest.forEach(function(p,i){
+ var rank=i+4;
+ var isMe=myEmail&&p.email===myEmail;
+ var initials=p.name.substring(0,2).toUpperCase();
+ var badgeCls=badgeMap[rank]||"regular";
+ var badgeTxt=rank<=10?"Top "+rank:"#"+rank;
+ listHtml+='<div class="lb-row'+(isMe?" me":"")+'">';
+ listHtml+='<div class="lb-rank">#'+rank+'</div>';
+ listHtml+='<div class="lb-av">'+initials+'</div>';
+ listHtml+='<div class="lb-info"><div class="lb-nm">'+(isMe?"You ("+p.name+")":p.name)+'</div><div><span class="lb-badge '+badgeCls+'">'+badgeTxt+'</span></div></div>';
+ listHtml+='<div class="lb-amt">'+mmk(p.total)+'</div>';
+ listHtml+='</div>';
+ });
+ listHtml+='</div>';
+ document.getElementById("ldbList").innerHTML=listHtml;
+}
+
+// ═══════════════════════════════════════
+// OPTIMISTIC UI — instant order feedback
+// ═══════════════════════════════════════
+// Already done in original cm() — HL.unshift with _local flag
+// Enhanced: add visual pulse to history tab
+function _pulseHistoryTab(){
+ var nb=document.querySelector('.nb[data-t="his"]');
+ if(!nb)return;
+ nb.style.transition="transform .15s";
+ nb.style.transform="scale(1.2)";
+ setTimeout(function(){nb.style.transform="scale(1)";},200);
+ setTimeout(function(){nb.style.transform="scale(1.1)";},350);
+ setTimeout(function(){nb.style.transform="scale(1)";nb.style.transition="";},500);
+}
+
+// Patch cm() to also pulse history tab
+var _origCm=cm;
+cm=function(ok){
+ _origCm(ok);
+ if(ok)setTimeout(_pulseHistoryTab,800);
+};
+
+// ═══════════════════════════════════════
+// SHW() WITH ANIMATION — for back navigation
+// ═══════════════════════════════════════
+var _origShw=shw;
+shw=function(p){
+ document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on","slide-in-right","slide-in-left","fade-up");});
+ var pg=document.getElementById("pg-"+p);
+ if(pg){
+ pg.classList.add("on");
+ pg.classList.add(p==="home"?"slide-in-left":"fade-up");
+ }
+ if(p==="home"){_restoreHomeScroll();}
+ else{document.getElementById("cnt").scrollTop=0;}
+};
+
+
  var btn=document.getElementById("btnGoogleLogin");
  if(btn)btn.addEventListener("click",function(){doGoogle();});
 })();
