@@ -997,10 +997,159 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 .notif-item.rejected-msg.unread{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
 /* AI CHAT BUTTON */
 /* ── IMAGE ROBOT FAB ── */
-.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:14px;width:70px;height:80px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:14px;width:76px;height:90px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
 .ai-fab:active{cursor:grabbing;transform:scale(.93);}
 .ai-fab-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
-.ai-fab-img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;animation:fabFloat 3s ease-in-out infinite;filter:drop-shadow(0 8px 18px rgba(42,171,238,.35)) drop-shadow(0 3px 8px rgba(0,0,0,.22));border-radius:0;}
+
+/* ══ CUTE ROBOT ANIMATIONS ══ */
+@keyframes fabFloat{
+  0%,100%{transform:translateY(0px) rotate(-1.5deg);}
+  25%{transform:translateY(-6px) rotate(1deg);}
+  50%{transform:translateY(-10px) rotate(-0.5deg);}
+  75%{transform:translateY(-5px) rotate(1.5deg);}
+}
+@keyframes fabWiggle{
+  0%,100%{transform:rotate(-8deg) scale(1.05);}
+  25%{transform:rotate(8deg) scale(1.08);}
+  50%{transform:rotate(-6deg) scale(1.05);}
+  75%{transform:rotate(6deg) scale(1.07);}
+}
+@keyframes fabBounce{
+  0%,100%{transform:translateY(0) scaleY(1) scaleX(1);}
+  30%{transform:translateY(-14px) scaleY(1.05) scaleX(0.97);}
+  55%{transform:translateY(-18px) scaleY(1.08) scaleX(0.95);}
+  70%{transform:translateY(-8px) scaleY(0.97) scaleX(1.03);}
+  80%{transform:translateY(-3px) scaleY(1.01) scaleX(0.99);}
+  90%{transform:translateY(-1px) scaleY(1) scaleX(1);}
+}
+@keyframes fabSpin{
+  0%{transform:rotate(0deg) scale(1);}
+  20%{transform:rotate(-15deg) scale(1.1);}
+  40%{transform:rotate(360deg) scale(1.05);}
+  60%{transform:rotate(355deg) scale(1);}
+  80%{transform:rotate(360deg) scale(1);}
+  100%{transform:rotate(360deg) scale(1);}
+}
+@keyframes fabDance{
+  0%,100%{transform:translateY(0) rotate(0deg) scaleX(1);}
+  10%{transform:translateY(-4px) rotate(-5deg) scaleX(1.05);}
+  20%{transform:translateY(-8px) rotate(5deg) scaleX(0.97);}
+  30%{transform:translateY(-12px) rotate(-4deg) scaleX(1.03);}
+  40%{transform:translateY(-10px) rotate(6deg) scaleX(0.98);}
+  50%{transform:translateY(-14px) rotate(-3deg) scaleX(1.04);}
+  60%{transform:translateY(-10px) rotate(4deg) scaleX(0.97);}
+  70%{transform:translateY(-7px) rotate(-3deg) scaleX(1.02);}
+  80%{transform:translateY(-4px) rotate(2deg) scaleX(0.99);}
+  90%{transform:translateY(-1px) rotate(-1deg) scaleX(1.01);}
+}
+@keyframes fabRun{
+  0%,100%{transform:translateX(0) rotate(0deg);}
+  10%{transform:translateX(4px) rotate(3deg);}
+  20%{transform:translateX(-3px) rotate(-2deg);}
+  30%{transform:translateX(5px) rotate(4deg);}
+  40%{transform:translateX(-4px) rotate(-3deg);}
+  50%{transform:translateX(6px) rotate(3deg);}
+  60%{transform:translateX(-5px) rotate(-2deg);}
+  70%{transform:translateX(4px) rotate(3deg);}
+  80%{transform:translateX(-3px) rotate(-1deg);}
+  90%{transform:translateX(2px) rotate(1deg);}
+}
+@keyframes fabShake{
+  0%,100%{transform:rotate(0deg);}
+  15%{transform:rotate(-12deg) translateX(-3px);}
+  30%{transform:rotate(12deg) translateX(3px);}
+  45%{transform:rotate(-10deg) translateX(-2px);}
+  60%{transform:rotate(10deg) translateX(2px);}
+  75%{transform:rotate(-6deg) translateX(-1px);}
+  90%{transform:rotate(6deg) translateX(1px);}
+}
+@keyframes fabHeartbeat{
+  0%,100%{transform:scale(1);}
+  14%{transform:scale(1.15);}
+  28%{transform:scale(1);}
+  42%{transform:scale(1.12);}
+  70%{transform:scale(1);}
+}
+@keyframes fabJump{
+  0%,100%{transform:translateY(0) scaleY(1);}
+  10%{transform:translateY(3px) scaleY(0.92) scaleX(1.08);}
+  35%{transform:translateY(-20px) scaleY(1.1) scaleX(0.93);}
+  65%{transform:translateY(-5px) scaleY(1.05) scaleX(0.97);}
+  80%{transform:translateY(2px) scaleY(0.95) scaleX(1.05);}
+  90%{transform:translateY(0) scaleY(1);}
+}
+@keyframes fabGlowPulse{
+  0%,100%{opacity:.5;transform:translateX(-50%) scaleX(1);}
+  50%{opacity:.9;transform:translateX(-50%) scaleX(1.4);}
+}
+/* Speech bubble pop */
+@keyframes bubblePop{
+  0%{transform:scale(0) translateY(4px);opacity:0;}
+  60%{transform:scale(1.1) translateY(-2px);opacity:1;}
+  80%{transform:scale(0.95) translateY(0);}
+  100%{transform:scale(1) translateY(0);opacity:1;}
+}
+@keyframes bubbleFade{
+  0%,70%{opacity:1;}
+  100%{opacity:0;transform:translateY(-4px);}
+}
+/* Shadow squish */
+@keyframes shadowSquish{
+  0%,100%{transform:translateX(-50%) scaleX(1);opacity:.5;}
+  50%{transform:translateX(-50%) scaleX(0.6);opacity:.25;}
+}
+
+.ai-fab-img{
+  width:100%;height:100%;
+  object-fit:contain;object-position:center;
+  display:block;
+  animation:fabFloat 3.2s ease-in-out infinite;
+  filter:drop-shadow(0 6px 16px rgba(42,171,238,.4)) drop-shadow(0 2px 6px rgba(0,0,0,.28));
+  border-radius:0;
+  mix-blend-mode:screen;
+  transform-origin:center bottom;
+}
+/* Robot shadow on ground */
+.ai-fab-shadow{
+  position:absolute;bottom:-6px;left:50%;
+  transform:translateX(-50%);
+  width:40px;height:8px;
+  background:radial-gradient(ellipse,rgba(42,171,238,.4),transparent 70%);
+  border-radius:50%;
+  animation:shadowSquish 3.2s ease-in-out infinite;
+  pointer-events:none;
+}
+/* Speech bubble */
+.ai-fab-bubble{
+  position:absolute;top:-36px;left:50%;
+  transform:translateX(-60%) scale(0);
+  background:rgba(23,33,43,.95);
+  border:1px solid rgba(42,171,238,.4);
+  border-radius:12px 12px 12px 2px;
+  padding:5px 10px;
+  font-size:11px;font-weight:700;
+  color:var(--ac2);
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+.ai-fab-bubble.show{
+  animation:bubblePop .4s cubic-bezier(.34,1.56,.64,1) forwards,
+             bubbleFade .4s ease-out 2.2s forwards;
+}
+/* Stars/sparkles that appear during animations */
+.ai-fab-sparkle{
+  position:absolute;pointer-events:none;
+  font-size:14px;opacity:0;
+  animation:sparkleFly 1.2s ease-out forwards;
+}
+@keyframes sparkleFly{
+  0%{opacity:1;transform:translate(0,0) scale(0);}
+  20%{transform:translate(var(--sx),var(--sy)) scale(1.2);}
+  100%{opacity:0;transform:translate(var(--ex),var(--ey)) scale(0);}
+}
 @keyframes fabFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.04)}}
 /* Typing dots overlay on FAB */
 .ai-fab-typing{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:3px;background:rgba(42,171,238,.92);border-radius:10px;padding:3px 8px;backdrop-filter:blur(4px);}
@@ -1042,74 +1191,320 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 .glow-dot:nth-child(3){animation-delay:1s;}
 /* AI CHAT OVERLAY */
 /* ══ AI CHAT PROFESSIONAL UI ══ */
-.ai-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:90;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.3s cubic-bezier(.25,.46,.45,.94);}
+/* ══════════════════════════════════════════
+   PREMIUM AI CHAT UI — FULL REDESIGN
+══════════════════════════════════════════ */
+.ai-ov{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  z-index:90;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:.35s cubic-bezier(.25,.46,.45,.94);
+}
 .ai-ov.v{opacity:1;pointer-events:all;}
-.ai-sh{background:#0d1117;border-radius:22px 22px 0 0;padding:0;max-width:430px;width:100%;height:91vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .38s cubic-bezier(.32,.72,0,1);border:1px solid rgba(255,255,255,.07);border-bottom:none;box-shadow:0 -20px 60px rgba(0,0,0,.6);}
+
+/* Main Sheet */
+.ai-sh{
+  background:linear-gradient(170deg,#0e141c 0%,#0b1018 60%,#080e16 100%);
+  border-radius:28px 28px 0 0;
+  padding:0;max-width:430px;width:100%;height:92vh;
+  display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform .42s cubic-bezier(.32,.72,0,1);
+  border:1px solid rgba(42,171,238,.12);
+  border-bottom:none;
+  box-shadow:0 -24px 80px rgba(0,0,0,.8),0 -1px 0 rgba(42,171,238,.08);
+  overflow:hidden;
+}
 .ai-ov.v .ai-sh{transform:translateY(0);}
-/* drag handle */
-.ai-sh::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:10px auto 0;flex-shrink:0;}
-/* Header */
-.ai-hdr{display:flex;align-items:center;gap:12px;padding:12px 16px 14px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
-.ai-hdr-av{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#0d1f33,#163352);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;border:1px solid rgba(42,171,238,.25);}
-.ai-hdr-av svg{width:36px;height:36px;}
-.ai-hdr-av .ai-online{position:absolute;bottom:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#10b981;border:2px solid #0d1117;animation:pulse-green 2s infinite;}
-@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
+
+/* Ambient glow at top */
+.ai-sh::after{
+  content:'';
+  position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(42,171,238,.5),transparent);
+  pointer-events:none;
+}
+
+/* Drag handle */
+.ai-sh::before{
+  content:'';display:block;
+  width:40px;height:4px;border-radius:4px;
+  background:rgba(255,255,255,.12);
+  margin:12px auto 0;flex-shrink:0;
+}
+
+/* ── HEADER ── */
+.ai-hdr{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px 16px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;
+  background:rgba(255,255,255,.02);
+  backdrop-filter:blur(10px);
+  position:relative;
+}
+/* Header gradient line */
+.ai-hdr::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(42,171,238,.2),transparent);
+}
+
+/* Robot avatar in header */
+.ai-hdr-av{
+  width:48px;height:48px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#0d2140 0%,#0e2d4e 50%,#0d1f35 100%);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;position:relative;
+  border:1px solid rgba(42,171,238,.3);
+  box-shadow:0 0 20px rgba(42,171,238,.15),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ai-hdr-av svg{width:38px;height:38px;}
+.ai-hdr-av .ai-online{
+  position:absolute;bottom:-2px;right:-2px;
+  width:10px;height:10px;border-radius:50%;
+  background:#10b981;border:2.5px solid #0e141c;
+  animation:pulse-green 2s infinite;
+}
+@keyframes pulse-green{
+  0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}
+  50%{box-shadow:0 0 0 5px rgba(16,185,129,0);}
+}
 .ai-hdr-info{flex:1;min-width:0;}
-.ai-hdr-nm{font-size:13px;font-weight:700;color:#e6edf3;letter-spacing:.1px;}
-.ai-hdr-sub{display:flex;align-items:center;gap:6px;margin-top:2px;}
-.ai-hdr-st{font-size:10px;color:#10b981;font-weight:600;display:flex;align-items:center;gap:4px;}
-.ai-hdr-st::before{content:'';width:5px;height:5px;border-radius:50%;background:#10b981;}
-.ai-model-tag{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.2);color:#58a6ff;padding:1px 6px;border-radius:5px;font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
-.ai-close{width:32px;height:32px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;}
-.ai-close:active{background:rgba(255,255,255,.1);}
+.ai-hdr-nm{
+  font-size:14px;font-weight:800;
+  color:#e8f4ff;letter-spacing:-.1px;
+  display:flex;align-items:center;gap:7px;
+}
+.ai-hdr-sub{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.ai-hdr-st{
+  font-size:10px;color:#10b981;font-weight:700;
+  display:flex;align-items:center;gap:4px;
+}
+.ai-hdr-st::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:#10b981;animation:pulse-green 2s infinite;
+}
+.ai-model-tag{
+  background:rgba(42,171,238,.1);
+  border:1px solid rgba(42,171,238,.25);
+  color:#5ec4ff;padding:1px 7px;
+  border-radius:6px;font-size:9px;font-weight:800;
+  letter-spacing:.6px;text-transform:uppercase;
+}
+.ai-close{
+  width:34px;height:34px;border-radius:11px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:.15s;
+}
+.ai-close:hover{background:rgba(255,255,255,.08);}
+.ai-close:active{background:rgba(255,255,255,.12);transform:scale(.9);}
 .ai-close svg{width:14px;height:14px;stroke:#8b949e;fill:none;}
-/* Messages */
-.ai-msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none;}
+
+/* ── MESSAGES AREA ── */
+.ai-msgs{
+  flex:1;overflow-y:auto;
+  padding:18px 16px 10px;
+  display:flex;flex-direction:column;gap:14px;
+  scrollbar-width:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(42,171,238,.04) 0%,transparent 60%);
+}
 .ai-msgs::-webkit-scrollbar{display:none;}
-.ai-msg{display:flex;gap:9px;animation:msgSlide .22s cubic-bezier(.25,.46,.45,.94) both;}
-@keyframes msgSlide{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* Message animation */
+@keyframes msgSlide{
+  from{opacity:0;transform:translateY(12px) scale(.97);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+.ai-msg{display:flex;gap:10px;animation:msgSlide .28s cubic-bezier(.25,.46,.45,.94) both;}
 .ai-msg.user{flex-direction:row-reverse;}
-.ai-msg .ai-av{width:28px;height:28px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.ai-msg.bot .ai-av{background:linear-gradient(135deg,#0d1f33,#163352);border:1px solid rgba(42,171,238,.2);}
-.ai-msg.bot .ai-av svg{width:13px;height:13px;fill:none;stroke:#2AABEE;stroke-width:2;}
-.ai-msg.user .ai-av{background:rgba(42,171,238,.1);border:1px solid rgba(42,171,238,.18);}
-.ai-msg.user .ai-av svg{width:13px;height:13px;fill:none;stroke:#58a6ff;stroke-width:2;}
-.ai-msg .ai-bub{max-width:82%;font-size:13px;line-height:1.62;word-break:break-word;}
-.ai-msg.bot .ai-bub{background:#161b22;border:1px solid rgba(255,255,255,.07);color:#c9d1d9;padding:11px 14px;border-radius:4px 14px 14px 14px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
-.ai-msg.user .ai-bub{background:linear-gradient(135deg,#1c4a7c,#1e6bb8);color:#fff;padding:11px 14px;border-radius:14px 4px 14px 14px;box-shadow:0 2px 12px rgba(30,107,184,.25);}
-/* Typing indicator */
-.ai-typing{display:flex;align-items:center;gap:5px;padding:13px 16px;background:#161b22;border:1px solid rgba(255,255,255,.07);border-radius:4px 14px 14px 14px;width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,.25);}
-.ai-typing span{width:6px;height:6px;border-radius:50%;background:#58a6ff;opacity:.35;animation:aiDot 1.4s ease infinite;}
-.ai-typing span:nth-child(2){animation-delay:.16s;}
-.ai-typing span:nth-child(3){animation-delay:.32s;}
-@keyframes aiDot{0%,80%,100%{transform:scale(1);opacity:.35;}40%{transform:scale(1.4);opacity:1;}}
-/* Quick suggestions */
-.ai-qsug{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 6px;}
-.ai-qsug button{padding:7px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8b949e;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:.15s;text-align:left;letter-spacing:.1px;}
-.ai-qsug button:active{background:rgba(42,171,238,.1);border-color:rgba(42,171,238,.3);color:#58a6ff;}
-/* Input row */
-.ai-inp-row{display:flex;gap:9px;padding:10px 14px calc(env(safe-area-inset-bottom,8px)+12px);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;background:#0d1117;align-items:flex-end;}
-.ai-inp{flex:1;padding:11px 14px;border-radius:13px;border:1px solid rgba(255,255,255,.1);background:#161b22;font-size:13px;font-family:var(--font);color:#e6edf3;outline:none;transition:.2s;resize:none;line-height:1.5;max-height:100px;}
-.ai-inp::placeholder{color:#484f58;}
-.ai-inp:focus{border-color:rgba(42,171,238,.4);box-shadow:0 0 0 3px rgba(42,171,238,.08);}
-.ai-send{width:38px;height:38px;border-radius:11px;border:none;background:linear-gradient(135deg,#1c4a7c,#2AABEE);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;align-self:flex-end;}
-.ai-send:active{transform:scale(.88);}
-.ai-send svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.5;}
-.ai-send:disabled{opacity:.35;cursor:default;}
-/* CS profile row */
+
+/* Avatars */
+.ai-msg .ai-av{
+  width:30px;height:30px;border-radius:10px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+}
+.ai-msg.bot .ai-av{
+  background:linear-gradient(135deg,#0d2140,#163352);
+  border:1px solid rgba(42,171,238,.25);
+  box-shadow:0 2px 8px rgba(42,171,238,.1);
+}
+.ai-msg.user .ai-av{
+  background:rgba(42,171,238,.12);
+  border:1px solid rgba(42,171,238,.2);
+}
+.ai-msg.bot .ai-av svg,.ai-msg.user .ai-av svg{width:16px;height:16px;fill:none;stroke-width:2;}
+.ai-msg.bot .ai-av svg{stroke:#2AABEE;}
+.ai-msg.user .ai-av svg{stroke:#5ec4ff;}
+
+/* Message bubbles */
+.ai-msg .ai-bub{
+  max-width:80%;font-size:13.5px;line-height:1.65;
+  word-break:break-word;
+}
+
+/* BOT bubble — glassmorphism card */
+.ai-msg.bot .ai-bub{
+  background:rgba(22,27,34,.9);
+  border:1px solid rgba(255,255,255,.07);
+  color:#c9d8e8;
+  padding:12px 15px;
+  border-radius:4px 16px 16px 16px;
+  box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(8px);
+}
+/* Bot bubble highlight top */
+.ai-msg.bot .ai-bub::before{
+  content:'';display:block;height:0;
+}
+
+/* USER bubble — blue gradient */
+.ai-msg.user .ai-bub{
+  background:linear-gradient(135deg,#1a4d80 0%,#1e70c4 50%,#2AABEE 100%);
+  color:#fff;
+  padding:12px 15px;
+  border-radius:16px 4px 16px 16px;
+  box-shadow:0 4px 18px rgba(42,171,238,.3),inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* Bot message: section headers */
+.ai-msg.bot .ai-bub strong{
+  color:#5ec4ff;font-weight:800;
+}
+
+/* ── TYPING INDICATOR ── */
+.ai-typing{
+  display:flex;align-items:center;gap:6px;
+  padding:14px 18px;
+  background:rgba(22,27,34,.9);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:4px 16px 16px 16px;
+  width:fit-content;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+.ai-typing span{
+  width:7px;height:7px;border-radius:50%;
+  background:#2AABEE;opacity:.3;
+  animation:aiDot 1.5s ease infinite;
+}
+.ai-typing span:nth-child(2){animation-delay:.2s;}
+.ai-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes aiDot{
+  0%,80%,100%{transform:translateY(0) scale(1);opacity:.3;}
+  40%{transform:translateY(-5px) scale(1.2);opacity:1;}
+}
+
+/* ── QUICK SUGGESTIONS ── */
+.ai-qsug{
+  display:flex;flex-wrap:nowrap;gap:7px;
+  padding:8px 16px 6px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.ai-qsug::-webkit-scrollbar{display:none;}
+.ai-qsug button{
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid rgba(42,171,238,.2);
+  background:rgba(42,171,238,.07);
+  color:#5ec4ff;
+  font-size:11px;font-weight:700;
+  cursor:pointer;font-family:var(--font);
+  transition:.15s;
+  white-space:nowrap;
+  letter-spacing:.1px;
+  flex-shrink:0;
+}
+.ai-qsug button:hover{background:rgba(42,171,238,.14);border-color:rgba(42,171,238,.4);}
+.ai-qsug button:active{
+  background:rgba(42,171,238,.2);
+  border-color:rgba(42,171,238,.5);
+  transform:scale(.95);
+}
+
+/* ── INPUT ROW ── */
+.ai-inp-row{
+  display:flex;gap:10px;
+  padding:12px 16px calc(env(safe-area-inset-bottom,8px)+14px);
+  border-top:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;
+  background:rgba(8,14,22,.8);
+  backdrop-filter:blur(12px);
+  align-items:flex-end;
+}
+.ai-inp{
+  flex:1;padding:12px 16px;
+  border-radius:18px;
+  border:1px solid rgba(42,171,238,.18);
+  background:rgba(22,27,34,.8);
+  font-size:13px;font-family:var(--font);
+  color:#e6edf3;outline:none;
+  transition:.2s;resize:none;line-height:1.5;
+  max-height:100px;
+  backdrop-filter:blur(8px);
+}
+.ai-inp::placeholder{color:#3d4d5e;}
+.ai-inp:focus{
+  border-color:rgba(42,171,238,.5);
+  box-shadow:0 0 0 3px rgba(42,171,238,.1);
+  background:rgba(22,27,34,.95);
+}
+
+/* SEND button — animated */
+.ai-send{
+  width:42px;height:42px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#1563a8,#2AABEE);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:.18s;
+  align-self:flex-end;
+  box-shadow:0 4px 16px rgba(42,171,238,.35);
+}
+.ai-send:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(42,171,238,.45);}
+.ai-send:active{transform:scale(.9);box-shadow:0 2px 8px rgba(42,171,238,.2);}
+.ai-send svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2.5;}
+.ai-send:disabled{opacity:.3;cursor:default;transform:none;box-shadow:none;}
+
+/* ── FORMATTED TEXT in bot messages ── */
+.ai-card{
+  background:rgba(42,171,238,.06);
+  border:1px solid rgba(42,171,238,.15);
+  border-radius:10px;padding:10px 12px;
+  margin-top:8px;font-size:12px;
+  line-height:1.7;
+}
+.ai-step{
+  display:flex;gap:8px;align-items:flex-start;
+  margin-bottom:6px;
+}
+.ai-step-n{
+  width:20px;height:20px;border-radius:6px;
+  background:rgba(42,171,238,.2);border:1px solid rgba(42,171,238,.3);
+  color:#5ec4ff;font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ai-step-t{color:#c9d8e8;font-size:12px;padding-top:2px;}
+.ai-tag{
+  display:inline-block;padding:2px 8px;
+  border-radius:6px;background:rgba(42,171,238,.12);
+  border:1px solid rgba(42,171,238,.2);
+  color:#5ec4ff;font-size:10px;font-weight:700;margin:2px;
+}
+
+/* CS row */
 .cs-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(42,171,238,.08),rgba(30,33,50,.04));border:1px solid rgba(42,171,238,.18);cursor:pointer;transition:all .15s;margin-bottom:10px;}
 .cs-row:active{transform:scale(.97);}
 .cs-ic{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#2AABEE,#1B8EC7);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(42,171,238,.25);}
 .cs-ic svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;}
-.cs-info{flex:1;}
-.cs-nm{font-size:13px;font-weight:800;color:var(--tx);}
-.cs-ds{font-size:11px;color:var(--tx3);margin-top:2px;}
+.cs-info{flex:1;}.cs-nm{font-size:13px;font-weight:800;color:var(--tx);}.cs-ds{font-size:11px;color:var(--tx3);margin-top:2px;}
 .cs-badge{padding:3px 8px;border-radius:6px;background:var(--gng);border:1px solid rgba(34,197,94,.2);font-size:9px;font-weight:800;color:var(--gn);text-transform:uppercase;letter-spacing:.3px;}
 .app.light .cs-row{background:rgba(42,171,238,.06);}
-/* AI chat stays dark in light mode — intentional professional dark theme */
-.app.light .ai-sh{background:#0d1117;}
-.app.light .ai-hdr{background:transparent;}
-.app.light .ai-inp-row{background:#0d1117;}
+.app.light .ai-sh{background:linear-gradient(170deg,#0e141c 0%,#0b1018 60%,#080e16 100%);}
+.app.light .ai-hdr{background:rgba(255,255,255,.02);}
+.app.light .ai-inp-row{background:rgba(8,14,22,.8);}
 .auth{width:100%;max-width:430px;min-height:100vh;margin:0 auto;background:#17212B;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;}
 .auth-card{background:#1C2733!important;border-color:rgba(255,255,255,.06)!important;box-shadow:0 8px 40px rgba(0,0,0,.35)!important;}
 .auth .al-name{color:#F5F5F5!important;font-weight:700!important;}
@@ -2152,7 +2547,7 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  </div>
  <div class="notif-ov" id="notifOv"><div class="notif-sh"><div class="m-h"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="m-t" style="margin:0;display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--ac2);fill:none;stroke-width:2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>Inbox</div><button style="border:none;background:none;color:var(--ac2);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)" onclick="clearNotifs()">Clear All</button></div><div id="notifList"></div><button class="trk-close" onclick="closeNotif()">Close</button></div></div>
 
-<!-- AI CUSTOMER SERVICE CHAT -->
+/* ── AI CUSTOMER SERVICE CHAT ── */
 <style>
 /* ── Robot FAB animations ── */
 @keyframes robotBob    { 0%,100%{transform:translateY(0)}  50%{transform:translateY(-3px)} }
@@ -2163,10 +2558,144 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
 @keyframes fabPulseRing{ 0%{transform:scale(1);opacity:.5} 100%{transform:scale(1.55);opacity:0} }
 </style>
 
+<script>
+/* ══════════════════════════════════════════
+   CUTE ROBOT ANIMATION CONTROLLER
+══════════════════════════════════════════ */
+(function(){
+  var img = document.getElementById("aiFabImg");
+  var bubble = document.getElementById("aiFabBubble");
+  if(!img) return;
+
+  var animations = [
+    { name:"fabFloat",   dur:"3.2s", timing:"ease-in-out", iter:"infinite" },
+    { name:"fabBounce",  dur:"1.0s", timing:"cubic-bezier(.36,.07,.19,.97)", iter:"1" },
+    { name:"fabWiggle",  dur:"0.7s", timing:"ease-in-out", iter:"3" },
+    { name:"fabDance",   dur:"1.8s", timing:"ease-in-out", iter:"1" },
+    { name:"fabRun",     dur:"0.9s", timing:"ease-in-out", iter:"2" },
+    { name:"fabSpin",    dur:"0.8s", timing:"cubic-bezier(.36,.07,.19,.97)", iter:"1" },
+    { name:"fabJump",    dur:"0.9s", timing:"cubic-bezier(.28,.84,.42,1)", iter:"1" },
+    { name:"fabShake",   dur:"0.6s", timing:"ease-in-out", iter:"3" },
+    { name:"fabHeartbeat","dur":"0.9s", timing:"ease-in-out", iter:"2" },
+  ];
+
+  var bubbleMsgs = [
+    "ဟာ! မင်းဟာ ✨", "GG bro! 🎮", "ဟေး! 👋",
+    "Top up ပေးမလား? 💎", "Let's go! 🚀",
+    "ကူပေးမယ်! 🤖", "Fr fr no cap! 😂",
+    "Ready! ⚡", "Play more win more! 🏆",
+  ];
+
+  var currentAnim = "fabFloat";
+  var idleTimer = null;
+
+  function setAnim(anim, onDone){
+    currentAnim = anim.name;
+    img.style.animation = anim.name+" "+anim.dur+" "+anim.timing+" "+anim.iter;
+    if(anim.iter !== "infinite"){
+      // Parse duration ms
+      var ms = parseFloat(anim.dur)*1000;
+      var reps = parseInt(anim.iter)||1;
+      setTimeout(function(){
+        returnToIdle();
+        if(onDone) onDone();
+      }, ms * reps + 100);
+    }
+  }
+
+  function returnToIdle(){
+    currentAnim = "fabFloat";
+    img.style.animation = "fabFloat 3.2s ease-in-out infinite";
+  }
+
+  function showBubble(text){
+    if(!bubble) return;
+    bubble.textContent = text;
+    bubble.classList.remove("show");
+    void bubble.offsetWidth;
+    bubble.classList.add("show");
+    setTimeout(function(){ bubble.classList.remove("show"); }, 2600);
+  }
+
+  function spawnSparkle(){
+    var fab = document.getElementById("aiFab");
+    if(!fab) return;
+    var emojis = ["✨","⭐","💫","🌟","💥","🎮","💎","🎯"];
+    var el = document.createElement("span");
+    el.className = "ai-fab-sparkle";
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    var sx = (Math.random()-0.5)*20+"px";
+    var sy = "-"+(10+Math.random()*10)+"px";
+    var ex = (Math.random()-0.5)*50+"px";
+    var ey = "-"+(30+Math.random()*30)+"px";
+    el.style.setProperty("--sx", sx);
+    el.style.setProperty("--sy", sy);
+    el.style.setProperty("--ex", ex);
+    el.style.setProperty("--ey", ey);
+    el.style.left = (30+Math.random()*40)+"%";
+    el.style.top = "20%";
+    fab.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1200);
+  }
+
+  // Pick a random cute animation
+  function doRandomAnim(){
+    if(currentAnim !== "fabFloat") return; // don't interrupt
+    var special = animations.slice(1); // skip idle
+    var pick = special[Math.floor(Math.random()*special.length)];
+    var msg = bubbleMsgs[Math.floor(Math.random()*bubbleMsgs.length)];
+    setAnim(pick);
+    showBubble(msg);
+    // Sparkles for energetic anims
+    if(["fabBounce","fabSpin","fabDance","fabJump"].includes(pick.name)){
+      spawnSparkle();
+      setTimeout(spawnSparkle, 300);
+    }
+  }
+
+  // Schedule random idle animations every 4-8 seconds
+  function scheduleRandom(){
+    var delay = 4000 + Math.random()*4000;
+    idleTimer = setTimeout(function(){
+      doRandomAnim();
+      scheduleRandom();
+    }, delay);
+  }
+  scheduleRandom();
+
+  // On hover — do a quick wiggle + bubble
+  var fab2 = document.getElementById("aiFab");
+  if(fab2){
+    fab2.addEventListener("mouseenter", function(){
+      if(currentAnim !== "fabFloat") return;
+      setAnim({ name:"fabWiggle", dur:"0.5s", timing:"ease-in-out", iter:"2" });
+      showBubble("ဟေး! မေးချင်တာ မေးပေ့ 😄");
+    });
+    fab2.addEventListener("touchstart", function(){
+      spawnSparkle();
+    }, {passive:true});
+  }
+
+  // When AI is typing — do shake animation on fab
+  var _origShow = window.aiShowTyping;
+  window.aiShowTyping = function(){
+    setAnim({ name:"fabShake", dur:"0.5s", timing:"ease-in-out", iter:"2" });
+    if(_origShow) _origShow.apply(this, arguments);
+  };
+
+  // Export for external use
+  window._robotDoAnim = doRandomAnim;
+  window._robotShowBubble = showBubble;
+  window._robotSparkle = spawnSparkle;
+})();
+</script>
+
 <button class="ai-fab" id="aiFab" title="AI Assistant">
  <div class="fab-pulse-ring"></div>
+ <div class="ai-fab-bubble" id="aiFabBubble"></div>
  <div class="ai-fab-inner">
   <img src="data:image/png;base64,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" alt="AI" class="ai-fab-img" id="aiFabImg"/>
+  <div class="ai-fab-shadow"></div>
   <!-- Typing dots overlay (shown when AI is typing) -->
   <div class="ai-fab-typing" id="aiFabTyping">
    <span></span><span></span><span></span>
@@ -4025,34 +4554,53 @@ function loadStoreChatKey(){
  }).catch(function(){});
 }
 
-var AI_SYSTEM_PROMPT = `You are "PCA Bot" 🤖 — the fun, chill assistant for PCA Store, Myanmar's go-to game top-up shop. You're like that gamer friend who knows everything about top-ups and loves to chat.
+var AI_SYSTEM_PROMPT = `You are "PCA Bot" — the smart, helpful AI assistant for PCA Store, Myanmar's trusted game top-up platform. You balance being genuinely helpful with being fun and relatable — like a knowledgeable gamer friend who actually knows what they're talking about.
 
-🎮 About PCA Store:
-- Game currency (diamonds, UC, gems, etc.) for MLBB, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Valorant, Roblox, CoC, CR, and more
-- Payments: KBZ Pay, Wave Pay, UAB Pay (MMK only)
-- Delivery: 5–15 minutes after payment confirm
-- Orders processed manually by admin
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏪 PCA STORE — CORE INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Games: MLBB, Free Fire, Genshin Impact, PUBG Mobile, Honkai Star Rail, Valorant, Roblox, Clash of Clans, Clash Royale, and 10+ more
+• Currency: MMK only
+• Payments: KBZ Pay 💙 | Wave Pay 🌊 | UAB Pay 🟡
+• Delivery: 5–15 minutes after admin confirms payment
+• All orders are manually processed by admin
 
-📦 How to order:
-1. Home မှာ game ရွေး
-2. User ID ထည့်ပြီး "Confirm ID" နှိပ်
-3. Package ရွေး
-4. KBZ / Wave / UAB နဲ့ pay
-5. Receipt screenshot တင်
-6. Admin approve ရင် 5–15 min အတွင်း ရမယ် ✅
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 HOW TO ORDER (5 Steps)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Pick your game from Home tab
+2. Enter your in-game User ID → tap "Confirm ID"
+3. Select your desired package
+4. Pay via KBZ / Wave / UAB Pay
+5. Upload payment receipt screenshot
+→ Admin reviews and delivers within 5–15 min ✅
 
-💬 Your personality & language rules:
-- You MUST speak in casual Burmese + English mix (Burmese script + sprinkle English gaming/tech words naturally) — like how Myanmar gamers actually text each other
-- Example style: "ဟဲဟဲ no worries! Order က History tab မှာ real-time ကြည့်လို့ရတယ်နော် 👀"
-- Be fun, use light humor, gaming slang is welcome (ez, gg, bro, ngl, fr fr, no cap, etc.)
-- Use emoji naturally but don't overdo it (2-4 per reply max)
-- Keep replies SHORT — 3-5 lines usually enough. No walls of text
-- Call the user by their account display name (passed as USER_NAME below). If no name, use "bro/sis" casually but NEVER use "boss"
-- If you genuinely don't know something (specific order status, exact prices) — say "ngl I can't check that directly, History tab မှာ ကြည့်ပြီး မရရင် Telegram မှာ admin ကို direct message ဆက်လိုက်ပေ့ 📲"
-- Never make up order statuses, prices, or delivery times beyond 5-15 min estimate
-- If someone just wants to chat/vibe, chat back! Don't be robotic. You're a gamer too 🎮
-- For greetings, be warm and playful
-- NEVER reply in formal/stiff tone. Always keep it casual and friendly like texting a friend`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 YOUR COMMUNICATION STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LANGUAGE: Always reply in Burmese + English mix — use Burmese script naturally with English gaming/tech terms woven in, exactly how Myanmar gamers message each other.
+
+TONE: Warm, smart, slightly playful. You're confident and knowledgeable, not scripted. Think: helpful Discord mod who's also a gamer.
+
+FORMATTING RULES:
+- Structure answers clearly: use bold for key terms, numbered lists for steps
+- Keep replies concise but complete — 4-8 lines max unless they asked for detail
+- 2-3 relevant emojis max per reply. Don't spam.
+- Use gaming slang naturally: ez, gg, fr, bro/sis, no cap, ngl, etc.
+- For multi-step processes, always number them clearly
+- If unsure about specific order status/exact prices, be honest: "ngl direct စစ်ချင်ရင် History tab မှာ ကြည့်ပေ့" or "Admin ကို Telegram မှာ DM ပေ့"
+
+NEVER:
+- Use formal/stiff/corporate tone
+- Say "boss" — use bro/sis or their name
+- Make up order statuses or specific prices
+- Give walls of unstructured text
+- Be repetitive or padding with filler phrases
+
+SMART REPLIES: When answering, always include ONE actionable next step. Don't just answer — guide them to what to do next.
+
+USER_NAME_PLACEHOLDER`;
+
 
 
 var AI_QUICK_SUGGESTIONS = [
@@ -4072,14 +4620,13 @@ function openAiChat(){
  var ov=document.getElementById("aiOv");
  if(!ov)return;
  ov.classList.add("v");
- // Build dynamic system prompt with username
  var _uname=(curUser&&(curUser.displayName||pf&&pf.nm))||"";
- var _nameStr=_uname?"User's name is "+_uname+". Address them by name naturally (e.g. 'ဟေး "+_uname+"!')":"Use 'bro/sis' casually. Never say 'boss'.";
- window._AI_DYNAMIC_PROMPT=AI_SYSTEM_PROMPT+"\n\nUSER_NAME: "+_nameStr;
+ var _nameStr=_uname?"User's name is "+_uname+". Call them by name naturally (e.g. 'ဟေး "+_uname+"!'). Be personal.":"User's name unknown. Use 'bro/sis' casually. Never say 'boss'.";
+ window._AI_DYNAMIC_PROMPT=AI_SYSTEM_PROMPT.replace("USER_NAME_PLACEHOLDER","\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 CURRENT USER\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"+_nameStr);
  // Init with welcome message if empty
  if(AI_CHAT_HISTORY.length===0){
- var _greet=_uname?"ဟေး "+_uname+"! 👋":"ဟေး! 👋";
- var welcomeMsg={role:"assistant",content:_greet+" PCA Bot ပါ — game top-up store ရဲ့ chill assistant လေးပါ 😄\n\nOrder ပေးနည်း, payment, ID verify, ဘာပဲ မေးမေး help ပေးနိုင်တယ်! Or just vibe လဲ ရတယ်ဗျ lol 🎮\n\nဘာကိစ္စ ရှိလဲ? 👇"};
+ var _greet=_uname?"ဟေး **"+_uname+"**! 👋":"ဟေး! 👋";
+ var welcomeMsg={role:"assistant",content:_greet+" PCA Bot ပါ 🤖\n\nGame top-up, payment, order tracking — ဘာပဲဆို help ပေးနိုင်တယ်!\nBurmese or English မဆို OK 😄\n\nဘာကိစ္စ ရှိလဲ? 👇"};
  AI_CHAT_HISTORY.push(welcomeMsg);
  aiRenderMessages();
  aiShowSuggestions(AI_QUICK_SUGGESTIONS.slice(0,4));
@@ -4114,12 +4661,36 @@ function aiRenderMessages(){
 }
 
 function aiFormatText(text){
- // Convert markdown-like formatting to HTML
- return text
- .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
- .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
- .replace(/\*(.*?)\*/g,"<em>$1</em>")
- .replace(/\n/g,"<br/>");
+ var t=text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+ t=t.replace(/\*\*(.*?)\*\*/g,"<strong style='color:#5ec4ff;font-weight:800'>$1</strong>");
+ t=t.replace(/\*(.*?)\*/g,"<em>$1</em>");
+ var lines=t.split(/\n/),out=[],inList=false;
+ for(var i=0;i<lines.length;i++){
+  var l=lines[i].trim();
+  var nm=l.match(/^(\d+)\.\s+(.+)$/);
+  if(nm){
+   if(!inList){out.push('<div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">');inList=true;}
+   out.push('<div style="display:flex;gap:8px;align-items:flex-start;">'
+    +'<span style="min-width:22px;height:22px;border-radius:7px;background:rgba(42,171,238,.18);border:1px solid rgba(42,171,238,.35);color:#5ec4ff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+nm[1]+'</span>'
+    +'<span style="color:#c9d8e8;font-size:13px;line-height:1.55;">'+nm[2]+'</span></div>');
+  } else {
+   if(inList){out.push('</div>');inList=false;}
+   var bm=l.match(/^[•\-\*]\s+(.+)$/);
+   if(bm){
+    out.push('<div style="display:flex;gap:7px;align-items:flex-start;margin-top:4px;">'
+     +'<span style="color:#2AABEE;font-size:12px;margin-top:2px;flex-shrink:0;">▸</span>'
+     +'<span style="color:#c9d8e8;">'+bm[1]+'</span></div>');
+   } else if(/^[━─\-]{3,}$/.test(l)){
+    out.push('<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(42,171,238,.2),transparent);margin:8px 0;"></div>');
+   } else if(l){
+    out.push('<div style="margin-top:2px;line-height:1.6;">'+l+'</div>');
+   } else {
+    out.push('<div style="height:5px;"></div>');
+   }
+  }
+ }
+ if(inList) out.push('</div>');
+ return out.join("");
 }
 
 function aiShowTyping(){
@@ -4222,62 +4793,62 @@ function aiLocalFallback(q){
  q=q.toLowerCase();
  var isMM=/[\u1000-\u109F]/.test(raw);
  var _un=(curUser&&(curUser.displayName||pf&&pf.nm))||"";
- var _callUser=_un||"bro";
+ var _n=_un||"bro";
 
- // ── Order / Top-up ──
  if(/order|topup|top.?up|ဝယ်|မှာ|ဖြည့်|ငွေဖြည့်|ဘယ်လို/.test(q)){
-  if(isMM)return"ez pz bro! 😄 ဒီလိုလုပ်ရုံပဲ —\n1. Home မှာ game ရွေး 🎮\n2. User ID ထည့်ပြီး **Confirm ID** နှိပ်\n3. Package ရွေး\n4. KBZ/Wave/UAB နဲ့ pay\n5. Receipt screenshot တင်\n6. Admin approve ရင် 5–15 min အတွင်း ရမယ် ✅\n\nngl super simple ပဲ!";
-  return"ez pz! 😄 Here's how —\n1. Pick a game from Home 🎮\n2. Enter User ID → tap **Confirm ID**\n3. Choose a package\n4. Pay via KBZ/Wave/UAB\n5. Upload receipt screenshot\n6. Get your diamonds in 5–15 min ✅\n\nsuper simple fr fr!";
+  return isMM
+   ?"ez! Order ပေးနည်း step-by-step 👇\n1. Home မှာ game ရွေး 🎮\n2. User ID ထည့်ပြီး **Confirm ID** နှိပ်\n3. Package ရွေး (amount ကြည့်ပြီး)\n4. KBZ / Wave / UAB Pay နဲ့ pay\n5. Receipt screenshot တင်\n6. Admin approve ရင် **5–15 min** ထဲ ရမယ် ✅\n\nGame page မှာ prices တွေ detail ကြည့်နိုင်တယ် 👀"
+   :"Here's how to top up 👇\n1. Pick a game from Home 🎮\n2. Enter User ID → tap **Confirm ID**\n3. Choose your package\n4. Pay via KBZ / Wave / UAB Pay\n5. Upload receipt screenshot\n6. Get your items in **5–15 min** ✅\n\nCheck individual game pages for prices!";
  }
- // ── Delivery time ──
- if(/long|time|fast|delivery|deliver|ဘယ်နှစ်|မြန်|နောင်|ကြာ|စောင့်/.test(q)){
-  if(isMM)return"payment confirm ရပြီဆို **5–15 min** ထဲ ရောက်လေ့ရှိတယ် 🚀 ez!\nHistory tab မှာ real-time ကြည့်နိုင်တယ်နော်";
-  return"Usually **5–15 min** after payment confirm! 🚀 gg fast delivery\nCheck real-time status in the History tab!";
+ if(/long|time|fast|delivery|deliver|ဘယ်နှစ်|မြန်|ကြာ|စောင့်|မိနစ်/.test(q)){
+  return isMM
+   ?"Payment confirm ရပြီဆို **5–15 minutes** ထဲ ရောက်လေ့ရှိတယ် ⚡\nReal-time status → **History tab** (clock icon) မှာ ကြည့်ပေ့\n15 min ကျော်ရင် admin ကို Telegram မှာ DM ဆက်ပေ့ 📲"
+   :"Usually **5–15 minutes** after payment confirm ⚡\nTrack in real-time → **History tab** (clock icon)\nIf it's past 15 min, DM admin on Telegram 📲";
  }
- // ── Payment ──
- if(/payment|pay|kbz|wave|uab|ငွေပေး|ငွေလွှဲ|ငွေ/.test(q)){
-  if(isMM)return"payment method တွေကတော့ 💳\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nတိတိကျကျ amount လွှဲပြီး receipt screenshot တင်ပေ့ boss 👍";
-  return"We take 💳\n• **KBZ Pay** 💙\n• **Wave Pay** 🌊\n• **UAB Pay** 🟡\n\nTransfer exact amount + upload receipt screenshot and you're good to go boss 👍";
+ if(/payment|pay|kbz|wave|uab|ငွေပေး|ငွေလွှဲ|ငွေ|pay.*method/.test(q)){
+  return isMM
+   ?"Payment methods တွေ 💳\n- **KBZ Pay** 💙\n- **Wave Pay** 🌊\n- **UAB Pay** 🟡\n\nExact amount လွှဲပြီး receipt screenshot တင်ပေ့ — bro amount ကွာသွားရင် order delay ဖြစ်နိုင်တယ် ⚠️"
+   :"Accepted payments 💳\n- **KBZ Pay** 💙\n- **Wave Pay** 🌊\n- **UAB Pay** 🟡\n\nTransfer the exact amount shown, then upload receipt. Wrong amount = order delay ⚠️";
  }
- // ── Order status / history ──
  if(/status|history|မှတ်တမ်း|order.*check|စစ်|ကြည့်/.test(q)){
-  if(isMM)return"**History tab** (bottom nav မှာ clock icon) မှာ order status real-time ကြည့်လို့ရတယ် 🔔\nAdmin approve ရင် notification ပါတက်မယ်!";
-  return"Hit the **History tab** (clock icon at bottom nav) to see real-time order status 🔔\nNotif pops when admin approves!";
+  return isMM
+   ?"**History tab** မှာ real-time order status ကြည့်လို့ရတယ် 🔔\n(Bottom nav မှာ clock icon ပါ)\n\nPending → Processing → Confirmed ဆင့်ဆင့် update ဖြစ်သွားမယ်\nNotification ပါ pop up လာမယ် ✅"
+   :"Check real-time order status in **History tab** 🔔\n(Clock icon in bottom nav)\n\nOrder goes: Pending → Processing → Confirmed\nYou'll get a notification when it's done ✅";
  }
- // ── Refund ──
- if(/refund|return|cancel|ပြန်|မရ|မပေး/.test(q)){
-  if(isMM)return"item မရောက်ရင် **24 နာရီ** အတွင်း Order ID ယူပြီး Telegram မှာ admin ကို DM ဆက်လိုက်ပေ့ 📱\nစစ်ပြီး ပြန်အမ်းပေးတယ် bro 🤝";
-  return"If items didn't arrive, DM admin on **Telegram** within 24h with your Order ID 📱\nThey'll sort it out for you! 🤝";
+ if(/refund|return|cancel|ပြန်|မရ|မပေး|cancel/.test(q)){
+  return isMM
+   ?"Item မရောက်ရင် **24 နာရီ** အတွင်း:\n1. Order ID ကူးယူ (History tab မှာ)\n2. Telegram မှာ admin ကို DM ဆက်ပေ့ 📱\n3. Order ID + screenshot ပေးပေ့\n\nAdmin က verify ပြီး process ပေးမယ် 🤝"
+   :"If items didn't arrive, within **24 hours**:\n1. Copy your Order ID (from History tab)\n2. DM admin on Telegram 📱\n3. Send Order ID + screenshot\n\nAdmin will verify and sort it out 🤝";
  }
- // ── Games ──
- if(/game|mlbb|mobile.?legend|free.?fire|genshin|pubg|roblox|clash|games|ဂိမ်း/.test(q)){
-  if(isMM)return"**15+ games** ရှိတယ် bro 🎮\nML, Free Fire, Genshin, PUBG, Honkai Star Rail, Roblox, CoC and more!\n\nHome screen မှာ ကြည့်ပေ့ full list 👾";
-  return"**15+ games** bro 🎮\nML, Free Fire, Genshin, PUBG, Honkai Star Rail, Roblox, CoC and more!\n\nCheck Home screen for the full list 👾";
+ if(/game|mlbb|mobile.?legend|free.?fire|genshin|pubg|roblox|clash|games|ဂိမ်း|game.*list/.test(q)){
+  return isMM
+   ?"**15+ games** available ✨\n- MLBB 💎 Free Fire 🔥\n- Genshin Impact 🌸 PUBG Mobile 🎯\n- Honkai Star Rail ⭐ Valorant ⚡\n- Roblox 🟦 CoC 🏰 CR 👑\n- and more!\n\nFull list → **Home tab** မှာ ကြည့်ပေ့ 👾"
+   :"**15+ games** available ✨\n- MLBB 💎 Free Fire 🔥\n- Genshin Impact 🌸 PUBG Mobile 🎯\n- Honkai Star Rail ⭐ Valorant ⚡\n- Roblox 🟦 CoC 🏰 CR 👑\n- and more!\n\nFull list on **Home tab** 👾";
  }
- // ── ID Verify ──
- if(/id|verify|verif|confirm|ကိုယ်|user.?id|မသိ/.test(q)){
-  if(isMM)return"ID verify နည်းလေးကတော့ ✅\n1. In-game User ID ထည့်\n2. **Confirm ID** နှိပ်\n3. Admin check ပေးမယ်\n4. မင်း in-game name ပေါ်လာရင် Yes နှိပ်\n\nမအောင်ဘူးဆို User ID ထပ်စစ်ပေ့ bro 😅";
-  return"ID verify steps ✅\n1. Enter in-game User ID\n2. Tap **Confirm ID**\n3. Admin checks your name\n4. See your name? Hit Yes!\n\nNot working? Double-check your User ID bro 😅";
+ if(/id|verify|verif|confirm|user.?id|မသိ/.test(q)){
+  return isMM
+   ?"User ID verify လုပ်နည်း ✅\n1. Game page ထဲ User ID ထည့်\n2. **Confirm ID** button နှိပ်\n3. မင်း in-game name ပေါ်လာရင် ✓ Yes\n4. မပေါ်ရင် ID ထပ်စစ်ပေ့\n\nML bro တွေ: Zone ID ပါ ထည့်ဖို့ မမေ့နဲ့! (e.g. 12345678 (1234))"
+   :"How to verify User ID ✅\n1. Enter your User ID on the game page\n2. Tap **Confirm ID**\n3. If your name appears → hit Yes ✓\n4. Name wrong? Double-check your ID\n\nMLBB players: Don't forget your Zone ID! (e.g. 12345678 (1234))";
  }
- // ── Price ──
- if(/price|cost|much|ဘယ်လောက်|ဈေး|ဒဲ့/.test(q)){
-  if(isMM)return"prices တွေက game နဲ့ package ပေါ် မူတည်ပြောင်းတယ်!\nStore ထဲ game page မှာ **MMK** နဲ့ ပြထားတာ ကြည့်ပေ့ 💰";
-  return"Prices vary per game & package!\nCheck each game's page in the store for prices in **MMK** 💰";
+ if(/price|cost|much|ဘယ်လောက်|ဈေး/.test(q)){
+  return isMM
+   ?"Prices တွေ game နဲ့ package ပေါ် မူတည်ပြောင်းတယ်!\n**Home → Game ရွေး** → prices full list မြင်ရမယ် 💰\nAll in **MMK** ပါ — USD/THB မဟုတ်ဘူးနော်"
+   :"Prices vary by game & package!\n**Home → Pick a game** → see full price list 💰\nAll prices in **MMK** only";
  }
- // ── Safety ──
  if(/safe|secure|trust|လုံခြုံ|ယုံ/.test(q)){
-  if(isMM)return"totally safe bro! ✅\n• Firebase secure database\n• Payment data encrypted\n• Order တိုင်း admin manual check\n• Myanmar မှာ trusted store အဖြစ် run နေတာ\n\nngl ယုံလို့ရတယ် 💯";
-  return"totally safe bro! ✅\n• Firebase secure database\n• Payment data encrypted\n• Manual admin review every order\n• Trusted store in Myanmar\n\nngl you're in good hands 💯";
+  return isMM
+   ?"100% safe bro ✅\n- Firebase secure database\n- Payment info encrypted\n- တိုင်း order admin manual review\n- Myanmar မှာ trusted platform\n\nngl ယုံကြည်လို့ရတယ် — customers တွေ GG review ပေးနေကြတာ 💯"
+   :"100% safe ✅\n- Firebase secure database\n- Encrypted payment data\n- Every order manually reviewed\n- Trusted platform in Myanmar\n\nThousands of happy customers fr fr 💯";
  }
- // ── Contact ──
  if(/contact|admin|telegram|help|ကူ|ဆက်သွယ်|မေး/.test(q)){
   var tg=window._storeTgUser||"";
-  if(isMM)return"admin ကို **Telegram**"+(tg?" @"+tg:"")+" မှာ DM ဆက်လိုက်ပေ့ 📱\nProfile > Help & FAQ မှာလည်း ကြည့်လို့ရသေးတယ်!";
-  return"Hit up admin on **Telegram**"+(tg?" @"+tg:"")+" 📱\nOr check **Help & FAQ** in Profile tab!";
+  return isMM
+   ?"Admin ကို **Telegram**"+(tg?" @"+tg:"")+" မှာ DM ဆက်ပေ့ 📱\n\nOr → **Profile tab → Help & FAQ** မှာ common questions ကြည့်လို့ရတယ်!\nUrgent ဆိုရင် Telegram က fastest ပဲ ⚡"
+   :"Reach admin on **Telegram**"+(tg?" @"+tg:"")+" 📱\n\nOr → **Profile tab → Help & FAQ** for common questions!\nFor urgent issues Telegram is fastest ⚡";
  }
- // ── Default ──
- if(isMM)return"ဟေး! 😊 ဒီအကြောင်းတွေ မေးလို့ရတယ် —\n• Order ဘယ်လို မှာမလဲ\n• Payment method\n• ဘယ်နှစ်မိနစ် ကြာမလဲ\n• Order status ကြည့်နည်း\n• Refund policy\n• ဘယ် game တွေ ရှိလဲ\n\nAdmin ကို တိုက်ရိုက် မေးချင်ရင် Telegram မှာ DM ဆက်ပေ့ bro 📲";
- return"Hey! 😊 Ask me about —\n• How to order & top up\n• Payment methods\n• Delivery time\n• Order tracking\n• Refund policy\n• Available games\n\nFor order-specific stuff, DM admin on Telegram 📲";
+ return isMM
+  ?"ဟေး "+_n+"! ✋ ဒီ topics တွေ help ပေးနိုင်တယ် —\n- Order ဘယ်လို မှာမလဲ 🛒\n- Payment methods\n- Delivery time ⏱️\n- Order status ကြည့်နည်း\n- Refund policy\n- Available games 🎮\n\nBurmese or English မဆို မေးပေ့!"
+  :"Hey "+_n+"! ✋ I can help with —\n- How to top up 🛒\n- Payment methods\n- Delivery time ⏱️\n- Order tracking\n- Refund policy\n- Available games 🎮\n\nAsk away in Burmese or English!";
 }
 
 function aiNextSuggestions(lastQ){
