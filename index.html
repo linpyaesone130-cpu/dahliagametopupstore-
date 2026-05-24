@@ -1572,11 +1572,9 @@ function go(t){
  _prevPgId=t;
 }
 function shw(p){
- // Save home scroll before leaving
- var prevPg=document.querySelector(".pg.on");
- if(prevPg&&prevPg.id==="pg-home")_saveHomeScroll();
- document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on")});
- document.getElementById("pg-"+p).classList.add("on");
+ document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on","slide-in-right","slide-in-left","fade-up");});
+ var pg=document.getElementById("pg-"+p);
+ if(pg){pg.classList.add("on");pg.classList.add(p==="home"?"slide-in-left":"fade-up");}
  if(p==="home"){_restoreHomeScroll();}
  else{document.getElementById("cnt").scrollTop=0;}
 }
@@ -1760,6 +1758,7 @@ function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
  document.getElementById("rcptTotal").textContent=mmk(order.price);
  document.getElementById("rcptDate").textContent=new Date().toLocaleString("en-US",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"});
  document.getElementById("sov").classList.add("v");
+ setTimeout(_pulseHistoryTab,800);
 }}
 function copyRcpt(){if(!lastOrder)return;var t=" PCA STORE RECEIPT \n"+lastOrder.txnId+"\n"+lastOrder.game+"\n"+lastOrder.currencyIcon+" "+lastOrder.amount+" "+lastOrder.currency+"\nUser: "+lastOrder.userId+"\nPayment: "+lastOrder.payment+"\nTotal: "+mmk(lastOrder.price)+"\nStatus: Pending\n"+new Date().toLocaleString()+"\n";cph(t);}
 function shareRcpt(){if(!lastOrder)return;var t="PCA Store Receipt\n"+lastOrder.txnId+"\n"+lastOrder.game+" "+lastOrder.currencyIcon+lastOrder.amount+"\nTotal: "+mmk(lastOrder.price);if(navigator.share){navigator.share({title:"PCA Store Receipt",text:t}).catch(function(){});}else{cph(t);}}
@@ -3581,6 +3580,7 @@ function _renderLdb(data){
 // ═══════════════════════════════════════
 // Already done in original cm() — HL.unshift with _local flag
 // Enhanced: add visual pulse to history tab
+// Enhanced: pulse history tab after order
 function _pulseHistoryTab(){
  var nb=document.querySelector('.nb[data-t="his"]');
  if(!nb)return;
@@ -3591,29 +3591,8 @@ function _pulseHistoryTab(){
  setTimeout(function(){nb.style.transform="scale(1)";nb.style.transition="";},500);
 }
 
-// Patch cm() to also pulse history tab
-var _origCm=cm;
-cm=function(ok){
- _origCm(ok);
- if(ok)setTimeout(_pulseHistoryTab,800);
-};
-
-// ═══════════════════════════════════════
-// SHW() WITH ANIMATION — for back navigation
-// ═══════════════════════════════════════
-var _origShw=shw;
-shw=function(p){
- document.querySelectorAll(".pg").forEach(function(x){x.classList.remove("on","slide-in-right","slide-in-left","fade-up");});
- var pg=document.getElementById("pg-"+p);
- if(pg){
- pg.classList.add("on");
- pg.classList.add(p==="home"?"slide-in-left":"fade-up");
- }
- if(p==="home"){_restoreHomeScroll();}
- else{document.getElementById("cnt").scrollTop=0;}
-};
-
-
+// Wire Google button
+;(function(){
  var btn=document.getElementById("btnGoogleLogin");
  if(btn)btn.addEventListener("click",function(){doGoogle();});
 })();
