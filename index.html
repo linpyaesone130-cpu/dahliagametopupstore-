@@ -997,7 +997,7 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 .notif-item.rejected-msg.unread{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
 /* AI CHAT BUTTON */
 /* ── IMAGE ROBOT FAB ── */
-.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:14px;width:76px;height:90px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:10px;width:90px;height:108px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
 .ai-fab:active{cursor:grabbing;transform:scale(.93);}
 .ai-fab-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 
@@ -1100,10 +1100,10 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 }
 
 .ai-fab-img{
-  width:76px;height:90px;
+  width:86px;height:104px;
   display:block;
   animation:fabFloat 3.2s ease-in-out infinite;
-  filter:drop-shadow(0 6px 20px rgba(42,171,238,.5)) drop-shadow(0 2px 8px rgba(0,0,0,.3));
+  filter:drop-shadow(0 8px 24px rgba(42,171,238,.65)) drop-shadow(0 2px 8px rgba(0,0,0,.4)) drop-shadow(0 0 40px rgba(42,171,238,.25));
   border-radius:0;
   transform-origin:center bottom;
   overflow:visible;
@@ -1149,7 +1149,7 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
   20%{transform:translate(var(--sx),var(--sy)) scale(1.2);}
   100%{opacity:0;transform:translate(var(--ex),var(--ey)) scale(0);}
 }
-@keyframes fabFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.04)}}
+@keyframes fabFloat{0%,100%{transform:translateY(0) scale(1) rotate(-1deg)}25%{transform:translateY(-3px) scale(1.02) rotate(0deg)}50%{transform:translateY(-8px) scale(1.05) rotate(1deg)}75%{transform:translateY(-4px) scale(1.03) rotate(0deg)}}
 /* Typing dots overlay on FAB */
 .ai-fab-typing{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:3px;background:rgba(42,171,238,.92);border-radius:10px;padding:3px 8px;backdrop-filter:blur(4px);}
 .ai-fab-typing.show{display:flex;}
@@ -2693,102 +2693,232 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <div class="fab-pulse-ring"></div>
  <div class="ai-fab-bubble" id="aiFabBubble"></div>
  <div class="ai-fab-inner">
-  <svg id="aiFabImg" class="ai-fab-img" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">
+  <svg id="aiFabImg" class="ai-fab-img" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">
   <defs>
-    <filter id="glow-fab" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
+    <filter id="glow-fab" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="glow-eye" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+    <filter id="glow-eye" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#4DD9FF"/>
-      <stop offset="100%" stop-color="#1B7DBF"/>
+    <filter id="glow-soft" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="bodyGrad2" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#7DF0FF"/>
+      <stop offset="50%" stop-color="#2AABEE"/>
+      <stop offset="100%" stop-color="#0D5E99"/>
     </radialGradient>
-    <radialGradient id="headGrad" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#5AE0FF"/>
-      <stop offset="100%" stop-color="#1A6FA0"/>
+    <radialGradient id="headGrad2" cx="40%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#90F4FF"/>
+      <stop offset="50%" stop-color="#34C5FF"/>
+      <stop offset="100%" stop-color="#0A6FA0"/>
     </radialGradient>
-    <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="rgba(42,171,238,0.5)"/>
+    <radialGradient id="faceGrad" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#0e2035"/>
+      <stop offset="100%" stop-color="#071222"/>
+    </radialGradient>
+    <radialGradient id="shadowGrad2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(42,171,238,0.6)"/>
       <stop offset="100%" stop-color="rgba(42,171,238,0)"/>
     </radialGradient>
+    <radialGradient id="glowBody" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(90,224,255,0.25)"/>
+      <stop offset="100%" stop-color="rgba(90,224,255,0)"/>
+    </radialGradient>
   </defs>
-  <!-- Shadow/glow under robot -->
-  <ellipse cx="40" cy="96" rx="22" ry="5" fill="url(#shadowGrad)">
-    <animate attributeName="rx" values="18;24;18" dur="3s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+
+  <!-- Ground shadow pulsing -->
+  <ellipse cx="50" cy="115" rx="28" ry="6" fill="url(#shadowGrad2)">
+    <animate attributeName="rx" values="22;30;22" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3s" repeatCount="indefinite"/>
   </ellipse>
-  <!-- Main robot group - floating animation -->
+
+  <!-- Main robot floating group -->
   <g id="robotMain">
-    <animateTransform attributeName="transform" type="translate" values="0,0;0,-7;0,0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
-    <!-- Antenna -->
-    <line x1="40" y1="12" x2="40" y2="6" stroke="#2AABEE" stroke-width="2.5" stroke-linecap="round">
-      <animateTransform attributeName="transform" type="rotate" values="0 40 12;5 40 12;-5 40 12;0 40 12" dur="3s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-9;0,0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0.05 0.55 0.95;0.45 0.05 0.55 0.95"/>
+
+    <!-- Antenna base -->
+    <rect x="47" y="10" width="6" height="10" rx="3" fill="#1B7DBF"/>
+    <!-- Antenna stick -->
+    <line x1="50" y1="10" x2="50" y2="4" stroke="#2AABEE" stroke-width="2.5" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" values="0 50 10;6 50 10;-6 50 10;0 50 10" dur="2.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
     </line>
-    <circle cx="40" cy="5" r="3.5" fill="#34C5FF" filter="url(#glow-eye)">
-      <animate attributeName="r" values="3.5;4.5;3.5" dur="1.5s" repeatCount="indefinite"/>
-      <animate attributeName="fill" values="#34C5FF;#fff;#34C5FF" dur="1.5s" repeatCount="indefinite"/>
+    <!-- Antenna ball glowing -->
+    <circle cx="50" cy="3" r="4.5" fill="#34C5FF" filter="url(#glow-eye)">
+      <animate attributeName="r" values="4;5.5;4" dur="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#34C5FF;#ffffff;#34C5FF" dur="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.85;1;0.85" dur="1.2s" repeatCount="indefinite"/>
     </circle>
-    <!-- Head -->
-    <rect x="22" y="13" width="36" height="28" rx="10" fill="url(#headGrad)" filter="url(#glow-fab)"/>
-    <rect x="22" y="13" width="36" height="28" rx="10" fill="none" stroke="rgba(90,224,255,0.4)" stroke-width="1"/>
-    <!-- Eyes -->
-    <ellipse cx="32" cy="27" rx="5" ry="5" fill="#0a1525">
-      <animate attributeName="ry" attributeType="XML" values="5;5;5;5;5;5;5;5;0.5;5;5;5;5;5;5;5;5" dur="4s" repeatCount="indefinite"/>
+    <!-- Antenna sparkles -->
+    <circle cx="44" cy="5" r="1.5" fill="#FFD060" opacity="0.6">
+      <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+      <animate attributeName="r" values="1;2.5;0.5" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+    </circle>
+    <circle cx="57" cy="7" r="1.5" fill="#4DDB6B" opacity="0.6">
+      <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" repeatCount="indefinite" begin="0.9s"/>
+      <animate attributeName="r" values="1;2;0.5" dur="2.2s" repeatCount="indefinite" begin="0.9s"/>
+    </circle>
+
+    <!-- HEAD — big round cute head -->
+    <!-- Head outer glow -->
+    <rect x="18" y="12" width="64" height="44" rx="22" fill="url(#glowBody)" filter="url(#glow-soft)"/>
+    <!-- Head main -->
+    <rect x="20" y="14" width="60" height="42" rx="20" fill="url(#headGrad2)" filter="url(#glow-fab)"/>
+    <!-- Head highlight streak -->
+    <rect x="28" y="17" width="22" height="8" rx="4" fill="rgba(255,255,255,0.22)"/>
+    <!-- Head border glow -->
+    <rect x="20" y="14" width="60" height="42" rx="20" fill="none" stroke="rgba(144,244,255,0.45)" stroke-width="1.5"/>
+
+    <!-- Face panel (screen) -->
+    <rect x="26" y="20" width="48" height="30" rx="12" fill="url(#faceGrad)"/>
+    <rect x="26" y="20" width="48" height="30" rx="12" fill="none" stroke="rgba(42,171,238,0.3)" stroke-width="1"/>
+    <!-- Screen scan line -->
+    <rect x="26" y="20" width="48" height="3" rx="2" fill="rgba(90,224,255,0.08)">
+      <animate attributeName="y" values="20;47;20" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.08;0.18;0.08" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- LEFT EYE -->
+    <g>
+      <circle cx="38" cy="34" r="8" fill="#071a2c"/>
+      <ellipse cx="38" cy="34" rx="7" ry="7" fill="#0e2840">
+        <animate attributeName="ry" values="7;7;7;7;7;0.5;7;7;7;7;7;7;7;0.5;7;7" dur="5s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Eye iris glow -->
+      <circle cx="38" cy="34" r="4.5" fill="#2AABEE" filter="url(#glow-eye)">
+        <animate attributeName="opacity" values="1;0.7;1" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="4.5;5.2;4.5" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Eye pupil -->
+      <circle cx="38" cy="34" r="2.5" fill="#0a1525"/>
+      <!-- Eye shine -->
+      <circle cx="35.5" cy="31.5" r="1.5" fill="rgba(255,255,255,0.85)"/>
+      <circle cx="40" cy="36" r="0.7" fill="rgba(255,255,255,0.4)"/>
+    </g>
+
+    <!-- RIGHT EYE -->
+    <g>
+      <circle cx="62" cy="34" r="8" fill="#071a2c"/>
+      <ellipse cx="62" cy="34" rx="7" ry="7" fill="#0e2840">
+        <animate attributeName="ry" values="7;7;7;7;7;0.5;7;7;7;7;7;7;7;0.5;7;7" dur="5s" repeatCount="indefinite" begin="0.15s"/>
+      </ellipse>
+      <!-- Eye iris glow -->
+      <circle cx="62" cy="34" r="4.5" fill="#2AABEE" filter="url(#glow-eye)">
+        <animate attributeName="opacity" values="1;0.7;1" dur="1.8s" repeatCount="indefinite" begin="0.4s"/>
+        <animate attributeName="r" values="4.5;5.2;4.5" dur="1.8s" repeatCount="indefinite" begin="0.4s"/>
+      </circle>
+      <!-- Eye pupil -->
+      <circle cx="62" cy="34" r="2.5" fill="#0a1525"/>
+      <!-- Eye shine -->
+      <circle cx="59.5" cy="31.5" r="1.5" fill="rgba(255,255,255,0.85)"/>
+      <circle cx="64" cy="36" r="0.7" fill="rgba(255,255,255,0.4)"/>
+    </g>
+
+    <!-- Cute MOUTH / smile -->
+    <path d="M 40 47 Q 50 54 60 47" stroke="#34C5FF" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <animate attributeName="d" values="M 40 47 Q 50 54 60 47;M 40 46 Q 50 55 60 46;M 40 47 Q 50 54 60 47" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <!-- Cheek blush left -->
+    <ellipse cx="28" cy="44" rx="5" ry="3" fill="rgba(255,150,150,0.25)">
+      <animate attributeName="opacity" values="0.2;0.4;0.2" dur="3s" repeatCount="indefinite"/>
     </ellipse>
-    <ellipse cx="48" cy="27" rx="5" ry="5" fill="#0a1525">
-      <animate attributeName="ry" attributeType="XML" values="5;5;5;5;5;5;5;5;0.5;5;5;5;5;5;5;5;5" dur="4s" repeatCount="indefinite" begin="0.1s"/>
+    <!-- Cheek blush right -->
+    <ellipse cx="72" cy="44" rx="5" ry="3" fill="rgba(255,150,150,0.25)">
+      <animate attributeName="opacity" values="0.2;0.4;0.2" dur="3s" repeatCount="indefinite" begin="0.5s"/>
     </ellipse>
-    <!-- Eye glows -->
-    <circle cx="32" cy="27" r="3" fill="#2AABEE" filter="url(#glow-eye)">
-      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite"/>
+
+    <!-- EAR left -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" values="0 20 35;-12 20 35;0 20 35" dur="3s" repeatCount="indefinite"/>
+      <rect x="12" y="27" width="10" height="18" rx="5" fill="#1479b8"/>
+      <rect x="14" y="30" width="5" height="12" rx="3" fill="rgba(90,224,255,0.3)"/>
+    </g>
+    <!-- EAR right -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" values="0 80 35;12 80 35;0 80 35" dur="3s" repeatCount="indefinite" begin="0.3s"/>
+      <rect x="78" y="27" width="10" height="18" rx="5" fill="#1479b8"/>
+      <rect x="81" y="30" width="5" height="12" rx="3" fill="rgba(90,224,255,0.3)"/>
+    </g>
+
+    <!-- NECK -->
+    <rect x="42" y="56" width="16" height="8" rx="4" fill="#1B7DBF"/>
+    <rect x="45" y="58" width="10" height="4" rx="2" fill="rgba(90,224,255,0.2)"/>
+
+    <!-- BODY — rounded chunky body -->
+    <rect x="16" y="64" width="68" height="44" rx="22" fill="url(#bodyGrad2)" filter="url(#glow-fab)"/>
+    <!-- Body highlight -->
+    <rect x="24" y="67" width="30" height="10" rx="5" fill="rgba(255,255,255,0.18)"/>
+    <!-- Body border -->
+    <rect x="16" y="64" width="68" height="44" rx="22" fill="none" stroke="rgba(90,224,255,0.35)" stroke-width="1.5"/>
+
+    <!-- Chest screen panel -->
+    <rect x="26" y="72" width="48" height="24" rx="10" fill="rgba(5,15,28,0.5)"/>
+    <rect x="26" y="72" width="48" height="24" rx="10" fill="none" stroke="rgba(42,171,238,0.35)" stroke-width="1"/>
+    <!-- Heart beat / EKG line on chest -->
+    <polyline points="28,84 34,84 37,76 40,92 43,80 46,88 49,84 70,84" fill="none" stroke="#2AABEE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.2s" repeatCount="indefinite"/>
+    </polyline>
+    <!-- Chest LED dots -->
+    <circle cx="34" cy="90" r="2.8" fill="#34C5FF" filter="url(#glow-eye)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="0.9s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="48" cy="27" r="3" fill="#2AABEE" filter="url(#glow-eye)">
-      <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+    <circle cx="42" cy="90" r="2.8" fill="#FFD060" filter="url(#glow-eye)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="0.9s" repeatCount="indefinite" begin="0.3s"/>
     </circle>
-    <!-- Mouth -->
-    <path d="M 33 35 Q 40 40 47 35" stroke="#34C5FF" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <!-- Ears -->
-    <rect x="14" y="20" width="8" height="14" rx="4" fill="#1B7DBF">
-      <animateTransform attributeName="transform" type="rotate" values="0 18 27;-10 18 27;0 18 27" dur="3.5s" repeatCount="indefinite"/>
-    </rect>
-    <rect x="58" y="20" width="8" height="14" rx="4" fill="#1B7DBF">
-      <animateTransform attributeName="transform" type="rotate" values="0 62 27;10 62 27;0 62 27" dur="3.5s" repeatCount="indefinite" begin="0.2s"/>
-    </rect>
-    <!-- Neck -->
-    <rect x="35" y="41" width="10" height="6" rx="3" fill="#1B7DBF"/>
-    <!-- Body -->
-    <rect x="20" y="47" width="40" height="32" rx="12" fill="url(#bodyGrad)" filter="url(#glow-fab)"/>
-    <rect x="20" y="47" width="40" height="32" rx="12" fill="none" stroke="rgba(90,224,255,0.3)" stroke-width="1"/>
-    <!-- Chest panel -->
-    <rect x="27" y="53" width="26" height="16" rx="6" fill="rgba(0,0,0,0.35)"/>
-    <!-- Chest dots -->
-    <circle cx="34" cy="61" r="3" fill="#34C5FF" filter="url(#glow-eye)">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+    <circle cx="50" cy="90" r="2.8" fill="#4DDB6B" filter="url(#glow-eye)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="0.9s" repeatCount="indefinite" begin="0.6s"/>
     </circle>
-    <circle cx="40" cy="61" r="3" fill="#34C5FF" filter="url(#glow-eye)">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" begin="0.33s"/>
+    <circle cx="58" cy="90" r="2.8" fill="#FF5A5A" filter="url(#glow-eye)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="0.9s" repeatCount="indefinite" begin="0.9s"/>
     </circle>
-    <circle cx="46" cy="61" r="3" fill="#34C5FF" filter="url(#glow-eye)">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" begin="0.66s"/>
+    <circle cx="66" cy="90" r="2.8" fill="#34C5FF" filter="url(#glow-eye)">
+      <animate attributeName="opacity" values="1;0.2;1" dur="0.9s" repeatCount="indefinite" begin="1.2s"/>
     </circle>
-    <!-- Left arm -->
-    <rect x="8" y="49" width="12" height="22" rx="6" fill="#1B7DBF">
-      <animateTransform attributeName="transform" type="rotate" values="0 14 49;15 14 49;0 14 49" dur="2.8s" repeatCount="indefinite" begin="1.8s"/>
-    </rect>
-    <!-- Right arm -->
-    <rect x="60" y="49" width="12" height="22" rx="6" fill="#1B7DBF">
-      <animateTransform attributeName="transform" type="rotate" values="0 66 49;-10 66 49;0 66 49" dur="2.8s" repeatCount="indefinite" begin="0.2s"/>
-    </rect>
-    <!-- Legs -->
-    <rect x="27" y="79" width="11" height="16" rx="5" fill="#1B7DBF"/>
-    <rect x="42" y="79" width="11" height="16" rx="5" fill="#1B7DBF"/>
+
+    <!-- LEFT ARM — wave -->
+    <g id="fabArmL">
+      <animateTransform attributeName="transform" type="rotate" values="0 16 68;14 16 68;0 16 68" dur="2.8s" repeatCount="indefinite" begin="1.5s" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+      <rect x="3" y="67" width="14" height="28" rx="7" fill="#1479b8"/>
+      <rect x="5" y="70" width="8" height="18" rx="4" fill="rgba(90,224,255,0.15)"/>
+      <!-- Fist -->
+      <rect x="2" y="92" width="16" height="10" rx="6" fill="#0D5E99"/>
+    </g>
+
+    <!-- RIGHT ARM — wave greeting -->
+    <g id="fabArmR">
+      <animateTransform attributeName="transform" type="rotate" values="0 83 68;-22 83 68;-8 83 68;-22 83 68;0 83 68" dur="2.5s" repeatCount="indefinite" begin="0.5s" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+      <rect x="83" y="67" width="14" height="28" rx="7" fill="#1479b8"/>
+      <rect x="85" y="70" width="8" height="18" rx="4" fill="rgba(90,224,255,0.15)"/>
+      <!-- Fist -->
+      <rect x="82" y="92" width="16" height="10" rx="6" fill="#0D5E99"/>
+    </g>
+
+    <!-- LEGS -->
+    <rect x="28" y="105" width="18" height="14" rx="7" fill="#1479b8"/>
+    <rect x="54" y="105" width="18" height="14" rx="7" fill="#1479b8"/>
     <!-- Feet -->
-    <rect x="24" y="92" width="15" height="7" rx="4" fill="#155E86"/>
-    <rect x="41" y="92" width="15" height="7" rx="4" fill="#155E86"/>
+    <rect x="24" y="114" width="24" height="8" rx="5" fill="#0D5E99"/>
+    <rect x="52" y="114" width="24" height="8" rx="5" fill="#0D5E99"/>
+
+    <!-- Hover particles around body -->
+    <circle cx="12" cy="75" r="2" fill="#34C5FF" opacity="0.5">
+      <animate attributeName="cy" values="75;65;75" dur="2.1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="2.1s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="12;8;12" dur="2.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="88" cy="70" r="1.5" fill="#FFD060" opacity="0.5">
+      <animate attributeName="cy" values="70;60;70" dur="1.7s" repeatCount="indefinite" begin="0.5s"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="1.7s" repeatCount="indefinite" begin="0.5s"/>
+      <animate attributeName="cx" values="88;92;88" dur="1.7s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+    <circle cx="50" cy="62" r="1.5" fill="#4DDB6B" opacity="0.4">
+      <animate attributeName="cy" values="62;52;62" dur="2.4s" repeatCount="indefinite" begin="1s"/>
+      <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite" begin="1s"/>
+    </circle>
   </g>
 </svg>
   <div class="ai-fab-shadow"></div>
