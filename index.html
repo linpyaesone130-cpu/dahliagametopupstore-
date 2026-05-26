@@ -997,7 +997,7 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 .notif-item.rejected-msg.unread{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);}
 /* AI CHAT BUTTON */
 /* ── IMAGE ROBOT FAB ── */
-.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:10px;width:72px;height:90px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:10px;width:64px;height:76px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
 .ai-fab:active{cursor:grabbing;transform:scale(.93);}
 .ai-fab-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 
@@ -1100,10 +1100,10 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 }
 
 .ai-fab-img{
-  width:72px;height:86px;
+  width:64px;height:76px;
   display:block;
   animation:fabFloat 3.2s ease-in-out infinite;
-  filter:drop-shadow(0 8px 24px rgba(40,100,200,0.45)) drop-shadow(0 3px 8px rgba(0,40,120,0.25));
+  filter:drop-shadow(0 6px 18px rgba(42,171,238,.6)) drop-shadow(0 2px 6px rgba(0,0,0,.35));
   border-radius:0;
   transform-origin:center bottom;
   overflow:visible;
@@ -1203,362 +1203,99 @@ body{font-family:var(--font);background:#17212B;color:var(--tx);-webkit-font-smo
 }
 .ai-ov.v{opacity:1;pointer-events:all;}
 
-/* Main Sheet — White Liquid-Glass */
+/* Main Sheet — White Premium */
 .ai-sh{
-  background:linear-gradient(165deg,
-    rgba(255,255,255,0.97) 0%,
-    rgba(240,248,255,0.96) 40%,
-    rgba(225,242,255,0.95) 100%);
+  background:linear-gradient(165deg,rgba(255,255,255,.97) 0%,rgba(240,248,255,.96) 40%,rgba(225,242,255,.95) 100%);
   border-radius:28px 28px 0 0;
   padding:0;max-width:430px;width:100%;height:92vh;
   display:flex;flex-direction:column;
   transform:translateY(100%);
   transition:transform .42s cubic-bezier(.32,.72,0,1);
-  border:1.5px solid rgba(255,255,255,0.9);
+  border:1.5px solid rgba(255,255,255,.9);
   border-bottom:none;
-  box-shadow:
-    0 -32px 80px rgba(42,120,200,0.18),
-    0 -8px 32px rgba(42,120,200,0.10),
-    0 -1px 0 rgba(255,255,255,0.9),
-    inset 0 1px 0 rgba(255,255,255,0.95);
+  box-shadow:0 -32px 80px rgba(42,120,200,.18),0 -8px 32px rgba(42,120,200,.10),inset 0 1px 0 rgba(255,255,255,.95);
   overflow:hidden;
   backdrop-filter:blur(40px);
   -webkit-backdrop-filter:blur(40px);
 }
 .ai-ov.v .ai-sh{transform:translateY(0);}
+.ai-sh::after{content:'';position:absolute;top:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,rgba(42,171,238,.6),transparent);pointer-events:none;}
+.ai-sh::before{content:'';display:block;width:44px;height:5px;border-radius:5px;background:rgba(42,120,200,.18);margin:14px auto 0;flex-shrink:0;}
 
-/* Liquid shimmer at top edge */
-.ai-sh::after{
-  content:'';
-  position:absolute;top:0;left:10%;right:10%;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(42,171,238,0.6),rgba(150,200,255,0.8),rgba(42,171,238,0.6),transparent);
-  pointer-events:none;
-  animation:liquidShimmer 3s ease-in-out infinite;
-}
-@keyframes liquidShimmer{
-  0%,100%{opacity:0.6;left:10%;right:10%;}
-  50%{opacity:1;left:5%;right:5%;}
-}
-
-/* Drag handle — frosted */
-.ai-sh::before{
-  content:'';display:block;
-  width:44px;height:5px;border-radius:5px;
-  background:rgba(42,120,200,0.2);
-  margin:14px auto 0;flex-shrink:0;
-  backdrop-filter:blur(4px);
-}
-
-/* ── HEADER — white glass ── */
-.ai-hdr{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 18px 16px;
-  border-bottom:1px solid rgba(42,120,200,0.1);
-  flex-shrink:0;
-  background:rgba(255,255,255,0.7);
-  backdrop-filter:blur(20px);
-  position:relative;
-}
-.ai-hdr::after{
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(42,171,238,0.3),transparent);
-}
-
-/* Robot avatar — white frosted glass */
-.ai-hdr-av{
-  width:50px;height:50px;
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.95) 0%,rgba(220,240,255,0.9) 100%);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;position:relative;
-  border:1.5px solid rgba(255,255,255,0.95);
-  box-shadow:
-    0 4px 20px rgba(42,120,200,0.2),
-    0 1px 4px rgba(42,120,200,0.1),
-    inset 0 1px 0 rgba(255,255,255,1);
-}
+/* Header */
+.ai-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px 16px;border-bottom:1px solid rgba(42,120,200,.1);flex-shrink:0;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);position:relative;}
+.ai-hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(42,171,238,.25),transparent);}
+.ai-hdr-av{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(220,240,255,.9));display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;border:1.5px solid rgba(255,255,255,.95);box-shadow:0 4px 20px rgba(42,120,200,.2),inset 0 1px 0 rgba(255,255,255,1);}
 .ai-hdr-av svg{width:42px;height:42px;}
-.ai-hdr-av .ai-online{
-  position:absolute;bottom:-2px;right:-2px;
-  width:11px;height:11px;border-radius:50%;
-  background:#10b981;border:2.5px solid #fff;
-  animation:pulse-green 2s infinite;
-}
-
+.ai-hdr-av .ai-online{position:absolute;bottom:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#10b981;border:2.5px solid #fff;animation:pulse-green 2s infinite;}
 .ai-hdr-info{flex:1;min-width:0;}
-.ai-hdr-nm{
-  font-size:15px;font-weight:800;
-  color:#1a2a3a;letter-spacing:-.2px;
-  display:flex;align-items:center;gap:7px;
-}
+.ai-hdr-nm{font-size:15px;font-weight:800;color:#1a2a3a;letter-spacing:-.2px;display:flex;align-items:center;gap:7px;}
 .ai-hdr-sub{display:flex;align-items:center;gap:6px;margin-top:3px;}
-.ai-hdr-st{
-  font-size:10px;color:#10b981;font-weight:700;
-  display:flex;align-items:center;gap:4px;
-}
-.ai-hdr-st::before{
-  content:'';width:5px;height:5px;border-radius:50%;
-  background:#10b981;animation:pulse-green 2s infinite;
-}
-.ai-model-tag{
-  background:rgba(42,171,238,0.1);
-  border:1px solid rgba(42,171,238,0.3);
-  color:#0e7fc2;padding:2px 8px;
-  border-radius:7px;font-size:9px;font-weight:800;
-  letter-spacing:.6px;text-transform:uppercase;
-}
-.ai-close{
-  width:36px;height:36px;border-radius:12px;
-  border:1.5px solid rgba(42,120,200,0.12);
-  background:rgba(255,255,255,0.7);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:.15s;
-  box-shadow:0 2px 8px rgba(42,120,200,0.08);
-}
-.ai-close:hover{background:rgba(255,255,255,0.95);}
+.ai-hdr-st{font-size:10px;color:#10b981;font-weight:700;display:flex;align-items:center;gap:4px;}
+.ai-hdr-st::before{content:'';width:5px;height:5px;border-radius:50%;background:#10b981;animation:pulse-green 2s infinite;}
+.ai-model-tag{background:rgba(42,171,238,.1);border:1px solid rgba(42,171,238,.3);color:#0e7fc2;padding:2px 8px;border-radius:7px;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
+.ai-close{width:36px;height:36px;border-radius:12px;border:1.5px solid rgba(42,120,200,.12);background:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;box-shadow:0 2px 8px rgba(42,120,200,.08);}
 .ai-close:active{transform:scale(.9);}
 .ai-close svg{width:14px;height:14px;stroke:#5a7a9a;fill:none;}
 
-/* ── MESSAGES AREA — soft white ── */
-.ai-msgs{
-  flex:1;overflow-y:auto;
-  padding:18px 16px 10px;
-  display:flex;flex-direction:column;gap:14px;
-  scrollbar-width:none;
-  background:linear-gradient(180deg,
-    rgba(235,246,255,0.6) 0%,
-    rgba(245,250,255,0.4) 100%);
-}
+/* Messages */
+.ai-msgs{flex:1;overflow-y:auto;padding:18px 16px 10px;display:flex;flex-direction:column;gap:14px;scrollbar-width:none;background:linear-gradient(180deg,rgba(235,246,255,.5) 0%,rgba(245,250,255,.3) 100%);}
 .ai-msgs::-webkit-scrollbar{display:none;}
-
-/* Message animation */
-@keyframes msgSlide{
-  from{opacity:0;transform:translateY(12px) scale(.97);}
-  to{opacity:1;transform:translateY(0) scale(1);}
-}
+@keyframes msgSlide{from{opacity:0;transform:translateY(12px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
 .ai-msg{display:flex;gap:10px;animation:msgSlide .28s cubic-bezier(.25,.46,.45,.94) both;}
 .ai-msg.user{flex-direction:row-reverse;}
-
-/* Avatars */
-.ai-msg .ai-av{
-  width:32px;height:32px;border-radius:11px;
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;
-}
-.ai-msg.bot .ai-av{
-  background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(210,235,255,0.9));
-  border:1.5px solid rgba(255,255,255,0.95);
-  box-shadow:0 3px 12px rgba(42,120,200,0.15);
-}
-.ai-msg.user .ai-av{
-  background:linear-gradient(135deg,#2AABEE,#1B7DBF);
-  border:1px solid rgba(42,171,238,0.4);
-  box-shadow:0 3px 10px rgba(42,171,238,0.3);
-}
+.ai-msg .ai-av{width:32px;height:32px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.ai-msg.bot .ai-av{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(210,235,255,.9));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 3px 12px rgba(42,120,200,.15);}
+.ai-msg.user .ai-av{background:linear-gradient(135deg,#2AABEE,#1B7DBF);border:1px solid rgba(42,171,238,.4);box-shadow:0 3px 10px rgba(42,171,238,.3);}
 .ai-msg.bot .ai-av svg{width:18px;height:18px;fill:none;stroke:#2AABEE;stroke-width:2;}
 .ai-msg.user .ai-av svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;}
+.ai-msg .ai-bub{max-width:80%;font-size:13.5px;line-height:1.65;word-break:break-word;}
+.ai-msg.bot .ai-bub{background:rgba(255,255,255,.9);border:1px solid rgba(42,120,200,.1);color:#1a2a3a;padding:13px 16px;border-radius:4px 18px 18px 18px;box-shadow:0 4px 20px rgba(42,120,200,.08),inset 0 1px 0 rgba(255,255,255,.95);backdrop-filter:blur(10px);}
+.ai-msg.user .ai-bub{background:linear-gradient(135deg,#1563a8,#1e88e5 50%,#2AABEE);color:#fff;padding:13px 16px;border-radius:18px 4px 18px 18px;box-shadow:0 6px 24px rgba(42,171,238,.35),inset 0 1px 0 rgba(255,255,255,.2);}
+.ai-msg.bot .ai-bub strong{color:#0e7fc2;font-weight:800;}
 
-/* Message bubbles */
-.ai-msg .ai-bub{
-  max-width:80%;font-size:13.5px;line-height:1.65;
-  word-break:break-word;
-}
-
-/* BOT bubble — white liquid glass */
-.ai-msg.bot .ai-bub{
-  background:rgba(255,255,255,0.88);
-  border:1px solid rgba(42,120,200,0.1);
-  color:#1a2a3a;
-  padding:13px 16px;
-  border-radius:4px 18px 18px 18px;
-  box-shadow:
-    0 4px 20px rgba(42,120,200,0.08),
-    0 1px 4px rgba(42,120,200,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-}
-/* Bot bubble highlight */
-.ai-msg.bot .ai-bub::before{
-  content:'';display:block;height:0;
-}
-
-/* USER bubble — vibrant blue gradient */
-.ai-msg.user .ai-bub{
-  background:linear-gradient(135deg,#1563a8 0%,#1e88e5 50%,#2AABEE 100%);
-  color:#fff;
-  padding:13px 16px;
-  border-radius:18px 4px 18px 18px;
-  box-shadow:
-    0 6px 24px rgba(42,171,238,0.35),
-    0 2px 8px rgba(42,171,238,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-}
-
-/* Bot message: strong text */
-.ai-msg.bot .ai-bub strong{
-  color:#0e7fc2;font-weight:800;
-}
-
-/* ── TYPING INDICATOR ── */
-.ai-typing{
-  display:flex;align-items:center;gap:6px;
-  padding:14px 18px;
-  background:rgba(255,255,255,0.88);
-  border:1px solid rgba(42,120,200,0.1);
-  border-radius:4px 18px 18px 18px;
-  width:fit-content;
-  box-shadow:0 4px 16px rgba(42,120,200,0.08);
-}
-.ai-typing span{
-  width:7px;height:7px;border-radius:50%;
-  background:#2AABEE;opacity:.3;
-  animation:aiDot 1.5s ease infinite;
-}
+/* Typing */
+.ai-typing{display:flex;align-items:center;gap:6px;padding:14px 18px;background:rgba(255,255,255,.9);border:1px solid rgba(42,120,200,.1);border-radius:4px 18px 18px 18px;width:fit-content;box-shadow:0 4px 16px rgba(42,120,200,.08);}
+.ai-typing span{width:7px;height:7px;border-radius:50%;background:#2AABEE;opacity:.3;animation:aiDot 1.5s ease infinite;}
 .ai-typing span:nth-child(2){animation-delay:.2s;}
 .ai-typing span:nth-child(3){animation-delay:.4s;}
-@keyframes aiDot{
-  0%,80%,100%{transform:translateY(0) scale(1);opacity:.25;}
-  40%{transform:translateY(-5px) scale(1.2);opacity:1;}
-}
+@keyframes aiDot{0%,80%,100%{transform:translateY(0) scale(1);opacity:.25;}40%{transform:translateY(-5px) scale(1.2);opacity:1;}}
 
-/* ── QUICK SUGGESTIONS ── */
-.ai-qsug{
-  display:flex;flex-wrap:nowrap;gap:7px;
-  padding:8px 16px 6px;
-  overflow-x:auto;scrollbar-width:none;
-  background:rgba(255,255,255,0.5);
-}
+/* Suggestions */
+.ai-qsug{display:flex;flex-wrap:nowrap;gap:7px;padding:8px 16px 6px;overflow-x:auto;scrollbar-width:none;background:rgba(255,255,255,.5);}
 .ai-qsug::-webkit-scrollbar{display:none;}
-.ai-qsug button{
-  padding:8px 16px;
-  border-radius:22px;
-  border:1.5px solid rgba(42,171,238,0.25);
-  background:rgba(255,255,255,0.85);
-  color:#0e7fc2;
-  font-size:11px;font-weight:700;
-  cursor:pointer;font-family:var(--font);
-  transition:.18s;
-  white-space:nowrap;
-  letter-spacing:.1px;
-  flex-shrink:0;
-  box-shadow:0 2px 10px rgba(42,120,200,0.08);
-  backdrop-filter:blur(8px);
-}
-.ai-qsug button:hover{
-  background:rgba(42,171,238,0.08);
-  border-color:rgba(42,171,238,0.5);
-  box-shadow:0 4px 14px rgba(42,120,200,0.14);
-}
-.ai-qsug button:active{
-  background:rgba(42,171,238,0.12);
-  transform:scale(.95);
-}
+.ai-qsug button{padding:8px 16px;border-radius:22px;border:1.5px solid rgba(42,171,238,.25);background:rgba(255,255,255,.85);color:#0e7fc2;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:.15s;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 10px rgba(42,120,200,.08);}
+.ai-qsug button:active{transform:scale(.95);background:rgba(42,171,238,.1);}
 
-/* ── INPUT ROW — frosted white ── */
-.ai-inp-row{
-  display:flex;gap:10px;
-  padding:12px 16px calc(env(safe-area-inset-bottom,8px)+14px);
-  border-top:1px solid rgba(42,120,200,0.08);
-  flex-shrink:0;
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(20px);
-  align-items:flex-end;
-  box-shadow:0 -4px 20px rgba(42,120,200,0.05);
-}
-.ai-inp{
-  flex:1;padding:13px 18px;
-  border-radius:22px;
-  border:1.5px solid rgba(42,120,200,0.15);
-  background:rgba(255,255,255,0.9);
-  font-size:13px;font-family:var(--font);
-  color:#1a2a3a;outline:none;
-  transition:.2s;resize:none;line-height:1.5;
-  max-height:100px;
-  box-shadow:
-    0 2px 12px rgba(42,120,200,0.08),
-    inset 0 1px 0 rgba(255,255,255,1);
-}
+/* Input row */
+.ai-inp-row{display:flex;gap:10px;padding:12px 16px calc(env(safe-area-inset-bottom,8px)+14px);border-top:1px solid rgba(42,120,200,.08);flex-shrink:0;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);align-items:flex-end;}
+.ai-inp{flex:1;padding:13px 18px;border-radius:22px;border:1.5px solid rgba(42,120,200,.15);background:rgba(255,255,255,.9);font-size:13px;font-family:var(--font);color:#1a2a3a;outline:none;transition:border-color .15s;resize:none;line-height:1.5;max-height:100px;box-shadow:0 2px 12px rgba(42,120,200,.08),inset 0 1px 0 rgba(255,255,255,1);}
 .ai-inp::placeholder{color:#90a8be;}
-.ai-inp:focus{
-  border-color:rgba(42,171,238,0.5);
-  box-shadow:
-    0 0 0 3px rgba(42,171,238,0.12),
-    0 4px 16px rgba(42,120,200,0.1),
-    inset 0 1px 0 rgba(255,255,255,1);
-  background:rgba(255,255,255,0.98);
-}
-
-/* SEND button — premium liquid blue */
-.ai-send{
-  width:46px;height:46px;border-radius:16px;border:none;
-  background:linear-gradient(135deg,#1563a8,#2AABEE);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:.18s;
-  align-self:flex-end;
-  box-shadow:
-    0 6px 20px rgba(42,171,238,0.4),
-    0 2px 8px rgba(42,171,238,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-}
-.ai-send::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
-  pointer-events:none;
-}
-.ai-send:hover{
-  transform:scale(1.06);
-  box-shadow:0 8px 28px rgba(42,171,238,0.5);
-}
+.ai-inp:focus{border-color:rgba(42,171,238,.5);box-shadow:0 0 0 3px rgba(42,171,238,.1),inset 0 1px 0 rgba(255,255,255,1);}
+.ai-send{width:46px;height:46px;border-radius:16px;border:none;background:linear-gradient(135deg,#1563a8,#2AABEE);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.18s;align-self:flex-end;box-shadow:0 6px 20px rgba(42,171,238,.4);}
 .ai-send:active{transform:scale(.92);}
 .ai-send svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2.5;}
 .ai-send:disabled{opacity:.3;cursor:default;transform:none;box-shadow:none;}
 
-/* ── FORMATTED content ── */
-.ai-card{
-  background:rgba(42,171,238,0.06);
-  border:1px solid rgba(42,171,238,0.15);
-  border-radius:12px;padding:10px 12px;
-  margin-top:8px;font-size:12px;
-  line-height:1.7;color:#1a2a3a;
-}
-.ai-step{
-  display:flex;gap:8px;align-items:flex-start;
-  margin-bottom:6px;
-}
-.ai-step-n{
-  width:20px;height:20px;border-radius:7px;
-  background:rgba(42,171,238,0.12);border:1px solid rgba(42,171,238,0.2);
-  color:#0e7fc2;font-size:10px;font-weight:800;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
+/* Cards / formatted */
+.ai-card{background:rgba(42,171,238,.06);border:1px solid rgba(42,171,238,.15);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.7;color:#1a2a3a;}
+.ai-step{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;}
+.ai-step-n{width:20px;height:20px;border-radius:7px;background:rgba(42,171,238,.12);border:1px solid rgba(42,171,238,.2);color:#0e7fc2;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ai-step-t{color:#2a3a4a;font-size:12px;padding-top:2px;}
-.ai-tag{
-  display:inline-block;padding:2px 8px;
-  border-radius:6px;background:rgba(42,171,238,0.08);
-  border:1px solid rgba(42,171,238,0.18);
-  color:#0e7fc2;font-size:10px;font-weight:700;margin:2px;
-}
+.ai-tag{display:inline-block;padding:2px 8px;border-radius:6px;background:rgba(42,171,238,.08);border:1px solid rgba(42,171,238,.18);color:#0e7fc2;font-size:10px;font-weight:700;margin:2px;}
 
-/* FAB — white drop shadow when on white bg */
+/* FAB shadow update */
 .ai-fab-img{
-  filter:drop-shadow(0 8px 24px rgba(42,100,200,0.5)) drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+  width:72px;height:86px;
+  display:block;
+  animation:fabFloat 3.2s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px rgba(40,100,200,.4)) drop-shadow(0 3px 8px rgba(0,40,120,.2));
+  border-radius:0;
+  transform-origin:center bottom;
+  overflow:visible;
 }
-.ai-fab-bubble{
-  background:rgba(255,255,255,0.96);
-  border:1.5px solid rgba(42,171,238,0.3);
-  border-radius:14px 14px 14px 3px;
-  padding:6px 12px;
-  font-size:11px;font-weight:800;
-  color:#0e7fc2;
-  white-space:nowrap;
-  pointer-events:none;
-  opacity:0;
-  backdrop-filter:blur(12px);
-  box-shadow:0 6px 24px rgba(42,120,200,0.18);
-}
+.ai-fab-bubble{background:rgba(255,255,255,.96);border:1.5px solid rgba(42,171,238,.3);border-radius:14px 14px 14px 3px;padding:6px 12px;font-size:11px;font-weight:800;color:#0e7fc2;white-space:nowrap;pointer-events:none;opacity:0;backdrop-filter:blur(12px);box-shadow:0 6px 24px rgba(42,120,200,.18);}
+.ai-fab{position:fixed;bottom:calc(env(safe-area-inset-bottom,8px)+74px);right:10px;width:72px;height:90px;border-radius:0;background:transparent;border:none;cursor:grab;display:flex;align-items:center;justify-content:center;z-index:55;transition:filter .2s,transform .15s;font-family:var(--font);padding:0;box-shadow:none;user-select:none;touch-action:none;overflow:visible;}
 
 /* CS row */
 .cs-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(42,171,238,.08),rgba(30,33,50,.04));border:1px solid rgba(42,171,238,.18);cursor:pointer;transition:all .15s;margin-bottom:10px;}
@@ -2384,210 +2121,6 @@ img.img-reveal.loaded { opacity: 1; }
 }
 @keyframes idShine { 0%{left:-60%} 100%{left:120%} }
 
-/* ══════════════════════════════════════════════════════════════
-   ⚡ 120FPS PERFORMANCE LAYER
-   - GPU-only properties: transform, opacity, filter
-   - Eliminate layout-triggering transitions (width/height/top/left)
-   - will-change only on actively animated elements
-   - contain:strict on scroll containers
-   - content-visibility for off-screen sections
-══════════════════════════════════════════════════════════════ */
-
-/* 1. Force GPU compositing on all interactive elements */
-.gc,.pk,.py,.py-glass,.nb,.tb,.sv,.bk,.hdr-btn,.abtn,
-.lb-row,.hc,.ev-mg-card,.ev-featured,.trk-dot,
-.ai-fab,.ai-fab-img,.ai-send,.ai-qsug button,
-.warn-box,.su-c,.ov .sh,.ed .es,.trk-sh,.evd-sh,.notif-sh,
-.ai-sh,.ai-msg,.ai-bub{
-  -webkit-backface-visibility:hidden;
-  backface-visibility:hidden;
-  transform:translateZ(0);
-}
-
-/* 2. will-change ONLY on elements that animate continuously */
-.ai-fab-img,
-#robotMain3d,
-#robotMain,
-.ai-msg,
-.sk,
-.live-order-dot,
-.hero-tag .dot{
-  will-change:transform;
-}
-/* Remove will-change from static elements after first paint */
-.gc,.pk,.py,.py-glass,.nb,.tb,.abtn{
-  will-change:auto;
-}
-
-/* 3. Contain scroll regions to avoid full-page repaints */
-.cnt{
-  contain:layout style;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;
-}
-.ai-msgs{
-  contain:layout style;
-  overscroll-behavior-y:contain;
-}
-
-/* 4. Replace slow transitions with GPU-only (transform+opacity only) */
-/* Tabs */
-.tb{transition:opacity .12s linear,transform .12s cubic-bezier(.25,.46,.45,.94)!important;}
-.tb:active{transform:scale(.94) translateZ(0)!important;}
-
-/* Nav buttons */
-.nb{transition:opacity .12s linear!important;}
-.nb svg{transition:opacity .12s linear!important;}
-.nb .nl{transition:opacity .12s linear!important;}
-.nb.on{transform:translateZ(0);}
-
-/* Game cards — only transform+opacity */
-.gc{transition:opacity .12s linear,transform .14s cubic-bezier(.25,.46,.45,.94)!important;}
-.gc:hover{transform:translateZ(0) scale(1.01)!important;}
-.gc:active{transform:scale(.93) translateZ(0)!important;}
-
-/* Package cards */
-.pk{transition:opacity .12s linear,transform .14s cubic-bezier(.25,.46,.45,.94)!important;}
-.pk:active{transform:scale(.95) translateZ(0)!important;}
-
-/* Payment cards */
-.py,.py-glass{transition:transform .14s cubic-bezier(.25,.46,.45,.94),opacity .12s linear!important;}
-.py:active,.py-glass:active{transform:scale(.93) translateZ(0)!important;}
-
-/* Buttons general */
-.hdr-btn,.bk,.sv,.abtn,.su-b,.m-ok,.m-c,.ai-send,.warn-ok,.warn-cancel{
-  transition:transform .12s cubic-bezier(.25,.46,.45,.94),opacity .12s linear!important;
-}
-.hdr-btn:active,.sv:active,.su-b:active,.m-ok:active,.m-c:active{
-  transform:scale(.93) translateZ(0)!important;
-}
-
-/* FAB drag — no transition during drag */
-.ai-fab{transition:opacity .15s linear!important;}
-.ai-fab:active{transform:scale(.93) translateZ(0)!important;}
-
-/* 5. Sheet overlays — GPU translate only */
-.ov .sh,.ed .es,.trk-sh,.evd-sh,.notif-sh,.ai-sh{
-  transition:transform .32s cubic-bezier(.32,.72,0,1)!important;
-}
-.ov,.ed,.trk-ov,.evd-ov,.notif-ov,.ai-ov,.warn-ov,.su{
-  transition:opacity .22s linear!important;
-}
-.warn-box{
-  transition:transform .22s cubic-bezier(.34,1.2,.64,1),opacity .18s linear!important;
-}
-.su-c{
-  transition:transform .28s cubic-bezier(.32,.72,0,1),opacity .22s linear!important;
-}
-
-/* 6. Input focus — no box-shadow transition (triggers repaint) */
-.srch input:focus,
-.icard input:focus,
-.ai-inp:focus{
-  transition:border-color .12s linear!important;
-  box-shadow:none!important;
-}
-.ai-inp:focus{
-  border-color:rgba(42,171,238,.5)!important;
-  outline:2px solid rgba(42,171,238,.15)!important;
-}
-
-/* 7. Shimmer skeleton — use transform instead of background-position */
-@keyframes shimmer120{
-  0%  {transform:translateX(-100%);}
-  100%{transform:translateX(100%);}
-}
-.sk{
-  background:#1C2733!important;
-  overflow:hidden;
-  position:relative;
-  animation:none!important;
-}
-.sk::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.07) 50%,transparent 100%);
-  animation:shimmer120 1.4s ease-in-out infinite;
-  will-change:transform;
-  transform:translateZ(0);
-}
-.app.light .sk{background:#EBEBEC!important;}
-.app.light .sk::after{
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.6) 50%,transparent 100%);
-}
-
-/* 8. Page transitions — translateX only (GPU) */
-@keyframes slideInRight120 {from{opacity:0;transform:translate3d(24px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes slideInLeft120  {from{opacity:0;transform:translate3d(-24px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes fadeUp120       {from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-.pg.slide-in-right{animation:slideInRight120 .18s cubic-bezier(.22,1,.36,1) both!important;}
-.pg.slide-in-left {animation:slideInLeft120  .18s cubic-bezier(.22,1,.36,1) both!important;}
-.pg.fade-up       {animation:fadeUp120       .16s cubic-bezier(.22,1,.36,1) both!important;}
-
-/* 9. Toast — GPU only */
-.toast{
-  transition:opacity .2s linear,transform .22s cubic-bezier(.34,1.2,.64,1)!important;
-  transform:translateX(-50%) translateY(-12px) scale(.95) translateZ(0)!important;
-}
-.toast.v{transform:translateX(-50%) translateY(0) scale(1) translateZ(0)!important;}
-
-/* 10. Message slide — faster for snappiness */
-@keyframes msgSlide120{
-  from{opacity:0;transform:translate3d(0,8px,0);}
-  to  {opacity:1;transform:translate3d(0,0,0);}
-}
-.ai-msg{animation:msgSlide120 .2s cubic-bezier(.22,1,.36,1) both!important;}
-
-/* 11. Robot float — use translate3d for GPU */
-@keyframes fabFloat120{
-  0%  {transform:translate3d(0,0px,0) rotate(-1deg);}
-  25% {transform:translate3d(0,-3px,0) rotate(0deg);}
-  50% {transform:translate3d(0,-8px,0) rotate(1deg);}
-  75% {transform:translate3d(0,-4px,0) rotate(0deg);}
-  100%{transform:translate3d(0,0px,0) rotate(-1deg);}
-}
-.ai-fab-img{animation:fabFloat120 3.2s ease-in-out infinite!important;}
-
-/* 12. content-visibility for off-screen pages */
-.pg:not(.on){
-  content-visibility:hidden;
-}
-
-/* 13. High-frequency pulse animations — simplify */
-@keyframes blink120{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-tag .dot{animation:blink120 2s linear infinite!important;}
-
-@keyframes liveOrderPulse120{
-  0%,100%{transform:scale(1) translateZ(0);}
-  50%    {transform:scale(1.15) translateZ(0);}
-}
-.live-order-dot{animation:liveOrderPulse120 1.4s linear infinite!important;}
-
-/* 14. Disable backdrop-filter on low-perf fallback (keeps 60fps floor) */
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
-}
-
-/* 15. Pixel-crisp text rendering during transforms */
-.gc .gn,.pk .pk-a,.pk .pk-p,.nb .nl,.lb,.ai-hdr-nm,.ai-hdr-st{
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeSpeed;
-}
-
-/* 16. Replace ALL transition:all with GPU-only transform+opacity */
-.hdr-btn,.bk,.py .py-ck,.py-glass .py-ck,
-.tr-ph,.lang-b,.trk-dot,.itab,.itab svg,.itab .itab-l,.itab .itab-c,
-.py-glass,.lb-row,.lb-tab,.kk,.tg-notify .tg-btn,
-.ds-nav button,.ds-day,.ev-featured,.ev-mg-card,.av,.pf-eb,.pf-sb,.lgo,
-.ai-close,.ev-featured,.nc-result{
-  transition:transform .12s cubic-bezier(.25,.46,.45,.94),opacity .12s linear!important;
-}
-.snap-dot{transition:width .2s cubic-bezier(.25,.46,.45,.94)!important;}
-.an-bar-fill{transition:width .7s ease!important;}
-.tg .ts{transition:background .2s linear!important;}
-.tg .ts::before{transition:transform .2s cubic-bezier(.25,.46,.45,.94)!important;}
-
 </style>
 <script>(function(){try{var dk=localStorage.getItem("pca_dark");if(dk==="1"){document.write("<style>.app{background:#06090f!important;color:#e5e7eb!important}.app.light{background:#17212B!important;color:#F5F5F5!important}</style>")}if(localStorage.getItem("pca_logged")==="1"){var s=document.createElement("style");s.textContent=".auth{display:none!important}.app.hide{display:block!important}";document.head.appendChild(s);}
 // Apply theme-light to auth screen on load if light mode active
@@ -2966,7 +2499,6 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <div class="ai-fab-inner">
   <svg id="aiFabImg" class="ai-fab-img" viewBox="0 0 90 108" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">
   <defs>
-    <!-- 3D White body gradient -->
     <radialGradient id="r3dHead" cx="38%" cy="28%" r="65%">
       <stop offset="0%" stop-color="#FFFFFF"/>
       <stop offset="45%" stop-color="#D8ECFF"/>
@@ -3000,89 +2532,59 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
       <stop offset="100%" stop-color="rgba(100,180,255,0)"/>
     </radialGradient>
     <filter id="f3dGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="f3dSoft" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="fDrop" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,80,180,0.3)"/>
+    <filter id="fDrop" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1" dy="3" stdDeviation="2.5" flood-color="rgba(0,80,180,0.25)"/>
     </filter>
   </defs>
 
-  <!-- Ground shadow -->
   <ellipse cx="45" cy="104" rx="18" ry="3.5" fill="url(#r3dShadow)">
     <animate attributeName="rx" values="14;20;14" dur="3s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3s" repeatCount="indefinite"/>
   </ellipse>
 
-  <!-- Whole robot floats -->
-  <g id="robotMain3d">
+  <g id="robotMain">
     <animateTransform attributeName="transform" type="translate" values="0,0;0,-7;0,0" dur="3s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0.05 0.55 0.95;0.45 0.05 0.55 0.95"/>
 
-    <!-- ── EAR LEFT (pill shape, tilted) ── -->
-    <g transform="translate(8,22) rotate(-15)">
-      <animateTransform attributeName="transform" type="rotate" values="-15 14 30;-22 14 30;-15 14 30" dur="3.5s" repeatCount="indefinite" additive="sum"/>
-      <rect x="0" y="0" width="11" height="22" rx="5.5" fill="url(#r3dEar)" filter="url(#fDrop)"/>
-      <rect x="2" y="3" width="7" height="15" rx="3.5" fill="rgba(255,255,255,0.35)"/>
-      <!-- Inner detail -->
-      <rect x="3.5" y="5" width="4" height="2" rx="1" fill="rgba(42,171,238,0.5)"/>
-    </g>
+    <!-- Ears -->
+    <rect x="8" y="20" width="11" height="22" rx="5.5" fill="url(#r3dEar)" filter="url(#fDrop)"/>
+    <rect x="10" y="23" width="7" height="15" rx="3.5" fill="rgba(255,255,255,0.35)"/>
+    <rect x="71" y="20" width="11" height="22" rx="5.5" fill="url(#r3dEar)" filter="url(#fDrop)"/>
+    <rect x="73" y="23" width="7" height="15" rx="3.5" fill="rgba(255,255,255,0.35)"/>
 
-    <!-- ── EAR RIGHT ── -->
-    <g transform="translate(71,22) rotate(15)">
-      <animateTransform attributeName="transform" type="rotate" values="15 76 30;22 76 30;15 76 30" dur="3.5s" repeatCount="indefinite" additive="sum" begin="0.3s"/>
-      <rect x="0" y="0" width="11" height="22" rx="5.5" fill="url(#r3dEar)" filter="url(#fDrop)"/>
-      <rect x="2" y="3" width="7" height="15" rx="3.5" fill="rgba(255,255,255,0.35)"/>
-      <rect x="3.5" y="5" width="4" height="2" rx="1" fill="rgba(42,171,238,0.5)"/>
-    </g>
-
-    <!-- ── ANTENNA ── -->
-    <line x1="45" y1="11" x2="45" y2="5" stroke="#9BC8F0" stroke-width="2.5" stroke-linecap="round">
-      <animateTransform attributeName="transform" type="rotate" values="0 45 11;6 45 11;-6 45 11;0 45 11" dur="2.5s" repeatCount="indefinite"/>
-    </line>
+    <!-- Antenna -->
+    <line x1="45" y1="11" x2="45" y2="5" stroke="#9BC8F0" stroke-width="2.5" stroke-linecap="round"/>
     <circle cx="45" cy="3.5" r="4" fill="#7DDFFF" filter="url(#f3dGlow)">
       <animate attributeName="r" values="3.5;5;3.5" dur="1.4s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.9;1;0.9" dur="1.4s" repeatCount="indefinite"/>
     </circle>
 
-    <!-- ── HEAD (rounded square, 3D white) ── -->
+    <!-- Head -->
     <rect x="17" y="11" width="56" height="40" rx="18" fill="url(#r3dHead)" filter="url(#fDrop)"/>
-    <!-- head sheen top -->
     <rect x="24" y="14" width="22" height="7" rx="3.5" fill="rgba(255,255,255,0.55)"/>
-    <!-- head edge highlight -->
     <rect x="17" y="11" width="56" height="40" rx="18" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
-    <!-- head shadow inner bottom -->
-    <rect x="17" y="35" width="56" height="16" rx="0 0 18 18" fill="rgba(0,80,180,0.08)"/>
 
-    <!-- ── FACE SCREEN ── -->
+    <!-- Face screen -->
     <rect x="23" y="17" width="44" height="29" rx="11" fill="url(#r3dFace)"/>
-    <!-- screen bezel -->
     <rect x="23" y="17" width="44" height="29" rx="11" fill="none" stroke="rgba(42,171,238,0.3)" stroke-width="1"/>
-    <!-- corner scan lines -->
-    <path d="M24 19 L24 23 M24 19 L28 19" stroke="rgba(42,171,238,0.6)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-    <path d="M66 19 L66 23 M66 19 L62 19" stroke="rgba(42,171,238,0.6)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-    <!-- scan line sweep -->
-    <rect x="23" y="17" width="44" height="2" rx="1" fill="rgba(90,224,255,0.12)">
+    <rect x="23" y="17" width="44" height="2" rx="1" fill="rgba(90,224,255,0.1)">
       <animate attributeName="y" values="17;43;17" dur="2.8s" repeatCount="indefinite"/>
     </rect>
 
-    <!-- ── LEFT EYE (big oval, cyan glow) ── -->
+    <!-- Left Eye -->
     <ellipse cx="36" cy="30" rx="7.5" ry="8.5" fill="#071a2c">
-      <animate attributeName="ry" values="8.5;8.5;8.5;0.4;8.5;8.5;8.5;8.5;0.4;8.5" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="8.5;8.5;8.5;0.4;8.5;8.5" dur="5s" repeatCount="indefinite"/>
     </ellipse>
     <ellipse cx="36" cy="30" rx="5.5" ry="6.5" fill="url(#r3dEye)" filter="url(#f3dGlow)">
       <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
     </ellipse>
     <ellipse cx="36" cy="30" rx="2.5" ry="3" fill="#071a2c"/>
-    <!-- eye highlight -->
     <ellipse cx="33.5" cy="27.5" rx="2" ry="1.5" fill="rgba(255,255,255,0.9)"/>
 
-    <!-- ── RIGHT EYE ── -->
+    <!-- Right Eye -->
     <ellipse cx="54" cy="30" rx="7.5" ry="8.5" fill="#071a2c">
-      <animate attributeName="ry" values="8.5;8.5;8.5;8.5;0.4;8.5;8.5;8.5;8.5;0.4" dur="5s" repeatCount="indefinite" begin="0.15s"/>
+      <animate attributeName="ry" values="8.5;8.5;8.5;8.5;0.4;8.5" dur="5s" repeatCount="indefinite" begin="0.15s"/>
     </ellipse>
     <ellipse cx="54" cy="30" rx="5.5" ry="6.5" fill="url(#r3dEye)" filter="url(#f3dGlow)">
       <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite" begin="0.4s"/>
@@ -3090,72 +2592,45 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
     <ellipse cx="54" cy="30" rx="2.5" ry="3" fill="#071a2c"/>
     <ellipse cx="51.5" cy="27.5" rx="2" ry="1.5" fill="rgba(255,255,255,0.9)"/>
 
-    <!-- ── NECK ── -->
+    <!-- Neck -->
     <rect x="36" y="51" width="18" height="8" rx="4" fill="#B0D4F1"/>
-    <rect x="36" y="51" width="18" height="8" rx="4" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
 
-    <!-- ── BODY (rounded oval, 3D white-blue) ── -->
+    <!-- Body -->
     <ellipse cx="45" cy="79" rx="27" ry="23" fill="url(#r3dBody)" filter="url(#fDrop)"/>
-    <!-- body sheen -->
     <ellipse cx="40" cy="66" rx="14" ry="6" fill="rgba(255,255,255,0.45)"/>
-    <!-- body edge -->
     <ellipse cx="45" cy="79" rx="27" ry="23" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
-    <!-- body shadow bottom -->
-    <ellipse cx="45" cy="93" rx="22" ry="8" fill="rgba(0,80,180,0.12)"/>
 
-    <!-- Chest glowing orb -->
-    <circle cx="45" cy="78" r="7" fill="rgba(42,171,238,0.15)"/>
+    <!-- Chest orb -->
     <circle cx="45" cy="78" r="5" fill="rgba(42,171,238,0.35)" filter="url(#f3dGlow)">
       <animate attributeName="r" values="4.5;6;4.5" dur="2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
     </circle>
     <circle cx="45" cy="78" r="2.5" fill="#7DDFFF"/>
 
-    <!-- ── LEFT ARM (holding atom orb) ── -->
-    <g id="fabArmL3d">
-      <animateTransform attributeName="transform" type="rotate" values="0 22 62;10 22 62;0 22 62" dur="3s" repeatCount="indefinite" begin="0.8s"/>
-      <!-- upper arm -->
-      <ellipse cx="22" cy="70" rx="7" ry="10" fill="url(#r3dEar)" filter="url(#fDrop)"/>
-      <ellipse cx="22" cy="70" rx="4.5" ry="7" fill="rgba(255,255,255,0.35)"/>
-      <!-- lower arm/hand -->
-      <ellipse cx="15" cy="83" rx="8" ry="6" fill="url(#r3dHead)" filter="url(#fDrop)"/>
-      <ellipse cx="15" cy="83" rx="5.5" ry="4" fill="rgba(255,255,255,0.5)"/>
-      <!-- ATOM ORB in hand -->
-      <g transform="translate(8,72)">
-        <!-- orb core -->
-        <circle cx="7" cy="7" r="5.5" fill="url(#r3dOrb)" filter="url(#f3dGlow)">
-          <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="7" cy="7" r="3.5" fill="rgba(180,144,255,0.6)"/>
-        <circle cx="5.5" cy="5.5" r="1.5" fill="rgba(255,255,255,0.8)"/>
-        <!-- orbit ring 1 -->
-        <ellipse cx="7" cy="7" rx="8" ry="3.5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1">
-          <animateTransform attributeName="transform" type="rotate" values="0 7 7;360 7 7" dur="2s" repeatCount="indefinite"/>
-        </ellipse>
-        <!-- orbit ring 2 -->
-        <ellipse cx="7" cy="7" rx="8" ry="3.5" fill="none" stroke="rgba(120,180,255,0.5)" stroke-width="0.8" transform="rotate(60 7 7)">
-          <animateTransform attributeName="transform" type="rotate" values="60 7 7;420 7 7" dur="3s" repeatCount="indefinite"/>
-        </ellipse>
-        <!-- orbit nodes -->
-        <circle cx="15" cy="7" r="1.5" fill="#7DDFFF" filter="url(#f3dGlow)">
-          <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="-1" cy="7" r="1.5" fill="#B490FF">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
-        </circle>
-      </g>
+    <!-- Left arm + atom orb -->
+    <ellipse cx="22" cy="70" rx="7" ry="10" fill="url(#r3dEar)" filter="url(#fDrop)"/>
+    <ellipse cx="22" cy="70" rx="4.5" ry="7" fill="rgba(255,255,255,0.35)"/>
+    <ellipse cx="13" cy="83" rx="8" ry="6" fill="url(#r3dHead)" filter="url(#fDrop)"/>
+    <!-- Atom -->
+    <g transform="translate(4,72)">
+      <circle cx="9" cy="9" r="5.5" fill="url(#r3dOrb)" filter="url(#f3dGlow)">
+        <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="9" cy="9" r="3" fill="rgba(180,144,255,0.6)"/>
+      <circle cx="7" cy="7" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <ellipse cx="9" cy="9" rx="9" ry="3.5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1">
+        <animateTransform attributeName="transform" type="rotate" values="0 9 9;360 9 9" dur="2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="9" cy="9" rx="9" ry="3.5" fill="none" stroke="rgba(120,180,255,0.5)" stroke-width="0.8" transform="rotate(60 9 9)">
+        <animateTransform attributeName="transform" type="rotate" values="60 9 9;420 9 9" dur="3s" repeatCount="indefinite"/>
+      </ellipse>
     </g>
 
-    <!-- ── RIGHT ARM ── -->
-    <g id="fabArmR3d">
-      <animateTransform attributeName="transform" type="rotate" values="0 68 62;-12 68 62;-4 68 62;-12 68 62;0 68 62" dur="2.8s" repeatCount="indefinite" begin="0.4s"/>
-      <ellipse cx="68" cy="70" rx="7" ry="10" fill="url(#r3dEar)" filter="url(#fDrop)"/>
-      <ellipse cx="68" cy="70" rx="4.5" ry="7" fill="rgba(255,255,255,0.35)"/>
-      <ellipse cx="75" cy="83" rx="8" ry="6" fill="url(#r3dHead)" filter="url(#fDrop)"/>
-      <ellipse cx="75" cy="83" rx="5.5" ry="4" fill="rgba(255,255,255,0.5)"/>
-    </g>
+    <!-- Right arm -->
+    <ellipse cx="68" cy="70" rx="7" ry="10" fill="url(#r3dEar)" filter="url(#fDrop)"/>
+    <ellipse cx="68" cy="70" rx="4.5" ry="7" fill="rgba(255,255,255,0.35)"/>
+    <ellipse cx="77" cy="83" rx="8" ry="6" fill="url(#r3dHead)" filter="url(#fDrop)"/>
 
-    <!-- Floating sparkles -->
+    <!-- Sparkles -->
     <circle cx="10" cy="68" r="1.8" fill="#7DDFFF" opacity="0.7">
       <animate attributeName="cy" values="68;58;68" dur="2.3s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.7;0;0.7" dur="2.3s" repeatCount="indefinite"/>
@@ -3163,10 +2638,6 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
     <circle cx="78" cy="62" r="1.4" fill="#B490FF" opacity="0.6">
       <animate attributeName="cy" values="62;52;62" dur="1.9s" repeatCount="indefinite" begin="0.6s"/>
       <animate attributeName="opacity" values="0.6;0;0.6" dur="1.9s" repeatCount="indefinite" begin="0.6s"/>
-    </circle>
-    <circle cx="60" cy="56" r="1" fill="#FFD060" opacity="0.5">
-      <animate attributeName="cy" values="56;48;56" dur="2.6s" repeatCount="indefinite" begin="1.2s"/>
-      <animate attributeName="opacity" values="0.5;0;0.5" dur="2.6s" repeatCount="indefinite" begin="1.2s"/>
     </circle>
   </g>
 </svg>
@@ -3199,8 +2670,8 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
      <stop offset="0%" stop-color="#7DDFFF"/>
      <stop offset="100%" stop-color="#0E6FAA"/>
     </radialGradient>
-    <filter id="hdrGlow" x="-60%" y="-60%" width="220%" height="220%">
-     <feGaussianBlur stdDeviation="1.5" result="blur"/>
+    <filter id="hdrGlow3d" x="-60%" y="-60%" width="220%" height="220%">
+     <feGaussianBlur stdDeviation="1.2" result="blur"/>
      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
    </defs>
@@ -3211,49 +2682,37 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
     #hdrER     { animation: robotBlink 4s ease-in-out infinite .2s; }
    </style>
    <g id="hdrBot3d">
-    <!-- antenna -->
     <line x1="20" y1="9" x2="20" y2="5" stroke="#9BC8F0" stroke-width="1.5" stroke-linecap="round"/>
-    <circle cx="20" cy="3.5" r="2" fill="#7DDFFF" filter="url(#hdrGlow)">
+    <circle cx="20" cy="3.5" r="2" fill="#7DDFFF" filter="url(#hdrGlow3d)">
      <animate attributeName="r" values="1.8;2.5;1.8" dur="1.3s" repeatCount="indefinite"/>
     </circle>
-    <!-- ear left -->
     <rect x="5.5" y="11" width="5" height="10" rx="2.5" fill="#B8D8F4"/>
     <rect x="6.5" y="13" width="3" height="6" rx="1.5" fill="rgba(255,255,255,0.4)"/>
-    <!-- ear right -->
     <rect x="29.5" y="11" width="5" height="10" rx="2.5" fill="#B8D8F4"/>
     <rect x="30.5" y="13" width="3" height="6" rx="1.5" fill="rgba(255,255,255,0.4)"/>
-    <!-- head -->
-    <rect x="8" y="9" width="24" height="16" rx="7" fill="url(#hdr3dHead)" filter="url(#hdrGlow)"/>
+    <rect x="8" y="9" width="24" height="16" rx="7" fill="url(#hdr3dHead)" filter="url(#hdrGlow3d)"/>
     <rect x="10" y="11" width="10" height="4" rx="2" fill="rgba(255,255,255,0.55)"/>
     <rect x="8" y="9" width="24" height="16" rx="7" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/>
-    <!-- face screen -->
     <rect x="10" y="11" width="20" height="12" rx="4.5" fill="url(#hdr3dFace)"/>
-    <rect x="10" y="11" width="20" height="12" rx="4.5" fill="none" stroke="rgba(42,171,238,0.25)" stroke-width="0.5"/>
-    <!-- eyes -->
-    <ellipse id="hdrEL" cx="16" cy="17" rx="3" ry="3.5" fill="url(#hdr3dEye)" filter="url(#hdrGlow)"/>
+    <ellipse id="hdrEL" cx="16" cy="17" rx="3" ry="3.5" fill="url(#hdr3dEye)" filter="url(#hdrGlow3d)"/>
     <ellipse cx="16" cy="17" rx="1.2" ry="1.5" fill="#071a2c"/>
     <ellipse cx="15" cy="15.8" rx="1" ry="0.7" fill="rgba(255,255,255,0.85)"/>
-    <ellipse id="hdrER" cx="24" cy="17" rx="3" ry="3.5" fill="url(#hdr3dEye)" filter="url(#hdrGlow)"/>
+    <ellipse id="hdrER" cx="24" cy="17" rx="3" ry="3.5" fill="url(#hdr3dEye)" filter="url(#hdrGlow3d)"/>
     <ellipse cx="24" cy="17" rx="1.2" ry="1.5" fill="#071a2c"/>
     <ellipse cx="23" cy="15.8" rx="1" ry="0.7" fill="rgba(255,255,255,0.85)"/>
-    <!-- neck -->
     <rect x="16" y="25.5" width="8" height="4" rx="2" fill="#B8D8F4"/>
-    <!-- body -->
-    <ellipse cx="20" cy="35" rx="11" ry="8" fill="url(#hdr3dHead)" filter="url(#hdrGlow)"/>
+    <ellipse cx="20" cy="35" rx="11" ry="8" fill="url(#hdr3dHead)" filter="url(#hdrGlow3d)"/>
     <ellipse cx="18" cy="30" rx="5" ry="2" fill="rgba(255,255,255,0.45)"/>
-    <!-- chest orb -->
-    <circle cx="20" cy="35" r="2.5" fill="rgba(42,171,238,0.3)" filter="url(#hdrGlow)">
+    <circle cx="20" cy="35" r="2.5" fill="rgba(42,171,238,0.3)" filter="url(#hdrGlow3d)">
      <animate attributeName="r" values="2;3;2" dur="2s" repeatCount="indefinite"/>
     </circle>
     <circle cx="20" cy="35" r="1.2" fill="#7DDFFF"/>
-    <!-- left arm -->
     <ellipse cx="9" cy="32" rx="3" ry="5" fill="#B8D8F4"/>
     <ellipse cx="9" cy="32" rx="2" ry="3.5" fill="rgba(255,255,255,0.35)"/>
-    <!-- right arm (wave) -->
     <g id="hdrArmWave">
      <ellipse cx="31" cy="30" rx="3" ry="5" fill="#B8D8F4"/>
      <ellipse cx="31" cy="30" rx="2" ry="3.5" fill="rgba(255,255,255,0.35)"/>
-     <circle cx="32.5" cy="26" r="2" fill="#7DDFFF" filter="url(#hdrGlow)"/>
+     <circle cx="32.5" cy="26" r="2" fill="#7DDFFF" filter="url(#hdrGlow3d)"/>
     </g>
    </g>
   </svg>
@@ -6537,160 +5996,6 @@ window.rht=function(){
   }
  },80);
 };
-
-// ════════════════════════════════════════════════════════════════
-// ⚡ 120FPS PERFORMANCE PATCHES
-// ════════════════════════════════════════════════════════════════
-(function(){
-
-/* ── 1. requestAnimationFrame-batched touch scale ──
-   Replace direct style.transform writes with rAF to avoid
-   mid-frame layout invalidation                             */
-var _rafPending = null;
-var _scaleTarget = null;
-var _scaleVal = "";
-
-function _applyScale(){
-  _rafPending = null;
-  if(_scaleTarget){ _scaleTarget.style.transform = _scaleVal; _scaleTarget = null; }
-}
-
-document.addEventListener("touchstart", function(e){
-  var el = e.target.closest(".gc,.pk,.py,.py-glass,.nb,.tb,.sv,.hdr-btn,.abtn,.ai-send,.ai-qsug button,.warn-ok,.warn-cancel,.su-b,.bk");
-  if(!el) return;
-  if(_rafPending){ cancelAnimationFrame(_rafPending); }
-  _scaleTarget = el;
-  _scaleVal = "scale(.95) translateZ(0)";
-  _rafPending = requestAnimationFrame(_applyScale);
-}, {passive:true});
-
-document.addEventListener("touchend", function(e){
-  var el = e.target.closest(".gc,.pk,.py,.py-glass,.nb,.tb,.sv,.hdr-btn,.abtn,.ai-send,.ai-qsug button,.warn-ok,.warn-cancel,.su-b,.bk");
-  if(!el) return;
-  if(_rafPending){ cancelAnimationFrame(_rafPending); }
-  _scaleTarget = el;
-  _scaleVal = "scale(1) translateZ(0)";
-  _rafPending = requestAnimationFrame(_applyScale);
-}, {passive:true});
-
-document.addEventListener("touchcancel", function(e){
-  var el = e.target.closest(".gc,.pk,.py,.py-glass,.nb,.tb,.sv,.hdr-btn,.abtn,.ai-send,.ai-qsug button,.warn-ok,.warn-cancel,.su-b,.bk");
-  if(el){ requestAnimationFrame(function(){ el.style.transform = "scale(1) translateZ(0)"; }); }
-}, {passive:true});
-
-/* ── 2. Passive scroll everywhere ── */
-(function patchScrollListeners(){
-  var opts = {passive:true, capture:false};
-  var cnt  = document.getElementById("cnt");
-  var msgs = document.getElementById("aiMsgs");
-  if(cnt)  cnt.addEventListener("scroll",  function(){}, opts);
-  if(msgs) msgs.addEventListener("scroll", function(){}, opts);
-})();
-
-/* ── 3. rAF-throttled nav bounce ──
-   Original code sets style.transform 3× with timeouts;
-   replace with a single rAF chain                        */
-var _origGo2 = window.go;
-window.go = function(t){
-  _origGo2(t);
-  requestAnimationFrame(function(){
-    var nb2 = document.querySelector(".nb[data-t='"+t+"']");
-    if(!nb2) return;
-    nb2.style.transform = "scale(1.15) translateZ(0)";
-    requestAnimationFrame(function(){
-      nb2.style.transform = "scale(1) translateZ(0)";
-    });
-  });
-};
-
-/* ── 4. Reduce shimmer animation count ──
-   Pause shimmer on off-screen skeleton cards via IntersectionObserver */
-if("IntersectionObserver" in window){
-  var skObs = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      var el = en.target;
-      if(en.isIntersecting){
-        el.style.animationPlayState = "";
-        if(el._skAfter) el._skAfter.style.animationPlayState = "";
-      } else {
-        el.style.animationPlayState = "paused";
-        if(el._skAfter) el._skAfter.style.animationPlayState = "paused";
-      }
-    });
-  }, {rootMargin:"100px"});
-  function _observeSkeletons(){
-    document.querySelectorAll(".sk:not([data-sk-obs])").forEach(function(el){
-      el.dataset.skObs = "1";
-      skObs.observe(el);
-    });
-  }
-  _observeSkeletons();
-  // Re-observe after game grid renders
-  var _origRgrd2 = window.rgrd;
-  if(_origRgrd2) window.rgrd = function(l){_origRgrd2(l); requestAnimationFrame(_observeSkeletons);};
-}
-
-/* ── 5. content-visibility eager for visible page, hidden for others ── */
-(function applyCV(){
-  var pages = document.querySelectorAll(".pg");
-  pages.forEach(function(pg){
-    if(!pg.classList.contains("on")){
-      pg.style.contentVisibility = "hidden";
-    } else {
-      pg.style.contentVisibility = "visible";
-    }
-  });
-})();
-
-// Patch go() to toggle content-visibility
-var _origGo3 = window.go;
-window.go = function(t){
-  _origGo3(t);
-  requestAnimationFrame(function(){
-    document.querySelectorAll(".pg").forEach(function(pg){
-      pg.style.contentVisibility = pg.classList.contains("on") ? "visible" : "hidden";
-    });
-  });
-};
-
-/* ── 6. Avoid layout thrash in FAB drag ──
-   FAB drag reads clientX/clientY (no layout) — already good.
-   Ensure rAF wraps the transform write.                     */
-var _aiFab = document.getElementById("aiFab");
-if(_aiFab){
-  var _fabDragging = false;
-  var _fabRx = 0, _fabRy = 0;
-  var _fabRafId = null;
-  var _fabTx = 0, _fabTy = 0;
-
-  _aiFab.addEventListener("touchmove", function(e){
-    if(!_fabDragging) return;
-    var t = e.touches[0];
-    _fabTx = t.clientX - _fabRx;
-    _fabTy = t.clientY - _fabRy;
-    if(_fabRafId) return; // already scheduled
-    _fabRafId = requestAnimationFrame(function(){
-      _fabRafId = null;
-      _aiFab.style.transform = "translate3d("+_fabTx+"px,"+_fabTy+"px,0)";
-    });
-  }, {passive:true});
-}
-
-/* ── 7. Overlay backdrop-filter — promote to own layer ── */
-[".ai-ov",".ov",".ed",".warn-ov",".su",".notif-ov",".trk-ov",".evd-ov"].forEach(function(sel){
-  var el = document.querySelector(sel);
-  if(el){ el.style.isolation = "isolate"; }
-});
-
-/* ── 8. High-refresh hint (Chrome/Safari) ── */
-try{
-  if(screen && screen.requestAnimationFrameRate){
-    screen.requestAnimationFrameRate(120);
-  }
-}catch(e){}
-
-})(); // end 120FPS patches
-
 
 </script>
 </body>
