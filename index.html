@@ -3544,6 +3544,132 @@ h1, h2, h3, .font-display {
 .app.light .auth,.app.light .auth-card,.theme-light .auth-card{box-shadow:none!important;}
 
 /* ══════════════════════════════════════════
+   ⚡ PERFORMANCE OPTIMIZATION
+   Mobile (Android/iOS) smooth 60fps fixes
+══════════════════════════════════════════ */
+
+/* 1. BACKDROP-FILTER REDUCTION
+   blur(30-50px) = huge GPU cost on mobile.
+   Reduce all to ≤8px or replace with solid bg. */
+.hdr {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.nav {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.ai-sh {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.ai-hdr {
+  backdrop-filter: none !important;
+  background: rgba(255,255,255,.97) !important;
+}
+.ai-inp-row {
+  backdrop-filter: none !important;
+  background: rgba(255,255,255,.99) !important;
+}
+.app:not(.light) .ai-hdr  { background: rgba(15,20,28,.99) !important; }
+.app:not(.light) .ai-inp-row { background: rgba(12,16,24,.99) !important; }
+/* Modals: keep minimal blur only */
+.ov, .ed, .su, .trk-ov, .warn-ov, .evd-ov, .notif-ov {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+/* Small badges: no blur needed */
+.vid-banner-badge, .vid-mute-btn, .etf-box, .ev-ft-timer .ftt,
+.ai-fab-bubble, .ai-fab-typing, .py-glass {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.toast {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 2. GAME CARD 3D PARALLAX — REMOVE
+   perspective + preserve-3d + rotateXY on every
+   card causes composite layer explosion on mobile. */
+.gc {
+  perspective: none !important;
+  transform-style: flat !important;
+}
+.gc-inner {
+  transform-style: flat !important;
+  transform: none !important;
+  transition: none !important;
+}
+.gc-inner .gi { transform: none !important; }
+.gc-inner .gn { transform: none !important; }
+.gc:hover .gc-inner { transform: none !important; }
+.gc-shine { display: none !important; }
+
+/* 3. REDUCE INFINITE ANIMATIONS
+   Each infinite animation = CPU/GPU work every frame. */
+
+/* Robot FAB: keep only float, remove all others */
+#robotBody { animation: none !important; }
+#robotEyeL, #robotEyeR { animation: none !important; }
+#robotEarL, #robotEarR  { animation: none !important; }
+#orbitRing1 { animation: none !important; }
+#orbitRing2 { animation: none !important; }
+.glow-dot   { animation: none !important; }
+.ai-fab-img { animation: fabFloat 3.2s ease-in-out infinite !important; }
+.ai-fab-shadow { animation: none !important; }
+.ai-fab .fab-pulse-ring { animation: none !important; filter: none !important; }
+
+/* Button shine: only run on hover/active, not always */
+.abtn.go::before { animation: none !important; }
+.abtn.go:active::before { animation: btnShine .6s ease !important; }
+
+/* Payment glass rotate: remove */
+.py-glass::after { animation: none !important; content: none !important; }
+
+/* Skeleton: keep one shimmer, remove duplicates */
+.sk-card::after { animation: none !important; content: none !important; }
+
+/* 4. GPU LAYER PROMOTION — ONLY KEY ELEMENTS
+   Too many translateZ(0) creates too many layers. */
+.gc, .pk, .py-glass, .py, .hc, .lb-row,
+.tb, .nb, .sv, .bk, .abtn, .m-ok, .m-c,
+.warn-ok, .warn-cancel, .su-b, .evd-join-btn {
+  transform: none !important;
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+}
+/* Only promote the actual moving elements */
+.nav, .hdr, .ai-fab {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* 5. REDUCE TRANSITION COSTS
+   Long/complex transitions cause jank on tap. */
+.gc {
+  transition: border-color .15s, box-shadow .15s !important;
+}
+.pk {
+  transition: border-color .15s, background .15s !important;
+}
+.nb {
+  transition: background .15s, color .15s !important;
+}
+.tb {
+  transition: background .15s, color .15s, border-color .15s !important;
+}
+
+/* 6. CONTAIN: reduce paint areas */
+.pg { contain: layout style !important; }
+.cnt { contain: layout style !important; }
+
+/* 7. DISABLE text-rendering optimizeLegibility
+   Causes layout recalculation on every render. */
+body { text-rendering: auto !important; }
+
+/* ══════════════════════════════════════════
    LIGHT MODE — GAME GRID IMAGE AREA FIX
    .gi container was dark-hardcoded; now
    matches the light card background.
@@ -6346,26 +6472,9 @@ function _revealLogoHero(cfg){
 // ═══════════════════════════════════════
 // PARALLAX TILT FOR GAME CARDS
 // ═══════════════════════════════════════
-function _gcTilt(e,card){
- var r=card.getBoundingClientRect();
- var mx=e.clientX-r.left;
- var my=e.clientY-r.top;
- var cx=r.width/2,cy=r.height/2;
- var rotY=((mx-cx)/cx)*6; // max 6deg
- var rotX=-((my-cy)/cy)*4; // max 4deg
- card.style.setProperty("--rotY",rotY+"deg");
- card.style.setProperty("--rotX",rotX+"deg");
- // Shine position
- var shine=card.querySelector(".gc-shine");
- if(shine){
- shine.style.setProperty("--mx",(mx/r.width*100)+"%");
- shine.style.setProperty("--my",(my/r.height*100)+"%");
- }
-}
-function _gcReset(card){
- card.style.setProperty("--rotY","0deg");
- card.style.setProperty("--rotX","0deg");
-}
+// Tilt disabled for mobile performance — CSS parallax removed
+function _gcTilt(e,card){}
+function _gcReset(card){}
 
 // ═══════════════════════════════════════
 // LEADERBOARD
