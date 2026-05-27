@@ -1357,11 +1357,14 @@ body{
 .pw-wrap{position:relative;}.pw-wrap input{padding-right:44px!important;}
 .pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx3);}.pw-eye svg{width:18px;height:18px;stroke:currentColor;fill:none;}
 .auth-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:28px;}
-.auth-logo .al-mark{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#2AABEE,#1B8EC7);display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 10px 36px rgba(42,171,238,.35);}
+.auth-logo .al-mark{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#2AABEE,#1B8EC7);display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 10px 36px rgba(42,171,238,.35);position:relative;overflow:hidden;}
 .auth-logo .al-mark svg{width:36px;height:36px;fill:#fff;}
 .auth-logo .al-name{font-size:20px;font-weight:700;letter-spacing:-.3px;color:#F5F5F5;}
 .auth-logo .al-name span{color:#2AABEE;}
 .auth-logo .al-sub{font-size:12px;color:#9EB4C8;margin-top:3px;font-weight:400;}
+/* Auth logo skeleton */
+@keyframes authSkelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.al-name-skel{width:120px;height:18px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.14) 50%,rgba(255,255,255,.06) 100%);background-size:400% 100%;animation:authSkelShimmer 1.6s ease-in-out infinite;margin-bottom:2px;}
 .auth-card{width:100%;background:#1C2733;border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:24px;box-shadow:0 8px 40px rgba(0,0,0,.35);}
 .auth-tabs{display:flex;margin-bottom:20px;border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;background:#17212B;}
 .atb{flex:1;padding:10px;font-size:13px;font-weight:600;color:#9EB4C8;background:transparent;border:none;cursor:pointer;font-family:var(--font);transition:.2s;}
@@ -3543,9 +3546,21 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
 <!-- AUTH SCREEN -->
 <div class="auth" id="authScreen">
  <div class="auth-logo">
- <div class="al-mark"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 014 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0118 8a4 4 0 01-1.17 2.83A4 4 0 0118 14a4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 011.17-2.83A4 4 0 016 14a4 4 0 011.17-2.83A4 4 0 016 8a4 4 0 014-4 4 4 0 012-4zm0 6a2 2 0 100 4 2 2 0 000-4z"/></svg></div>
- <div class="al-name"><span>PCA Store</span> Store</div>
- <div class="al-sub">Premium Game Top Up</div>
+ <!-- Logo mark: skeleton → real logo image from config, or default SVG -->
+ <div class="al-mark" id="authLogoMark">
+  <!-- Skeleton shimmer (shown until config loads) -->
+  <div id="authLogoSkel" style="width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.05) 100%);background-size:400% 100%;animation:authSkelShimmer 1.6s ease-in-out infinite;border-radius:22px"></div>
+  <!-- Real logo (hidden until config) -->
+  <div id="authLogoReal" style="display:none;width:100%;height:100%;align-items:center;justify-content:center">
+   <svg viewBox="0 0 24 24" id="authLogoSvg" style="width:36px;height:36px;fill:#fff"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M9 10v4M7 12h4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="18" cy="12" r="1" fill="#fff"/></svg>
+  </div>
+ </div>
+ <!-- Store name: skeleton → real name from config -->
+ <div id="authNameWrap" style="display:flex;flex-direction:column;align-items:center;gap:2px">
+  <div id="authNameSkel" class="al-name-skel"></div>
+  <div id="authNameReal" class="al-name" style="display:none"><span id="authStoreName">PCA Store</span></div>
+ </div>
+ <div class="al-sub" id="authStoreSub">Premium Game Top Up</div>
  </div>
  <div class="auth-card">
  <div class="auth-tabs">
@@ -5002,9 +5017,104 @@ function rpf(){
  h+='<div class="st-r"><div class="st-l"><div class="st-i" style="background:'+(pf.dk?"var(--acg)":"rgba(245,158,11,.08)")+'"><svg viewBox="0 0 24 24" stroke="'+(pf.dk?"var(--ac2)":"#d97706")+'"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div><div class="st-info"><span class="st-lb">'+(pf.dk?"Dark Mode":"Light Mode")+'</span><span class="st-ds">Switch appearance</span></div></div><label class="tg"><input type="checkbox" '+(pf.dk?"checked":"")+' onchange="toggleTheme(this.checked)"/><span class="ts"></span></label></div></div>';
  // Customer Service AI button
  h+='<div class="cs-row" onclick="openAiChat()"><div class="cs-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="cs-info"><div class="cs-nm">Customer Service</div><div class="cs-ds">AI assistant — ask anything about PCA Store</div></div><div class="cs-badge">AI Online</div></div>';
+
+ // ── ADMIN PANEL (Firebase admin check) ──
+ var isAdmin=curUser&&(curUser.email==="admin@pcastore.com"||pf._isAdmin===true);
+ if(isAdmin){
+  h+='<div style="margin-top:16px;border-radius:20px;background:linear-gradient(145deg,rgba(59,158,255,.08),rgba(59,158,255,.03));border:1.5px solid rgba(59,158,255,.2);padding:18px;overflow:hidden;position:relative">';
+  h+='<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac2),transparent)"></div>';
+  h+='<div style="font-size:12px;font-weight:900;color:var(--ac2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--ac2);fill:none;stroke-width:2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel</div>';
+
+  // Logo preview + upload
+  h+='<div style="margin-bottom:14px">';
+  h+='<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Store Logo</div>';
+  h+='<div style="display:flex;align-items:center;gap:12px">';
+  h+='<div id="adminLogoPreview" style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#3B9EFF,#1B6FD8);display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(59,158,255,.3);flex-shrink:0">';
+  h+=(window._currentLogoImg?'<img src="'+window._currentLogoImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px"/>'
+    :'<svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#fff;stroke:none"><rect x="2" y="6" width="20" height="12" rx="3"/></svg>');
+  h+='</div>';
+  h+='<div style="flex:1">';
+  h+='<button onclick="adminUploadLogo()" style="width:100%;padding:10px;border-radius:12px;border:1.5px dashed rgba(59,158,255,.35);background:rgba(59,158,255,.06);color:var(--ac2);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload Logo Image</button>';
+  h+='<div style="font-size:9px;color:var(--tx3);margin-top:4px;text-align:center">JPG / PNG • Max 2MB • Recommended 256×256</div>';
+  h+='</div></div></div>';
+
+  // Store name
+  h+='<div style="margin-bottom:12px">';
+  h+='<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Store Name</div>';
+  h+='<div style="display:flex;gap:6px">';
+  h+='<input id="adminStoreName" placeholder="e.g. PCA Store" value="'+(window._currentStoreName||"")+'" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(59,158,255,.2);background:rgba(13,17,23,.6);font-size:13px;font-family:var(--font);color:var(--tx);outline:none"/>';
+  h+='<button onclick="adminSaveName()" style="padding:10px 14px;border-radius:10px;border:none;background:var(--tg-gradient);color:#fff;font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font);white-space:nowrap">Save</button>';
+  h+='</div></div>';
+
+  // Store subtitle
+  h+='<div style="margin-bottom:14px">';
+  h+='<div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Store Subtitle</div>';
+  h+='<div style="display:flex;gap:6px">';
+  h+='<input id="adminStoreSub" placeholder="e.g. Premium Game Top Up" value="'+(window._currentStoreSub||"")+'" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(59,158,255,.2);background:rgba(13,17,23,.6);font-size:13px;font-family:var(--font);color:var(--tx);outline:none"/>';
+  h+='<button onclick="adminSaveSub()" style="padding:10px 14px;border-radius:10px;border:none;background:var(--tg-gradient);color:#fff;font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font);white-space:nowrap">Save</button>';
+  h+='</div></div>';
+
+  h+='</div>'; // end admin panel
+ }
+
  h+='<button class="lgo" onclick="doLogout()">Log Out</button>';
  h+='<div style="text-align:center;margin-top:16px;padding:12px;font-size:10px;color:var(--tx3)"><div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:4px"><span style="width:6px;height:6px;border-radius:50%;background:'+(fbReady?"var(--gn)":"var(--rd)")+'"></span>'+(fbReady?"Firebase Connected":"Firebase Offline")+'</div>'+(curUser?'Logged in as <strong style="color:var(--tx2)">'+curUser.email+'</strong>':'Guest mode')+'<br/>PCA Store v1.0</div>';
  document.getElementById("pg-pf").innerHTML=h;
+}
+// ── ADMIN PANEL FUNCTIONS ──
+function adminUploadLogo(){
+ var inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.style.display="none";
+ document.body.appendChild(inp);
+ inp.addEventListener("change",function(){
+  if(!inp.files||!inp.files[0])return;
+  if(inp.files[0].size>2097152){tst("Max 2MB","er");inp.remove();return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+   var dataUrl=e.target.result;
+   var prev=document.getElementById("adminLogoPreview");
+   if(prev)prev.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px"/>';
+   if(fbReady&&db){
+    db.collection("config").doc("store").set({logoImg:dataUrl},{merge:true}).then(function(){
+     tst("Logo saved ✓","ok");
+     window._currentLogoImg=dataUrl;
+     var lm=document.getElementById("logoMark");
+     if(lm){lm.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';lm.style.display="flex";}
+     var authMark=document.getElementById("authLogoMark");
+     if(authMark)authMark.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;border-radius:22px"/>';
+    }).catch(function(){tst("Save failed","er");});
+   }else{tst("Firebase offline","er");}
+  };
+  reader.readAsDataURL(inp.files[0]);
+  inp.remove();
+ });
+ inp.click();
+}
+function adminSaveName(){
+ var inp=document.getElementById("adminStoreName");
+ if(!inp||!inp.value.trim()){tst("Name is empty","er");return;}
+ var name=inp.value.trim();
+ if(fbReady&&db){
+  db.collection("config").doc("store").set({storeName:name},{merge:true}).then(function(){
+   tst("Name saved ✓","ok");
+   window._currentStoreName=name;
+   var lt=document.getElementById("logoText");if(lt)lt.textContent=name;
+   var an=document.getElementById("authStoreName");if(an)an.textContent=name;
+   var anr=document.getElementById("authNameReal");if(anr)anr.style.display="block";
+   var ans=document.getElementById("authNameSkel");if(ans)ans.style.display="none";
+  }).catch(function(){tst("Save failed","er");});
+ }else{tst("Firebase offline","er");}
+}
+function adminSaveSub(){
+ var inp=document.getElementById("adminStoreSub");
+ if(!inp||!inp.value.trim()){tst("Subtitle is empty","er");return;}
+ var sub=inp.value.trim();
+ if(fbReady&&db){
+  db.collection("config").doc("store").set({storeSub:sub},{merge:true}).then(function(){
+   tst("Subtitle saved ✓","ok");
+   window._currentStoreSub=sub;
+   var el=document.getElementById("authStoreSub");if(el)el.textContent=sub;
+  }).catch(function(){tst("Save failed","er");});
+ }else{tst("Firebase offline","er");}
 }
 function uploadAvatar(){
  var inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.style.display="none";
@@ -5427,6 +5537,21 @@ function warnDismiss(){document.getElementById("warnOv").classList.remove("v");_
 document.addEventListener("DOMContentLoaded",function(){
  var wo=document.getElementById("warnOv");
  if(wo)wo.addEventListener("click",function(e){if(e.target===this)warnDismiss();});
+ // Auth logo fallback: if config doesn't load in 2s, show default SVG logo
+ setTimeout(function(){
+  var authSkel=document.getElementById("authLogoSkel");
+  var authReal=document.getElementById("authLogoReal");
+  var authNameSkel=document.getElementById("authNameSkel");
+  var authNameReal=document.getElementById("authNameReal");
+  if(authSkel&&authSkel.style.display!=="none"){
+   authSkel.style.display="none";
+   if(authReal)authReal.style.display="flex";
+  }
+  if(authNameSkel&&authNameSkel.style.display!=="none"){
+   authNameSkel.style.display="none";
+   if(authNameReal)authNameReal.style.display="block";
+  }
+ },2000);
 });
 var GV=[];
 function rGv(){
@@ -6454,6 +6579,8 @@ function startFirebaseListeners(){
  if(doc.exists){
  var d=doc.data();
  Object.keys(d).forEach(function(k){if(pf.hasOwnProperty(k))pf[k]=d[k];});
+ // Check admin role
+ if(d.role==="admin"||d.isAdmin===true)pf._isAdmin=true;
  // ── Cache profile client-side for instant next-load ──
  try{localStorage.setItem("pca_pf_"+userEmail,JSON.stringify(pf));}catch(e){}
  rpf();
@@ -6527,6 +6654,29 @@ function _revealLogoHero(cfg){
  if(ls)ls.style.display="inline";
  if(lmSkel)lmSkel.style.display="none";
  if(ltSkel)ltSkel.style.display="none";
+
+ // ── UPDATE AUTH SCREEN LOGO ──
+ var authSkel=document.getElementById("authLogoSkel");
+ var authReal=document.getElementById("authLogoReal");
+ var authMarkEl=document.getElementById("authLogoMark");
+ var authNameSkel=document.getElementById("authNameSkel");
+ var authNameReal=document.getElementById("authNameReal");
+ var authStoreName=document.getElementById("authStoreName");
+ var authStoreSub=document.getElementById("authStoreSub");
+ // Show real logo in auth mark
+ if(authSkel)authSkel.style.display="none";
+ if(authReal)authReal.style.display="flex";
+ if(cfg.logoImg&&authMarkEl){
+  // Replace with image
+  authMarkEl.innerHTML='<img src="'+cfg.logoImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:22px"/>';
+  window._currentLogoImg=cfg.logoImg;
+ }
+ // Show store name
+ if(authNameSkel)authNameSkel.style.display="none";
+ if(authNameReal)authNameReal.style.display="block";
+ if(authStoreName&&cfg.storeName){authStoreName.textContent=cfg.storeName;window._currentStoreName=cfg.storeName;}
+ if(authStoreSub&&cfg.storeSub){authStoreSub.textContent=cfg.storeSub;window._currentStoreSub=cfg.storeSub;}
+
  var heroSkel=document.getElementById("heroSkel");
  var heroSlides=document.getElementById("heroSlides");
  var heroSec=document.getElementById("heroSec");
