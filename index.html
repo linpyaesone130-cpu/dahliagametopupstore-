@@ -3639,11 +3639,19 @@ h1, h2, h3, .font-display {
   -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important;
 }
-/* Only promote the actual moving elements */
-.nav, .hdr, .ai-fab {
+/* Only promote the actual moving elements.
+   .nav uses left:50%+translateX(-50%) — don't override with
+   translateZ(0) or nav shifts off-center. Use will-change. */
+.hdr, .ai-fab {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: translateZ(0);
+  will-change: transform;
+}
+.nav {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  transform: translateX(-50%) !important;
 }
 
 /* 5. REDUCE TRANSITION COSTS
@@ -3660,6 +3668,16 @@ h1, h2, h3, .font-display {
 .tb {
   transition: background .15s, color .15s, border-color .15s !important;
 }
+
+/* 5b. FASTER PAGE SLIDE TRANSITIONS
+   Smaller translate distance = less GPU work per frame.
+   Opacity-only is cheapest (compositor-only). */
+.pg.slide-in-right { animation: slideInRight .18s cubic-bezier(.25,.46,.45,.94) both !important; }
+.pg.slide-in-left  { animation: slideInLeft  .18s cubic-bezier(.25,.46,.45,.94) both !important; }
+.pg.fade-up        { animation: fadeUp       .16s cubic-bezier(.25,.46,.45,.94) both !important; }
+@keyframes slideInRight { from{opacity:0;transform:translate3d(16px,0,0)} to{opacity:1;transform:translate3d(0,0,0)} }
+@keyframes slideInLeft  { from{opacity:0;transform:translate3d(-16px,0,0)} to{opacity:1;transform:translate3d(0,0,0)} }
+@keyframes fadeUp       { from{opacity:0;transform:translate3d(0,8px,0)} to{opacity:1;transform:translate3d(0,0,0)} }
 
 /* 6. CONTAIN: reduce paint areas */
 .pg { contain: layout style !important; }
@@ -4388,15 +4406,17 @@ function go(t){
  var nb=document.querySelector('.nb[data-t="'+t+'"]');
  var animCls=t==="det"||t==="his"||t==="pf"?"fade-up":dir>0?"slide-in-right":"slide-in-left";
 
- // All DOM writes in one rAF — zero layout thrash
+ // Phase 1: Switch pages + nav in ONE rAF (just visual swap, no data)
  requestAnimationFrame(function(){
   allPgs.forEach(function(p){p.className=p.className.replace(/\bon\b|\bslide-in-right\b|\bslide-in-left\b|\bfade-up\b/g,"").trim();});
   allNbs.forEach(function(n){n.classList.remove("on");});
   if(pg){pg.classList.add("on",animCls);}
   if(nb){nb.classList.add("on");}
 
-  // Scroll reset + data calls deferred to next frame so paint goes first
-  requestAnimationFrame(function(){
+  // Phase 2: Scroll reset + data calls after animation finishes (220ms)
+  // Keeps animation frames clean — no data-load jank during transition
+  var delay=animCls==="fade-up"?200:220;
+  setTimeout(function(){
    var cnt=document.getElementById("cnt");
    if(cnt)cnt.scrollTop=0;
    if(t==="home"){_homeScrollY=0;rpt();fltG();}
@@ -4426,7 +4446,7 @@ function go(t){
    else if(t==="ldb")rLdb();
    else if(t==="pro"){document.getElementById("acList").style.display="block";document.getElementById("acDetail").style.display="none";rpr();}
    else if(t==="inbox")renderInboxPage();
-  });
+  },delay);
  });
  _prevPgId=t;
 }
@@ -7049,9 +7069,8 @@ document.addEventListener("touchstart",function(e){
   swipeActive=false;
   var dx=e.changedTouches[0].clientX-sx;
   var dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx)<60||Math.abs(dy)>60)return;
-  // Only swipe from edge (first 32px)
-  if(sx>32&&dx>0)return;
+  if(Math.abs(dx)<55||Math.abs(dy)>55)return;
+  // Swipe allowed from anywhere on screen (removed edge-only restriction)
   var cur=document.querySelector(".pg.on");
   if(!cur)return;
   var curId=cur.id.replace("pg-","");
