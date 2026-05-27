@@ -87,6 +87,8 @@ body{
   flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 20px 100px;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-y:auto;
+  transform:translateZ(0);
+  will-change:scroll-position;
   min-height:0;
 }
 /* Pages: display:none — simplest, no position/layout conflicts */
@@ -3658,9 +3660,8 @@ h1, h2, h3, .font-display {
 @keyframes slideInLeft  { from{opacity:0;transform:translate3d(-16px,0,0)} to{opacity:1;transform:translate3d(0,0,0)} }
 @keyframes fadeUp       { from{opacity:0;transform:translate3d(0,8px,0)} to{opacity:1;transform:translate3d(0,0,0)} }
 
-/* 6. CONTAIN: reduce paint areas */
-.pg { contain: layout style !important; }
-.cnt { contain: layout style !important; }
+/* 6. CONTAIN: removed — contain:layout breaks scroll on .cnt */
+.pg { contain: style; }
 
 /* 7. DISABLE text-rendering optimizeLegibility
    Causes layout recalculation on every render. */
