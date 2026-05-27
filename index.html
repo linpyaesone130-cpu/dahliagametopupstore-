@@ -59,7 +59,7 @@ body{
   font-family:var(--font);background:#17212B;color:var(--tx);
   -webkit-font-smoothing:antialiased;-webkit-text-stroke:0;
   text-rendering:optimizeLegibility;overflow-x:hidden;letter-spacing:-.01em;
-  overscroll-behavior:none;
+  overscroll-behavior-x:none;overflow-y:hidden;
 }
 
 /* GLOBAL IMAGE AUTO-ADJUST */
@@ -68,7 +68,7 @@ body{
 .app .logo-mark img,.app .py-i img,.app .qr-box img{object-fit:cover;object-position:center;}
 
 /* APP SHELL */
-.app{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;}
+.app{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;overflow-y:hidden;}
 
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;position:sticky;top:0;z-index:50;background:rgba(23,33,43,.97);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid var(--bd);flex-shrink:0;}
@@ -84,11 +84,9 @@ body{
 
 /* CONTENT */
 .cnt{
-  flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 20px 100px;
+  flex:1;overflow-y:scroll;overflow-x:hidden;padding:16px 20px 100px;
   -webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:auto;
-  transform:translateZ(0);
-  will-change:scroll-position;
+  overscroll-behavior-y:contain;
   min-height:0;
 }
 /* Pages: display:none — simplest, no position/layout conflicts */
