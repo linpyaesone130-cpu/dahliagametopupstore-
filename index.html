@@ -68,7 +68,7 @@ body{
 .app .logo-mark img,.app .py-i img,.app .qr-box img{object-fit:cover;object-position:center;}
 
 /* APP SHELL */
-.app{width:100%;max-width:430px;height:100vh;margin:0 auto;position:relative;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;}
+.app{width:100%;max-width:430px;min-height:100vh;margin:0 auto;position:relative;background:var(--bg);display:flex;flex-direction:column;}
 
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;position:sticky;top:0;z-index:50;background:rgba(23,33,43,.97);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid var(--bd);flex-shrink:0;}
@@ -3660,8 +3660,9 @@ h1, h2, h3, .font-display {
 @keyframes slideInLeft  { from{opacity:0;transform:translate3d(-16px,0,0)} to{opacity:1;transform:translate3d(0,0,0)} }
 @keyframes fadeUp       { from{opacity:0;transform:translate3d(0,8px,0)} to{opacity:1;transform:translate3d(0,0,0)} }
 
-/* 6. CONTAIN: removed — contain:layout breaks scroll on .cnt */
-.pg { contain: style; }
+/* 6. CONTAIN: reduce paint areas */
+
+
 
 /* 7. DISABLE text-rendering optimizeLegibility
    Causes layout recalculation on every render. */
