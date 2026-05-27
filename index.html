@@ -2242,7 +2242,8 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
  <button class="af-btn reg" onclick="doRegister()">Create Account</button>
  <div class="af-err" id="regErr"></div>
  </div>
- <div class="af-or">or</div>
+ <div id="fbStatus" style="display:none;text-align:center;padding:8px 12px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.25);color:#FB923C;">⚠️ Server offline — use Guest to browse</div>
+<div class="af-or">or</div>
  <button class="af-google" onclick="doGoogle()" id="googleBtn"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google</button>
  <button class="af-skip" onclick="skipAuth()">Browse as Guest →</button>
 
@@ -2865,8 +2866,19 @@ if (typeof firebase !== 'undefined') {
  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
  fbReady = true;
  } catch(e) {
+ console.warn("Firebase init failed:", e);
  fbReady = false;
  }
+}
+
+// If Firebase failed to load, show status and go to guest
+if (!fbReady) {
+ document.addEventListener("DOMContentLoaded", function(){
+  var fbSt=document.getElementById("fbStatus");
+  if(fbSt)fbSt.style.display="block";
+  // Auto-enter as guest after 1.5s
+  setTimeout(function(){ enterApp(null); }, 1500);
+ });
 }
 
 // AUTH SYSTEM 
@@ -3039,45 +3051,33 @@ function doLogout(){
 }
 
 // Check if already logged in — auto-skip if Firebase unavailable
-var _authResolved=false;
-var _authFallbackTimer=setTimeout(function(){
- if(_authResolved)return;
- _authResolved=true;
- try{
-  if(localStorage.getItem("pca_logged")==="1"){
-   document.getElementById("authScreen").classList.add("hide");
-   enterApp(null);
-  }else{
-   var _a=document.getElementById("authScreen");
-   var _m=document.getElementById("mainApp");
-   if(_a){_a.classList.remove("hide");_a.style.display="";}
-   if(_m){_m.classList.add("hide");_m.style.display="none";}
-  }
- }catch(e){}
-},5000);
-
 if(auth){
+ // Hide auth screen immediately if previously logged in
  try{if(localStorage.getItem("pca_logged")==="1"){document.getElementById("authScreen").classList.add("hide");}}catch(e){}
- auth.onAuthStateChanged(function(user){
-  if(_authResolved)return;
-  _authResolved=true;
-  clearTimeout(_authFallbackTimer);
-  if(user){
-  curUser=user;
-  try{localStorage.setItem("pca_logged","1");}catch(e){}
-  enterApp(user);
-  }else{
-  try{localStorage.removeItem("pca_logged");}catch(e){}
+ // 6-second timeout — if Firebase hangs, show auth screen
+ var _fbAuthTimer=setTimeout(function(){
   var _a=document.getElementById("authScreen");
   var _m=document.getElementById("mainApp");
-  if(_a){_a.classList.remove("hide");_a.style.display="";}
-  if(_m){_m.classList.add("hide");_m.style.display="none";}
-  }
+  if(_a&&_a.style.display!=="none"){_a.classList.remove("hide");_a.style.display="";}
+  if(_m&&_m.style.display!=="block"){_m.classList.add("hide");_m.style.display="none";}
+ },6000);
+ auth.onAuthStateChanged(function(user){
+ clearTimeout(_fbAuthTimer);
+ if(user){
+ curUser=user;
+ try{localStorage.setItem("pca_logged","1");}catch(e){}
+ enterApp(user);
+ }else{
+ try{localStorage.removeItem("pca_logged");}catch(e){}
+ var _a=document.getElementById("authScreen");
+ var _m=document.getElementById("mainApp");
+ if(_a){_a.classList.remove("hide");_a.style.display="";}
+ if(_m){_m.classList.add("hide");_m.style.display="none";}
+ }
  });
 }else{
- clearTimeout(_authFallbackTimer);
- _authResolved=true;
  enterApp(null);
+ // No Firebase — keep skeleton (do not reveal orange/black defaults)
 }
 
 // Save order to Firebase
@@ -3484,7 +3484,7 @@ function cm(ok){document.getElementById("cmod").classList.remove("v");if(ok){
 function copyRcpt(){if(!lastOrder)return;var t=" PCA STORE RECEIPT \n"+lastOrder.txnId+"\n"+lastOrder.game+"\n"+lastOrder.currencyIcon+" "+lastOrder.amount+" "+lastOrder.currency+"\nUser: "+lastOrder.userId+"\nPayment: "+lastOrder.payment+"\nTotal: "+mmk(lastOrder.price)+"\nStatus: Pending\n"+new Date().toLocaleString()+"\n";cph(t);}
 function shareRcpt(){if(!lastOrder)return;var t="PCA Store Receipt\n"+lastOrder.txnId+"\n"+lastOrder.game+" "+lastOrder.currencyIcon+lastOrder.amount+"\nTotal: "+mmk(lastOrder.price);if(navigator.share){navigator.share({title:"PCA Store Receipt",text:t}).catch(function(){});}else{cph(t);}}
 function csuc(){document.getElementById("sov").classList.remove("v");cg();go("home");}
-document.addEventListener("DOMContentLoaded",function(){var _cmod=document.getElementById("cmod");if(_cmod)_cmod.addEventListener("click",function(e){if(e.target===this)cm(0);});});
+document.getElementById("cmod").addEventListener("click",function(e){if(e.target===this)cm(0);});
 
 // HISTORY
 function rht(){var c={all:HL.length,confirmed:HL.filter(function(h){return h.s==="confirmed"||h.s==="success"}).length,pending:HL.filter(function(h){return h.s==="pending"}).length,failed:HL.filter(function(h){return h.s==="failed"}).length};
@@ -3754,7 +3754,7 @@ function sed(){pf.nm=document.getElementById("en").value||pf.nm;pf.em=document.g
  // ── Cache updated profile locally ──
  try{if(curUser)localStorage.setItem("pca_pf_"+(curUser.email||"g"),JSON.stringify(pf));}catch(e){}
  fbSaveProfile(pf);rpf();ced();}
-document.addEventListener("DOMContentLoaded",function(){var _emod=document.getElementById("emod");if(_emod)_emod.addEventListener("click",function(e){if(e.target===this)ced();});});
+document.getElementById("emod").addEventListener("click",function(e){if(e.target===this)ced();});
 
 // ORDER TRACKING 
 function otrk(idx){
@@ -3798,7 +3798,8 @@ function otrk(idx){
  }
 }
 function ctrk(){document.getElementById("trkOv").classList.remove("v");}
-document.addEventListener("DOMContentLoaded",function(){var _trkOv=document.getElementById("trkOv");if(_trkOv)_trkOv.addEventListener("click",function(e){if(e.target===this)ctrk();});var _walMo=document.getElementById("walMo");if(_walMo)_walMo.addEventListener("click",function(e){if(e.target===this)cWalMo();});});
+document.getElementById("trkOv").addEventListener("click",function(e){if(e.target===this)ctrk();});
+document.getElementById("walMo").addEventListener("click",function(e){if(e.target===this)cWalMo();});
 
 // LANGUAGE 
 var lang="en";
@@ -4501,7 +4502,7 @@ function openNotif(){
 }
 
 function closeNotif(){document.getElementById("notifOv").classList.remove("v");}
-document.addEventListener("DOMContentLoaded",function(){var _notifOv=document.getElementById("notifOv");if(_notifOv)_notifOv.addEventListener("click",function(e){if(e.target===this)closeNotif();});});
+document.getElementById("notifOv").addEventListener("click",function(e){if(e.target===this)closeNotif();});
 
 function readNotif(id){
  if(!db)return;
@@ -5025,7 +5026,7 @@ function aiNextSuggestions(lastQ){
   fabStartX=pos.x;
   fabStartY=pos.y;
   fab.style.transition="none";
-  // Do NOT preventDefault here — blocks all other touch events on page
+  e.preventDefault();
  }
  function onMove(e){
   if(!isDragging)return;
@@ -5035,8 +5036,7 @@ function aiNextSuggestions(lastQ){
   if(Math.abs(dx)>5||Math.abs(dy)>5)moved=true;
   if(!moved)return;
   setPos(fabStartX+dx, fabStartY+dy);
-  // Only prevent default when actually dragging the fab
-  if(moved&&e.cancelable)e.preventDefault();
+  e.preventDefault();
  }
  function onEnd(e){
   if(!isDragging)return;
@@ -5054,7 +5054,7 @@ function aiNextSuggestions(lastQ){
  }
 
  fab.addEventListener("mousedown",onStart);
- fab.addEventListener("touchstart",onStart,{passive:true});
+ fab.addEventListener("touchstart",onStart,{passive:false});
  document.addEventListener("mousemove",onMove);
  document.addEventListener("touchmove",onMove,{passive:false});
  document.addEventListener("mouseup",onEnd);
@@ -5666,36 +5666,11 @@ rhl=function(){
 };
 
 // Also patch go() to render kanban when navigating to history
-// Single consolidated go() extension
-var _goBase=go;
+var _origGo=go;
 go=function(t){
- if(typeof _goBase==="function")_goBase(t);
+ if(typeof _origGo==="function")_origGo(t);
  if(t==="his")setTimeout(rKanban,50);
- var bar=document.getElementById("pageProgress");
- if(bar){
-  bar.style.transition="none";bar.style.width="0%";bar.classList.add("active");
-  requestAnimationFrame(function(){
-   bar.style.transition="width .25s ease";bar.style.width="100%";
-   setTimeout(function(){bar.style.transition="opacity .2s";bar.style.opacity="0";setTimeout(function(){bar.classList.remove("active");bar.style.width="0%";bar.style.opacity="";bar.style.transition="";},200);},260);
-  });
- }
- requestAnimationFrame(function(){
-  document.querySelectorAll("img:not(.img-reveal)").forEach(function(img){
-   if(img.dataset.noReveal)return;
-   img.classList.add("img-reveal");
-   if(img.complete&&img.naturalWidth){img.classList.add("loaded");}
-   else{img.addEventListener("load",function(){img.classList.add("loaded");});}
-  });
-  var pg=document.getElementById("pg-"+t);
-  if(!pg)return;
-  pg.querySelectorAll(".lb").forEach(function(el,i){
-   el.classList.remove("reveal-anim");void el.offsetWidth;
-   el.style.animationDelay=(i*40)+"ms";el.classList.add("reveal-anim");
-   el.addEventListener("animationend",function(){el.style.animationDelay="";el.classList.remove("reveal-anim");},{once:true});
-  });
- });
 };
-window.go=go;
 
 // Wire Google button
 ;(function(){
@@ -5781,7 +5756,19 @@ function _scrollTop(){
 // ════════════════════════════════════════════════════════════════
 // ④ PAGE PROGRESS BAR on navigation (lightweight, no setTimeout chain)
 // ════════════════════════════════════════════════════════════════
-// Progress bar + image reveal handled in consolidated go() above
+(function(){
+ var bar=document.getElementById("pageProgress");
+ if(!bar)return;
+ var _origGo=window.go;
+ window.go=function(t){
+  _origGo(t);
+  bar.style.transition="none";bar.style.width="0%";bar.classList.add("active");
+  requestAnimationFrame(function(){
+   bar.style.transition="width .25s ease";bar.style.width="100%";
+   setTimeout(function(){bar.style.transition="opacity .2s";bar.style.opacity="0";setTimeout(function(){bar.classList.remove("active");bar.style.width="0%";bar.style.opacity="";bar.style.transition="";},200);},260);
+  });
+ };
+})();
 
 // ════════════════════════════════════════════════════════════════
 // ⑤ GAME CARD PRESS FLASH
@@ -5913,6 +5900,7 @@ document.addEventListener("touchstart",function(e){
  nav.addEventListener("touchstart",function(e){
   if(e.touches.length!==1)return;
   _nx=e.touches[0].clientX;_ny=e.touches[0].clientY;_nActive=true;
+  e.stopPropagation();
  },{passive:true});
  nav.addEventListener("touchmove",function(e){
   if(!_nActive)return;
@@ -5996,6 +5984,22 @@ window.rgrd=function(l){
    else{img.addEventListener("load",function(){img.classList.add("loaded");});}
   });
  }
+ var _origGo=window.go;
+ window.go=function(t){
+  _origGo(t);
+  requestAnimationFrame(function(){
+   revealImgs();
+   var pg=document.getElementById("pg-"+t);
+   if(!pg)return;
+   pg.querySelectorAll(".lb").forEach(function(el,i){
+    el.classList.remove("reveal-anim");
+    void el.offsetWidth;
+    el.style.animationDelay=(i*40)+"ms";
+    el.classList.add("reveal-anim");
+    el.addEventListener("animationend",function(){el.style.animationDelay="";el.classList.remove("reveal-anim");},{once:true});
+   });
+  });
+ };
  revealImgs();
 })();
 
