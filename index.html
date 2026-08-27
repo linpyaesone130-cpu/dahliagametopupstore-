@@ -4050,13 +4050,13 @@ if(dk!=="1"){document.addEventListener("DOMContentLoaded",function(){var a=docum
 // FIREBASE CONFIG 
 // Replace with your Firebase project credentials
 var firebaseConfig = {
- apiKey: "AIzaSyCRq3M1hclmBnqClfQrmv8WGE6-hth0Zr0",
- authDomain: "dahliagametopupstore-9d3fd.firebaseapp.com",
- projectId: "dahliagametopupstore-9d3fd",
- storageBucket: "dahliagametopupstore-9d3fd.appspot.com",
- messagingSenderId: "110787045948",
- appId: "1:110787045948:web:e46ed650774c0f6128f139",
- measurementId: "G-5ZJBYB3LHX"
+ apiKey: "AIzaSyAaa_stXEri8e8TRMOCh9D-b0LcOhv4Aho",
+ authDomain: "kusanagi3.firebaseapp.com",
+ projectId: "kusanagi3",
+ storageBucket: "kusanagi3.firebasestorage.app",
+ messagingSenderId: "1033307580536",
+ appId: "1:1033307580536:web:060303924f8cd4ed8ea58d",
+ measurementId: "G-X931DVNSQ3"
 };
 var fbReady = false;
 var db = null;
@@ -4100,7 +4100,8 @@ function doLogin(){
   curUser=r.user;enterApp(curUser);
  }).catch(function(e){
   var msg=e.code==="auth/user-not-found"?"Account not found":e.code==="auth/wrong-password"?"Wrong password":e.code==="auth/invalid-email"?"Invalid email":e.code==="auth/too-many-requests"?"Too many attempts, try later":e.code==="auth/invalid-credential"?"Email or password incorrect":(e.code?e.message:"Something went wrong. Please try again.");
-  errEl.textContent=msg;
+  errEl.textContent="["+(e.code||"no-code")+"] "+msg; // DEBUG: temp — remove once root cause confirmed
+  try{console.error("LOGIN DEBUG",e.code,e.message,e.name,JSON.stringify(e),e.stack);}catch(_e){}
   if(btn){btn.disabled=false;btn.style.opacity="";}
  });
 }
