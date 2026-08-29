@@ -253,14 +253,14 @@ body{
 .icard input:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(139,92,246,.1);}
 
 /* PACKAGE */
-.pk-g{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
-.pk{border-radius:18px;padding:14px 12px 12px;text-align:center;border:1px solid var(--bd);background:var(--sf);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;font-family:var(--font);display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:0;position:relative;overflow:hidden;min-height:80px;box-shadow:0 2px 10px rgba(0,0,0,.06);will-change:transform;transform:translateZ(0);touch-action:pan-y;}
+.pk-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.pk{border-radius:18px;padding:12px 10px;text-align:center;border:1px solid var(--bd);background:var(--sf);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;font-family:var(--font);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;min-height:80px;box-shadow:0 2px 10px rgba(0,0,0,.06);will-change:transform;transform:translateZ(0);touch-action:pan-y;}
 .pk-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.25;pointer-events:none;transition:.2s;border-radius:inherit;}.pk.on .pk-img{opacity:.35;}
 .pk .pk-a,.pk .pk-p{text-shadow:none;}
 .pk:active{transform:scale(.95);}
 .pk.on{border-color:var(--ac);background:rgba(139,92,246,.06);box-shadow:0 0 0 2px rgba(139,92,246,.18),0 4px 20px rgba(139,92,246,.10);}
-.pk .pk-a{font-size:clamp(11px,3.2vw,13px);font-weight:800;color:var(--tx);position:relative;z-index:1;line-height:1.3;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;margin-bottom:auto;text-align:center;}.pk.on .pk-a{color:var(--ac2);}
-.pk .pk-p{font-size:11px;color:#6D28D9;font-weight:800;font-family:var(--mono);margin-top:10px;position:relative;z-index:1;letter-spacing:.2px;text-align:center;}
+.pk .pk-a{font-size:clamp(11px,3.2vw,13px);font-weight:800;color:var(--tx);position:relative;z-index:1;line-height:1.3;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;text-align:center;}.pk.on .pk-a{color:var(--ac2);}
+.pk .pk-p{font-size:11px;color:#6D28D9;font-weight:800;font-family:var(--mono);position:relative;z-index:1;letter-spacing:.2px;text-align:center;}
 
 /* PAYMENT */
 .py-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
@@ -3734,6 +3734,58 @@ body { text-rendering: auto !important; }
   stroke: #8A94A8 !important;
 }
 
+/* ══════════════════════════════════════════
+   PACKAGE TAB ROW SPACING (Select Diamonds tabs)
+══════════════════════════════════════════ */
+#pkgTabs.tabs{margin-bottom:14px;}
+
+/* ══════════════════════════════════════════
+   TRANSFER CARD — QR moved beside phone number
+══════════════════════════════════════════ */
+.tr-ph-row{display:flex;gap:10px;align-items:center;margin:8px 0 4px;}
+.tr-ph-row .tr-ph{flex:1;min-width:0;margin:0;}
+.tr-ph-row .qr-box{width:64px;height:64px;margin:0;flex-shrink:0;}
+.tr-ph-row .tr-ph .tpn{font-size:14px;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;}
+
+/* ══════════════════════════════════════════
+   LIGHT MODE — FULL CONTRAST FIX
+   (several cards below were only ever styled for a dark
+   theme; in .app.light they kept dark backgrounds while
+   text stayed dark too, making text unreadable)
+══════════════════════════════════════════ */
+.app.light .icard input{background:var(--sf2)!important;border-color:var(--bd)!important;color:var(--tx)!important;}
+.app.light .icard input:focus{background:var(--sf)!important;border-color:var(--ac)!important;}
+.app.light .icard input::placeholder{color:var(--tx3)!important;}
+.app.light .tr-c{background:var(--sf2)!important;border-color:var(--bd)!important;}
+.app.light .tr-h{color:var(--ac2)!important;}
+.app.light .tr-r .tl{color:var(--tx3)!important;}
+.app.light .tr-r .tv{color:var(--tx)!important;}
+.app.light .tr-ph{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .tr-ph:active{background:var(--acg)!important;border-color:var(--ac)!important;}
+.app.light .tr-ph .tpn{color:var(--tx)!important;}
+.app.light .tr-nt{color:var(--tx3)!important;border-top-color:var(--bd)!important;}
+.app.light .notif-sh{background:var(--sf)!important;}
+.app.light .notif-item.read{background:var(--sf2)!important;border-color:var(--bd)!important;}
+.app.light .notif-item.unread{background:var(--acg)!important;border-color:rgba(124,58,237,.2)!important;}
+.app.light .ni-title{color:var(--tx)!important;}
+.app.light .ni-desc{color:var(--tx2)!important;}
+.app.light #rcptCard{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .warn-box{background:var(--sf)!important;}
+.app.light .warn-title{color:var(--tx)!important;}
+.app.light .lb-row{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .lb-tab{background:var(--sf2)!important;border-color:var(--bd)!important;color:var(--tx3)!important;}
+.app.light .lb-tab.on{background:var(--tg-gradient)!important;color:#fff!important;}
+.app.light .faq-item{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .kc{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .kk{background:var(--sf2)!important;border-color:var(--bd)!important;color:var(--tx)!important;}
+.app.light .osum{background:var(--sf2)!important;border-color:var(--bd)!important;}
+.app.light .ev-mg-card{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .su-c{background:var(--sf)!important;}
+.app.light .chk{background:var(--sf2)!important;border-color:var(--bd)!important;}
+.app.light .sv{background:var(--sf2)!important;border-color:var(--bd)!important;color:var(--tx)!important;}
+.app.light .py-glass{background:var(--sf)!important;border-color:var(--bd)!important;}
+.app.light .py-glass .py-n{color:var(--tx)!important;}
+
 </style>
 <script>(function(){try{if(localStorage.getItem("pca_logged")==="1"){var s=document.createElement("style");s.textContent=".auth{display:none!important}.app.hide{display:block!important}";document.head.appendChild(s);}
 // Apply theme-light to auth screen on load
@@ -4442,6 +4494,16 @@ function rgrd(l){
 
 // DETAIL
 
+var curPkgTabs=null;
+function selPkgTab(i){
+ if(!curPkgTabs||!curPkgTabs[i])return;
+ document.querySelectorAll("#pkgTabs .tb").forEach(function(el,j){el.classList.toggle("on",j===i);});
+ var pkgs=curPkgTabs[i].pr||[];
+ sg.pr=pkgs;
+ var grid=document.getElementById("curPkgGrid");
+ if(grid)grid.innerHTML=renderPkgs(pkgs);
+ sp=null;sy=null;ck=false;usum();
+}
 var selRegion=null;
 function pickRegion(ri){
  selRegion=ri;
@@ -4459,13 +4521,16 @@ function og(id){
  var h='<button class="bk" onclick="cg()"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Back</button>';
  var bnSrc=sg.bannerImg||sg.img;
  if(bnSrc){
- h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;aspect-ratio:16/9;width:100%;border-radius:var(--r3);background:'+(sg.c||'#131D2B')+'"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block"/></div>';
+ h+='<div class="bn" style="position:relative;overflow:hidden;padding:0;aspect-ratio:16/9;width:100%;border-radius:var(--r3);background:'+(sg.c||'#131D2B')+'"><img src="'+bnSrc+'" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"/></div>';
  }else{
  h+='<div class="bn" style="background:'+sg.c+';position:relative;overflow:hidden"></div>';
  }
  var showSid=sg.showSid===true||sg.showSid==="true";
  h+='<div class="icard"><div class="ir"><div class="ic'+(showSid?'':'" style="flex:1')+'" ><label><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>User ID</label><input id="uid" placeholder="Enter User ID" oninput="checkSavedVerify()"/></div>'+(showSid?'<div class="ic"><label><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Server ID</label><input id="sid" placeholder="Enter Server ID"/></div>':'')+'</div><button id="verifyBtn" onclick="requestVerify()" style="width:100%;padding:10px;margin-top:8px;border-radius:10px;border:1.5px solid var(--ac);background:rgba(109,40,217,.08);color:var(--ac2);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font)">Confirm ID</button><div id="verifyStatus"></div></div>';
- h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div><div class="pk-g">'+sg.pr.map(function(p,i){var pkImg=p.img?'<div class="pk-img" style="background-image:url('+p.img+')"></div>':'';return'<button class="pk" onclick="ppk('+i+')">'+pkImg+'<div class="pk-a">'+p.d+'</div><div class="pk-p">'+mmk(p.p)+'</div></button>'}).join("")+'</div>';
+ curPkgTabs=(sg.tabs&&sg.tabs.length)?sg.tabs:[{name:sg.cur||"Packages",pr:sg.pr||[]}];
+ sg.pr=curPkgTabs[0].pr||sg.pr||[];
+ var pkgTabsHtml=curPkgTabs.length>1?('<div class="tabs" id="pkgTabs">'+curPkgTabs.map(function(t,i){return'<button class="tb'+(i===0?' on':'')+'" onclick="selPkgTab('+i+')">'+t.name+'</button>';}).join("")+'</div>'):'';
+ h+='<div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Select '+sg.cur+'</div>'+pkgTabsHtml+'<div class="pk-g" id="curPkgGrid">'+renderPkgs(sg.pr)+'</div>';
  h+='<div id="pyS" style="display:none"><div class="lb"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div><div class="py-g-glass">'+PY.map(function(p,i){return'<div class="py-glass" onclick="ppy('+i+')"><div class="py-glow"></div><div class="py-ck"></div><div class="py-i" style="background:'+p.col+';overflow:hidden;border-radius:10px">'+(p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover"/>':p.ic)+'</div><div class="py-n">'+p.n+'</div></div>'}).join("")+'</div></div>';
  h+='<div id="trS" style="display:none"></div><div id="upS" style="display:none"></div><div id="osm" style="display:none"></div>';
  h+='<button class="abtn no" id="abtn" onclick="doO()">Select a Package</button>';
@@ -4502,7 +4567,8 @@ function ppy(i){sy=i;ck=false;rc=false;
  document.querySelectorAll(".py-glass").forEach(function(e,x){e.classList.toggle("on",x===i)});
  var pm=PY[i],cp=pm.ph.replace(/-/g,"");
  document.getElementById("trS").style.display="block";
- document.getElementById("trS").innerHTML='<div class="tr-c"><div class="tr-h"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Transfer to '+pm.n+'</div><div class="tr-r"><span class="tl">Name</span><span class="tv">'+pm.hd+'</span></div><div class="tr-ph" onclick="cph(\''+cp+'\')"><span class="tpn">'+pm.ph+'</span><span class="tpc"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</span></div><div class="qr-wrap"><div class="qr-box">'+(pm.qr?'<img src="'+pm.qr+'" alt="QR"/>':'<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(pm.k+"://pay?phone="+cp+"&amount="+sg.pr[sp].p+"&name="+pm.hd)+'" alt="QR"/>')+'</div><div class="qr-hint">Scan QR to pay '+mmk(sg.pr[sp].p)+' via '+pm.n+'</div></div><div class="tr-r"><span class="tl">Amount</span><span class="tv" style="color:var(--ac2);font-size:15px;font-family:var(--mono)">'+mmk(sg.pr[sp].p)+'</span></div><div class="tr-nt">Tap phone number to copy or scan QR. Transfer exact amount, then confirm below.</div></div>';
+ var qrImg=pm.qr?'<img src="'+pm.qr+'" alt="QR"/>':'<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(pm.k+"://pay?phone="+cp+"&amount="+sg.pr[sp].p+"&name="+pm.hd)+'" alt="QR"/>';
+ document.getElementById("trS").innerHTML='<div class="tr-c"><div class="tr-h"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Transfer to '+pm.n+'</div><div class="tr-r"><span class="tl">Name</span><span class="tv">'+pm.hd+'</span></div><div class="tr-ph-row"><div class="tr-ph" onclick="cph(\''+cp+'\')"><span class="tpn">'+pm.ph+'</span><span class="tpc"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</span></div><div class="qr-box">'+qrImg+'</div></div><div class="qr-hint" style="text-align:center;margin:0 0 10px">Scan QR to pay '+mmk(sg.pr[sp].p)+' via '+pm.n+'</div><div class="tr-r"><span class="tl">Amount</span><span class="tv" style="color:var(--ac2);font-size:15px;font-family:var(--mono)">'+mmk(sg.pr[sp].p)+'</span></div><div class="tr-nt">Tap phone number to copy or scan QR. Transfer exact amount, then confirm below.</div></div>';
  document.getElementById("upS").style.display="block";
  document.getElementById("upS").innerHTML='<div class="lb" style="font-size:11px;margin-bottom:8px"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Upload Receipt</div><div class="rcp" id="rcb" onclick="drc()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="rcp-t">Tap to <b>upload receipt</b></div></div><div class="chk" id="ckb" onclick="dck()"><div class="chk-i" id="cki"></div><div class="chk-t">I have transferred <strong>'+mmk(sg.pr[sp].p)+'</strong> to <strong>'+pm.n+'</strong></div></div>';
  usum();ubtn();
@@ -5183,8 +5249,8 @@ function rFaq(){
  '</div>';
 }
 
-// ID VERIFICATION (Admin Manual) — REAL-TIME FIX 
-var verifyUnsub=null;var idVerified=false;
+// ID VERIFICATION — automatic name check via G2Bulk (no admin step)
+var idVerified=false;
 var verifiedIds={};
 try{var vi=localStorage.getItem("pca_verified");if(vi)verifiedIds=JSON.parse(vi);}catch(e){}
 
@@ -5205,18 +5271,18 @@ function _showVerifiedUI(name){
  if(btn){btn.textContent=" Verified";btn.style.background="rgba(5,150,105,.1)";btn.style.borderColor="var(--gn)";btn.style.color="var(--gn)";btn.disabled=true;}
  if(vs)vs.innerHTML='<div style="padding:12px;margin-top:8px;border-radius:12px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.2);text-align:center;animation:pgIn .3s ease"><div style="font-size:9px;font-weight:700;color:var(--gn);text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:4px"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--gn);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg>Name Verified</div><div style="font-size:20px;font-weight:900;color:var(--gn);letter-spacing:-.3px">'+name+'</div></div>';
 }
-function _showWaitingUI(){
+function _showCheckingUI(){
  var btn=document.getElementById("verifyBtn");
  var vs=document.getElementById("verifyStatus");
- if(btn){btn.textContent=" Waiting...";btn.disabled=true;btn.style.background="rgba(217,119,6,.08)";btn.style.borderColor="var(--yw)";btn.style.color="var(--yw)";}
- if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--yw);display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:var(--yw);animation:blink 1.2s infinite;flex-shrink:0"></span>Waiting for admin verification...</div><div style="font-size:9px;color:var(--tx3);margin-top:4px">Admin will check your in-game name and confirm</div></div>';
+ if(btn){btn.textContent=" Checking...";btn.disabled=true;btn.style.background="rgba(217,119,6,.08)";btn.style.borderColor="var(--yw)";btn.style.color="var(--yw)";}
+ if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15);text-align:center"><div style="font-size:11px;font-weight:700;color:var(--yw);display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:var(--yw);animation:blink 1.2s infinite;flex-shrink:0"></span>Checking ID...</div></div>';
 }
-function _showRejectedUI(){
+function _showRejectedUI(msg){
  idVerified=false;
  var btn=document.getElementById("verifyBtn");
  var vs=document.getElementById("verifyStatus");
  if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
- if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)"> ID not found — please check and try again</div>';
+ if(vs)vs.innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)"> '+(msg||"ID not found — please check and try again")+'</div>';
 }
 
 // MAIN: ID input handler — reset if changed, instant verify if cached
@@ -5230,7 +5296,6 @@ function checkSavedVerify(){
  // Empty or too short — full reset to "Confirm ID"
  if(!gameId||gameId.length<2){
  idVerified=false;
- if(verifyUnsub){verifyUnsub();verifyUnsub=null;}
  if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
  if(vs)vs.innerHTML="";
  usum();
@@ -5247,73 +5312,55 @@ function checkSavedVerify(){
  }
 
  // ID typed but not yet verified — reset button to "Confirm ID"
- // (only reset if currently NOT in waiting state to avoid flicker)
- if(btn&&btn.textContent!==" Waiting..."&&!idVerified){
+ // (only reset if currently NOT mid-check to avoid flicker)
+ if(btn&&btn.textContent!==" Checking..."&&!idVerified){
  btn.textContent="Confirm ID";btn.disabled=false;
  btn.style.background="";btn.style.borderColor="";btn.style.color="";
  }
  // If currently showing verified but ID changed to unverified ID — reset
  if(idVerified){
  idVerified=false;
- if(verifyUnsub){verifyUnsub();verifyUnsub=null;}
  if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
  if(vs)vs.innerHTML="";
  }
  usum();
 }
 
+// Calls G2Bulk's Validate Player endpoint directly and shows the result immediately — no admin, no waiting
 function requestVerify(){
  var uidEl=document.getElementById("uid");var sidEl=document.getElementById("sid");
  if(!uidEl||!uidEl.value.trim()){tst("Enter User ID first","er");return;}
- if(!fbReady||!db){tst("Firebase offline","er");return;}
  var gameId=uidEl.value.trim();var serverId=sidEl?sidEl.value.trim():"";
- var docId=gameId+"_"+sg.n.replace(/\s/g,"");
 
- // Show waiting UI immediately
- _showWaitingUI();
+ // No G2Bulk mapping for this game — nothing to check the name against, accept the ID as entered
+ if(!sg||!sg.g2bulkCode){
+ idVerified=true;
+ var btn0=document.getElementById("verifyBtn");
+ var vs0=document.getElementById("verifyStatus");
+ if(btn0){btn0.textContent=" Confirmed";btn0.style.background="rgba(5,150,105,.1)";btn0.style.borderColor="var(--gn)";btn0.style.color="var(--gn)";btn0.disabled=true;}
+ if(vs0)vs0.innerHTML="";
+ usum();
+ return;
+ }
 
- // FIX: Start listener FIRST, then write — so we never miss admin's response
- listenVerify(docId);
-
- var vDoc={
- game:sg.n,gameId:gameId,serverId:serverId,
- authUser:curUser?curUser.email:"guest",
- pcaId:pcaId?"DH-"+pcaId:"",
- status:"pending",verifiedName:"",
- timestamp:new Date().toISOString()
- };
- // Write to Firebase (listener already active, will catch any change)
- db.collection("verifications").doc(docId).set(vDoc).catch(function(){
- tst("Failed to send. Try again.","er");
- var btn=document.getElementById("verifyBtn");
- if(btn){btn.textContent="Confirm ID";btn.disabled=false;btn.style.background="";btn.style.borderColor="";btn.style.color="";}
- });
-}
-
-// REAL-TIME listener — fires instantly when admin verifies/rejects
-function listenVerify(docId){
- if(verifyUnsub)verifyUnsub(); // unsubscribe previous
- verifyUnsub=db.collection("verifications").doc(docId).onSnapshot(function(d){
- if(!d.exists)return;
- var v=d.data();
- if(v.status==="verified"&&v.verifiedName){
- var _uid=document.getElementById("uid");
- if(_uid&&sg)saveVerified(_uid.value.trim(),sg.n,v.verifiedName);
- _showVerifiedUI(v.verifiedName);
- tst(" Verified: "+v.verifiedName,"ok");
- }else if(v.status==="rejected"){
+ _showCheckingUI();
+ fetch("https://api.g2bulk.com/v1/games/checkPlayerId",{
+ method:"POST",
+ headers:{"Content-Type":"application/json"},
+ body:JSON.stringify({game:sg.g2bulkCode,user_id:gameId,server_id:serverId})
+ }).then(function(r){return r.json();}).then(function(d){
+ if(d&&d.valid==="valid"&&d.name){
+ saveVerified(gameId,sg.n,d.name);
+ _showVerifiedUI(d.name);
+ tst(" Verified: "+d.name,"ok");
+ }else{
  _showRejectedUI();
  tst("ID not found — try again","er");
- }else if(v.status==="pending"){
- _showWaitingUI();
  }
- },function(err){
- // Listener error — silent fail
+ }).catch(function(){
+ _showRejectedUI("Couldn't check ID — check your connection and try again");
+ tst("Check failed. Try again.","er");
  });
-}
-function confirmName(ok){
- if(ok){idVerified=true;var _uid=document.getElementById("uid");var _vname=document.querySelector("#verifyStatus div div:nth-child(2)");var vn=_vname?_vname.textContent:"Verified";if(_uid&&sg){saveVerified(_uid.value.trim(),sg.n,vn);}document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.15);text-align:center;font-size:12px;font-weight:800;color:var(--gn)">Verified: '+vn+'</div>';document.getElementById("verifyBtn").textContent="Verified";document.getElementById("verifyBtn").disabled=true;document.getElementById("verifyBtn").textContent="Verified";tst("ID confirmed!","ok");}
- else{idVerified=false;document.getElementById("verifyStatus").innerHTML='<div style="padding:10px;margin-top:8px;border-radius:10px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.15);text-align:center;font-size:11px;font-weight:700;color:var(--rd)">Please re-enter correct ID</div>';document.getElementById("verifyBtn").textContent="Confirm ID";document.getElementById("verifyBtn").disabled=false;document.getElementById("uid").value="";document.getElementById("uid").focus();}
 }
 
 // WARNING DIALOG 
@@ -6292,7 +6339,7 @@ function startFirebaseListeners(){
 // Wire closing script tag
  clearTimeout(_gamesLoadTimeout);
  var fbGames=[];var gIdx=0;
- s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"",c:g.c||g.color||"#8B5CF6",cur:g.cur||"Diamonds",ci:g.ci||"",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
+ s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"",c:g.c||g.color||"#8B5CF6",cur:g.cur||"Diamonds",ci:g.ci||"",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],tabs:g.tabs||[],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
  // Sort by gameOrder saved in config/store (published from manage.html)
  db.collection("config").doc("store").get().then(function(cfg){
   var order=(cfg.exists&&cfg.data().gameOrder)||[];
