@@ -6353,7 +6353,7 @@ function startFirebaseListeners(){
 // Wire closing script tag
  clearTimeout(_gamesLoadTimeout);
  var fbGames=[];var gIdx=0;
- s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"",c:g.c||g.color||"#8B5CF6",cur:g.cur||"Diamonds",ci:g.ci||"",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],tabs:g.tabs||[],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||""});});
+ s.forEach(function(d){var g=d.data();fbGames.push({id:gIdx++,n:g.n||g.name||"",e:g.e||g.emoji||"",c:g.c||g.color||"#8B5CF6",cur:g.cur||"Diamonds",ci:g.ci||"",pl:g.pl||g.platform||"Mobile",img:g.img||"",pr:g.pr||g.packages||[{d:86,p:2800}],tabs:g.tabs||[],regions:g.regions||[],showSid:g.showSid||false,bannerImg:g.bannerImg||"",g2bulkCode:g.g2bulkCode||""});});
  // Sort by gameOrder saved in config/store (published from manage.html)
  db.collection("config").doc("store").get().then(function(cfg){
   var order=(cfg.exists&&cfg.data().gameOrder)||[];
